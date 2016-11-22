@@ -1,0 +1,44 @@
+.top {
+	margin: 0px;
+	padding: 0px;
+	background: url(../images/top.jpg);
+	height: 126px;
+	background-position: center top;
+	background-repeat: no-repeat;
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+}
+.top_logo {
+	float: left;
+	height: 69px;
+	padding-top: 30px;
+}
+.top_logo img {
+	width: 90%
+}
+
+.bj{
+	margin: 0px;
+	padding: 0px;
+	 background:url(../images/bj.jpg);
+
+	background-position: center top;
+	background-repeat: no-repeat;
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+}
+.admin_ds{ background:url(../images/admin.png); width:488px; height:284px;}
+.admin_dl{ width:348px; margin: 0  auto;}
+.admin_wenzi{ width:65px; float:left; line-height:37px;  color:#FFF; font-family:"微软雅黑"; color:#FFF;}
+.clear {
+	clear:both;}
+	.admin_tiao{ width:277px; float:right;}
+	
+.admin_anniu{ width:200px;}
+.footer{ background:url(../images/footer.jpg) repeat-x; height:127px; line-height:127px; color:#FFF;}
+.footer a{ color:#FFF;}
+.footer_jg{ height:150px;}

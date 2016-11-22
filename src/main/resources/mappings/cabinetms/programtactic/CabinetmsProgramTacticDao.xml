@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cabinetms.programtactic.dao.CabinetmsProgramTacticDao">
+    
+	<sql id="cabinetmsProgramTacticColumns">
+		a.id AS "id",
+		a.no AS "no",
+		a.name AS "name",
+		a.starttime AS "starttime",
+		a.endtime AS "endtime",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.status AS "status"
+	</sql>
+	
+	<sql id="cabinetmsProgramTacticJoins">
+	</sql>
+    
+	<select id="get" resultType="CabinetmsProgramTactic">
+		SELECT 
+			<include refid="cabinetmsProgramTacticColumns"/>
+		FROM cabinetms_program_tactic a
+		<include refid="cabinetmsProgramTacticJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CabinetmsProgramTactic">
+		SELECT 
+			<include refid="cabinetmsProgramTacticColumns"/>
+		FROM cabinetms_program_tactic a
+		<include refid="cabinetmsProgramTacticJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="beginCreateDate != null and endCreateDate != null and beginCreateDate != '' and endCreateDate != ''">
+				AND a.create_date BETWEEN #{beginCreateDate} AND #{endCreateDate}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CabinetmsProgramTactic">
+		SELECT 
+			<include refid="cabinetmsProgramTacticColumns"/>
+		FROM cabinetms_program_tactic a
+		<include refid="cabinetmsProgramTacticJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cabinetms_program_tactic(
+			id,
+			no,
+			name,
+			starttime,
+			endtime,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			status
+		) VALUES (
+			#{id},
+			#{no},
+			#{name},
+			#{starttime},
+			#{endtime},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{status}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cabinetms_program_tactic SET 	
+			no = #{no},
+			name = #{name},
+			starttime = #{starttime},
+			endtime = #{endtime},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			status = #{status}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE cabinetms_program_tactic SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

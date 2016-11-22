@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cabinetms.noticetactic.dao.CabinetmsNoticeTacticDao">
+    
+	<sql id="cabinetmsNoticeTacticColumns">
+		a.id AS "id",
+		a.no AS "no",
+		a.name AS "name",
+		a.notice_no AS "noticeNo",
+		a.notice_name AS "noticeName",
+		a.status AS "status",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="cabinetmsNoticeTacticJoins">
+	</sql>
+    
+	<select id="get" resultType="CabinetmsNoticeTactic">
+		SELECT 
+			<include refid="cabinetmsNoticeTacticColumns"/>
+		FROM cabinetms_notice_tactic a
+		<include refid="cabinetmsNoticeTacticJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CabinetmsNoticeTactic">
+		SELECT 
+			<include refid="cabinetmsNoticeTacticColumns"/>
+		FROM cabinetms_notice_tactic a
+		<include refid="cabinetmsNoticeTacticJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="no != null and no != ''">
+				AND a.no = #{no}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="noticeNo != null and noticeNo != ''">
+				AND a.notice_no = #{noticeNo}
+			</if>
+			<if test="noticeName != null and noticeName != ''">
+				AND a.notice_name = #{noticeName}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="beginCreateDate != null and endCreateDate != null and beginCreateDate != '' and endCreateDate != ''">
+				AND a.create_date BETWEEN #{beginCreateDate} AND #{endCreateDate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CabinetmsNoticeTactic">
+		SELECT 
+			<include refid="cabinetmsNoticeTacticColumns"/>
+		FROM cabinetms_notice_tactic a
+		<include refid="cabinetmsNoticeTacticJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cabinetms_notice_tactic(
+			id,
+			no,
+			name,
+			notice_no,
+			notice_name,
+			status,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{no},
+			#{name},
+			#{noticeNo},
+			#{noticeName},
+			#{status},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cabinetms_notice_tactic SET 	
+			no = #{no},
+			name = #{name},
+			notice_no = #{noticeNo},
+			notice_name = #{noticeName},
+			status = #{status},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE cabinetms_notice_tactic SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

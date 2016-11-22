@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cabinetms.terminal.dao.CabinetmsTerminalDao">
+    
+	<sql id="cabinetmsTerminalColumns">
+		a.id AS "id",
+		a.terminal_no AS "terminalNo",
+		a.terminal_name AS "terminalName",
+		a.terminal_ip AS "terminalIp",
+		a.office_id AS "office.id",
+		a.program_tactic_id AS "programTactic.id",
+		a.notice_id AS "notice.id",
+		a.screenshot AS "screenshot",
+		a.status1 AS "status",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		o5.name AS "office.name",
+		n.notice_name AS "notice.noticeName",
+		p.name AS "programTactic.name"
+	</sql>
+	
+	<sql id="cabinetmsTerminalJoins">
+		LEFT JOIN sys_office o5 ON o5.id = a.office_id
+		LEFT JOIN cabinetms_notice n on n.id = a.notice_id
+		LEFT JOIN cabinetms_program_tactic p on p.id = a.program_tactic_id
+	</sql>
+    
+	<select id="get" resultType="CabinetmsTerminal">
+		SELECT 
+			<include refid="cabinetmsTerminalColumns"/>
+		FROM cabinetms_terminal a
+		<include refid="cabinetmsTerminalJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CabinetmsTerminal">
+		SELECT 
+			<include refid="cabinetmsTerminalColumns"/>
+		FROM cabinetms_terminal a
+		<include refid="cabinetmsTerminalJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="terminalName != null and terminalName != ''">
+				AND a.terminal_name = #{terminalName}
+			</if>
+			<if test="terminalIp != null and terminalIp != ''">
+				AND a.terminal_ip = #{terminalIp}
+			</if>
+			<if test="office != null and office.id != null and office.id != ''">
+				AND a.office_id = #{office.id}
+			</if>
+			<if test="programTactic != null and programTactic.id != null and programTactic.id != ''">
+				AND a.program_tactic_id = #{programTactic.id}
+			</if>
+			<if test="notice != null and notice.id != null and notice.id != ''">
+				AND a.notice_id = #{notice.id}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status1 = #{status}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CabinetmsTerminal">
+		SELECT 
+			<include refid="cabinetmsTerminalColumns"/>
+		FROM cabinetms_terminal a
+		<include refid="cabinetmsTerminalJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllConnectedList" resultType="CabinetmsTerminal">
+		SELECT
+		<include refid="cabinetmsTerminalColumns"/>
+		FROM cabinetms_terminal a
+		<include refid="cabinetmsTerminalJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.status1 != '4'
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO cabinetms_terminal(
+			id,
+			terminal_name,
+			terminal_ip,
+			office_id,
+			program_tactic_id,
+			notice_id,
+			screenshot,
+			status1,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{terminalName},
+			#{terminalIp},
+			#{office.id},
+			#{programTactic.id},
+			#{notice.id},
+			#{screenshot},
+			#{status},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cabinetms_terminal SET 	
+			terminal_name = #{terminalName},
+			terminal_ip = #{terminalIp},
+			office_id = #{office.id},
+			program_tactic_id = #{programTactic.id},
+			notice_id = #{notice.id},
+			screenshot = #{screenshot},
+			status1 = #{status},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE cabinetms_terminal SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateByIP">
+		UPDATE cabinetms_terminal
+		<set>
+			<if test="status != null and status != ''">
+				status1 = #{status},
+			</if>
+			<if test="screenshot != null and screenshot != ''">
+				screenshot = #{screenshot},
+			</if>
+			<if test="updateDate != null">
+				update_date = #{updateDate},
+			</if>
+		</set>
+		WHERE terminal_ip = #{terminalIp}
+	</update>
+	
+</mapper>

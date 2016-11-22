@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cabinetms.programtactic.dao.CabinetmsProgramTacticDetailDao">
+    
+	<sql id="cabinetmsProgramTacticDetailColumns">
+		a.id AS "id",
+		a.program_tactic_id AS "programTactic.id",
+		a.program_tactic_name AS "programTactic.name",
+		a.program_id AS "program.id",
+		a.program_name AS "program.name",
+		a.starttime AS "starttime",
+		a.endtime AS "endtime",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="cabinetmsProgramTacticDetailJoins">
+		LEFT JOIN cabinetms_program_tactic b ON b.id = a.program_tactic_id
+	</sql>
+    
+	<select id="get" resultType="CabinetmsProgramTacticDetail">
+		SELECT 
+			<include refid="cabinetmsProgramTacticDetailColumns"/>
+		FROM cabinetms_program_tactic_detail a
+		<include refid="cabinetmsProgramTacticDetailJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CabinetmsProgramTacticDetail">
+		SELECT 
+			<include refid="cabinetmsProgramTacticDetailColumns"/>
+		FROM cabinetms_program_tactic_detail a
+		<include refid="cabinetmsProgramTacticDetailJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="programTactic != null and programTactic.id != null and programTactic.id != ''">
+				AND a.program_tactic_id = #{programTactic.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findListForPreView" resultType="java.util.LinkedHashMap">
+		SELECT 
+			a.program_id AS "id",
+			a.starttime AS "starttime",
+			a.endtime AS "endtime"
+		FROM cabinetms_program_tactic_detail a
+		<include refid="cabinetmsProgramTacticDetailJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="programTactic != null and programTactic.id != null and programTactic.id != ''">
+				AND a.program_tactic_id = #{programTactic.id}
+			</if>
+		</where>
+		ORDER BY a.starttime ASC
+	</select>
+	
+	<select id="findAllList" resultType="CabinetmsProgramTacticDetail">
+		SELECT 
+			<include refid="cabinetmsProgramTacticDetailColumns"/>
+		FROM cabinetms_program_tactic_detail a
+		<include refid="cabinetmsProgramTacticDetailJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cabinetms_program_tactic_detail(
+			id,
+			program_tactic_id,
+			program_tactic_name,
+			program_id,
+			program_name,
+			starttime,
+			endtime,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{programTactic.id},
+			#{programTactic.name},
+			#{program.id},
+			#{program.name},
+			#{starttime},
+			#{endtime},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cabinetms_program_tactic_detail SET 	
+			program_tactic_id = #{programTactic.id},
+			program_tactic_name = #{programTactic.name},
+			program_id = #{program.id},
+			program_name = #{program.name},
+			starttime = #{starttime},
+			endtime = #{endtime},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE cabinetms_program_tactic_detail SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE program_tactic_id = #{programTactic.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>
