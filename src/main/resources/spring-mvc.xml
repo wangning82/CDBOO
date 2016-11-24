@@ -21,7 +21,7 @@
 	<context:property-placeholder ignore-unresolvable="true" location="classpath:jeesite.properties" />
 	
 	<!-- 使用Annotation自动注册Bean,只扫描@Controller -->
-	<context:component-scan base-package="com.thinkgem.jeesite;com.cabinetms" use-default-filters="false"><!-- base-package 如果多个，用“,”分隔 -->
+	<context:component-scan base-package="com.thinkgem.jeesite;com.growtogether" use-default-filters="false"><!-- base-package 如果多个，用“,”分隔 -->
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 
@@ -131,7 +131,7 @@
 		<property name="maxUploadSize" value="${web.maxUploadSize}" />  
 	</bean>
 
-	<websocket:message-broker application-destination-prefix="/cabinet">
+	<websocket:message-broker application-destination-prefix="/GrowTogether">
 		<websocket:stomp-endpoint path="/websocket">
 			<websocket:sockjs/>
 		</websocket:stomp-endpoint>
@@ -139,7 +139,7 @@
 	</websocket:message-broker>
 
 	<bean id="checkTerminalStatusJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
-		<property name="jobClass" value="com.cabinetms.conjob.CheckTerminalStatusConJob"/>
+		<property name="jobClass" value="com.growtogether.conjob.CheckTerminalStatusConJob"/>
 		<property name="durability" value="true"/>
 		<property name="jobDataAsMap">
 			<map>
@@ -155,7 +155,7 @@
 
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="jobFactory">
-			<bean class="com.cabinetms.conjob.SpringBeanJobFactory" />
+			<bean class="com.growtogether.conjob.SpringBeanJobFactory" />
 		</property>
 		<property name="startupDelay" value="0" />
 		<property name="overwriteExistingJobs" value="true" />
