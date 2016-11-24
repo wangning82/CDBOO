@@ -138,34 +138,5 @@
 		<websocket:simple-broker prefix="/topic, /queue"/>
 	</websocket:message-broker>
 
-	<bean id="checkTerminalStatusJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
-		<property name="jobClass" value="com.growtogether.conjob.CheckTerminalStatusConJob"/>
-		<property name="durability" value="true"/>
-		<property name="jobDataAsMap">
-			<map>
-				<entry key="minute" value="3"/>
-			</map>
-		</property>
-	</bean>
-
-	<bean id="checkTerminalStatusTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail" ref="checkTerminalStatusJob"/>
-		<property name="cronExpression" value="0 0/3 * * * ?"/><!-- 3分钟更新一次 -->
-	</bean>
-
-	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-		<property name="jobFactory">
-			<bean class="com.growtogether.conjob.SpringBeanJobFactory" />
-		</property>
-		<property name="startupDelay" value="0" />
-		<property name="overwriteExistingJobs" value="true" />
-		<property name="exposeSchedulerInRepository" value="true" />
-		<property name="taskExecutor" ref="threadPoolTaskExecutor" />
-		<property name="triggers">
-			<list>
-				<ref bean="checkTerminalStatusTrigger"/>
-			</list>
-		</property>
-	</bean>
 
 </beans>
