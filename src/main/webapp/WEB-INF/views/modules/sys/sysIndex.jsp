@@ -162,7 +162,7 @@
 		<div id="header" class="navbar navbar-fixed-top ">
 			<div class="navbar-inner">
 				<div class="dgs13" >
-                    <div class="logo"><img src="${ctxStatic}/growtogether/images/logo.png"></div>
+                    <%--<div class="logo"><img src="${ctxStatic}/growtogether/images/logo.png"></div>--%>
                     <div  class="anniu1"><a href="${ctx}/logout"><img src="${ctxStatic}/growtogether/images/anniu1.png"></a></div>
                     <div class=" clear"></div>
                 

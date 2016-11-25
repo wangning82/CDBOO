@@ -40,22 +40,22 @@
 			<li><label>最后登陆IP：</label>
 				<form:input path="loginIp" htmlEscape="false" maxlength="100" class="input-medium"/>
 			</li>
-			<li><label>最后登陆始：</label>
+			<li><label>最后登陆：</label>
 				<input name="loginDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
 					value="<fmt:formatDate value="${talUser.loginDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
 					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
 			</li>
-            <li><label>最后登陆止：</label>
+            <li><label>最后登陆：</label>
                 <input name="loginDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
                        value="<fmt:formatDate value="${talUser.loginDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
                        onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
             </li>
-			<li><label>创建时间始：</label>
+			<li><label>创建时间：</label>
 				<input name="createDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
 					value="<fmt:formatDate value="${talUser.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
 					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
 			</li>
-            <li><label>创建时间止：</label>
+            <li><label>创建时间：</label>
                 <input name="createDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
                        value="<fmt:formatDate value="${talUser.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
                        onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
