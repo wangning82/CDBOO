@@ -1,14 +1,12 @@
-package com.growtogether.taluser.dao;
+package com.cdboo.taluser.dao;
 
-import com.growtogether.taluser.entity.TalUser;
+import com.cdboo.taluser.entity.TalUser;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-
-import static org.apache.shiro.web.filter.mgt.DefaultFilter.user;
 
 /**
  * Created by admin on 2016/11/24.

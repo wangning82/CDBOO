@@ -162,8 +162,8 @@
 		<div id="header" class="navbar navbar-fixed-top ">
 			<div class="navbar-inner">
 				<div class="dgs13" >
-                    <%--<div class="logo"><img src="${ctxStatic}/growtogether/images/logo.png"></div>--%>
-                    <div  class="anniu1"><a href="${ctx}/logout"><img src="${ctxStatic}/growtogether/images/anniu1.png"></a></div>
+                    <%--<div class="logo"><img src="${ctxStatic}/cdboo/images/logo.png"></div>--%>
+                    <div  class="anniu1"><a href="${ctx}/logout"><img src="${ctxStatic}/cdboo/images/anniu1.png"></a></div>
                     <div class=" clear"></div>
                 
                 </div>
@@ -212,7 +212,7 @@
 	    <div class="container-fluid">
 			<div id="content" class="row-fluid">
 				<div id="left">
-					<div style="background: url(${ctxStatic}/growtogether/images/touxiang.jpg);background-size: cover;height:120px;width: 160px"></div>
+					<div style="background: url(${ctxStatic}/cdboo/images/touxiang.jpg);background-size: cover;height:120px;width: 160px"></div>
 					<div style="padding-left: 30px;height: 30px;background-color: ivory" >
 						<li id="userInfo" class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#" title="个人信息">您好, ${fns:getUser().name}&nbsp;<span id="notifyNum" class="label label-info hide"></span></a>

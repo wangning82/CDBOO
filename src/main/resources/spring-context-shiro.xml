@@ -27,7 +27,7 @@
 				/ReportServer/** = user
 				${clientPath}/client/** = anon
 				/websocket/** = anon
-				/GrowTogether/** = anon
+				/CDBOO/** = anon
 				/topic/** = anon
 				/queue/** = anon
 			</value>

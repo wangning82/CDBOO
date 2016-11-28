@@ -1,7 +1,7 @@
 /**
  * Copyright &copy; 2012-2014 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
  */
-package com.growtogether.taluser.entity;
+package com.cdboo.taluser.entity;
 
 import org.hibernate.validator.constraints.Length;
 import java.util.Date;
