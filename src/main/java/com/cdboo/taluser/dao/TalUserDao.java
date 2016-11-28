@@ -1,9 +1,9 @@
 /**
  * Copyright &copy; 2012-2014 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
  */
-package com.growtogether.taluser.dao;
+package com.cdboo.taluser.dao;
 
-import com.growtogether.taluser.entity.TalUser;
+import com.cdboo.taluser.entity.TalUser;
 import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
 

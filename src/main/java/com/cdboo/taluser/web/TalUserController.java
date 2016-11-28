@@ -1,13 +1,13 @@
 /**
  * Copyright &copy; 2012-2014 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
  */
-package com.growtogether.taluser.web;
+package com.cdboo.taluser.web;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.growtogether.taluser.entity.TalUser;
-import com.growtogether.taluser.service.TalUserService;
+import com.cdboo.taluser.entity.TalUser;
+import com.cdboo.taluser.service.TalUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
