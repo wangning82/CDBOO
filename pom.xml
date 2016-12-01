@@ -3,13 +3,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	
-	<groupId>com.cabinetms</groupId>
-	<artifactId>cabinetms</artifactId>
+	<groupId>com.cdboo</groupId>
+	<artifactId>cdboo</artifactId>
 	<version>0.0.1</version>
 	<packaging>war</packaging>
 	
-	<name>CabinetMS</name>
-	<url>https://github.com/fudiandong/CabinetMS</url>
+	<name>CDBOO</name>
+	<url>https://github.com/fudiandong/CDBOO</url>
 	<inceptionYear>2016</inceptionYear>
 	
 	<!-- 项目属性 -->
@@ -481,12 +481,12 @@
 			<version>${jackson.version}</version>
 		</dependency>
 		
-		<!-- fastjson json
+		<!-- fastjson json -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
 			<version>${fastjson.version}</version>
-		</dependency> -->
+		</dependency>
 		
 		<!-- xstream xml -->
 		<dependency>
