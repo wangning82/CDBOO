@@ -163,6 +163,7 @@
 			<div class="navbar-inner">
 				<div class="dgs13" >
                     <%--<div class="logo"><img src="${ctxStatic}/cdboo/images/logo.png"></div>--%>
+					<div class="logo"><h1>${fns:getConfig('productName')}</h1></div>
                     <div  class="anniu1"><a href="${ctx}/logout"><img src="${ctxStatic}/cdboo/images/anniu1.png"></a></div>
                     <div class=" clear"></div>
                 
