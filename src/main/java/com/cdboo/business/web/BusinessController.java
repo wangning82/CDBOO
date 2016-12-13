@@ -9,6 +9,12 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.cdboo.business.entity.BusinessTimestep;
+import com.cdboo.timestep.entity.Timestep;
+import com.cdboo.timestep.service.TimestepService;
+import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.modules.sys.entity.Office;
+import com.thinkgem.jeesite.modules.sys.entity.User;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,7 +44,10 @@ public class BusinessController extends BaseController {
 
 	@Autowired
 	private BusinessService businessService;
-	
+
+	@Autowired
+	private TimestepService timestepService;
+
 	@ModelAttribute
 	public Business get(@RequestParam(required=false) String id) {
 		Business entity = null;
@@ -121,5 +130,22 @@ public class BusinessController extends BaseController {
 		}
 		return mapList;
 	}
+
+	@RequiresPermissions("business:time:view")
+	@RequestMapping(value = {"index"})
+	public String index(User user, Model model) {
+		return "cdboo/business/businessIndex";
+	}
+
+	@RequiresPermissions("sys:office:view")
+	@RequestMapping(value = {"listTimestep"})
+	public String listTimestep(BusinessTimestep businessTimestep, HttpServletRequest request, HttpServletResponse response, Model model) {
+		Page<Timestep> page = timestepService.findPage(new Page<>(request, response), businessTimestep);
+
+//		model.addAttribute("timestepList", timestepService.findListByBusinessTimestep(businessTimestep));
+		model.addAttribute("page", page);
+		return "cdboo/business/businessTimestepList";
+	}
+
 	
 }
