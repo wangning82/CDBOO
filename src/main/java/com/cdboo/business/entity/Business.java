@@ -3,10 +3,15 @@
  */
 package com.cdboo.business.entity;
 
+import com.cdboo.timestep.entity.Timestep;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.google.common.collect.Lists;
+import com.thinkgem.jeesite.modules.sys.entity.Role;
 import org.hibernate.validator.constraints.Length;
 
 import com.thinkgem.jeesite.common.persistence.TreeEntity;
+
+import java.util.List;
 
 /**
  * 行业Entity
@@ -18,7 +23,9 @@ public class Business extends TreeEntity<Business> {
 	private static final long serialVersionUID = 1L;
 	private String hierarchy;		// 所在层级
 	private String status;		// 状态位显示
-	
+
+	private List<Timestep> timestepList = Lists.newArrayList(); // 拥有时段列表
+
 	public Business() {
 		super();
 	}
@@ -74,5 +81,13 @@ public class Business extends TreeEntity<Business> {
 	
 	public String getParentId() {
 		return parent != null && parent.getId() != null ? parent.getId() : "0";
+	}
+
+	public List<Timestep> getTimestepList() {
+		return timestepList;
+	}
+
+	public void setTimestepList(List<Timestep> timestepList) {
+		this.timestepList = timestepList;
 	}
 }
