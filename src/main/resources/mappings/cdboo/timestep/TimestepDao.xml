@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdboo.timestep.dao.TimestepDao">
+    
+	<sql id="timestepColumns">
+		a.id AS "id",
+		a.timestep_no AS "timestepNo",
+		a.timestep_name AS "timestepName",
+		a.starttime AS "starttime",
+		a.endtime AS "endtime",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.status AS "status"
+	</sql>
+	
+	<sql id="timestepJoins">
+	</sql>
+    
+	<select id="get" resultType="Timestep">
+		SELECT 
+			<include refid="timestepColumns"/>
+		FROM cdboo_timestep a
+		<include refid="timestepJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Timestep">
+		SELECT 
+			<include refid="timestepColumns"/>
+		FROM cdboo_timestep a
+		<include refid="timestepJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="timestepNo != null and timestepNo != ''">
+				AND a.timestep_no = #{timestepNo}
+			</if>
+			<if test="timestepName != null and timestepName != ''">
+				AND a.timestep_name = #{timestepName}
+			</if>
+			<if test="beginStarttime != null and endStarttime != null and beginStarttime != '' and endStarttime != ''">
+				AND a.starttime BETWEEN #{beginStarttime} AND #{endStarttime}
+			</if>
+			<if test="beginEndtime != null and endEndtime != null and beginEndtime != '' and endEndtime != ''">
+				AND a.endtime BETWEEN #{beginEndtime} AND #{endEndtime}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findListByBusinessTimestep" resultType="Timestep">
+		SELECT
+		<include refid="timestepColumns"/>
+		FROM cdboo_timestep a
+		<include refid="timestepJoins"/>
+
+		<if test="business != null and business.id != null and business.id != ''">
+			JOIN cdboo_business_timestep b on b.timestep_id = a.id
+		</if>
+
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="business != null and business.id != ''">
+				AND b.business_id = #{business.id}
+			</if>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="Timestep">
+		SELECT 
+			<include refid="timestepColumns"/>
+		FROM cdboo_timestep a
+		<include refid="timestepJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cdboo_timestep(
+			id,
+			timestep_no,
+			timestep_name,
+			starttime,
+			endtime,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			status
+		) VALUES (
+			#{id},
+			#{timestepNo},
+			#{timestepName},
+			#{starttime},
+			#{endtime},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{status}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cdboo_timestep SET 	
+			timestep_no = #{timestepNo},
+			timestep_name = #{timestepName},
+			starttime = #{starttime},
+			endtime = #{endtime},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			status = #{status}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE cdboo_timestep SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
