@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdboo.music.dao.CdbooMusicDao">
+    
+	<sql id="cdbooMusicColumns">
+		a.id AS "id",
+		a.music_no AS "musicNo",
+		a.music_owner AS "musicOwner",
+		a.music_name AS "musicName",
+		a.actor AS "actor",
+		a.special AS "special",
+		a.volume AS "volume",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.status AS "status",
+		a.path AS "path"
+	</sql>
+	
+	<sql id="cdbooMusicJoins">
+	</sql>
+    
+	<select id="get" resultType="CdbooMusic">
+		SELECT 
+			<include refid="cdbooMusicColumns"/>
+		FROM cdboo_music a
+		<include refid="cdbooMusicJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CdbooMusic">
+		SELECT 
+			<include refid="cdbooMusicColumns"/>
+		FROM cdboo_music a
+		<include refid="cdbooMusicJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="musicNo != null and musicNo != ''">
+				AND a.music_no = #{musicNo}
+			</if>
+			<if test="musicOwner != null and musicOwner != ''">
+				AND a.music_owner = #{musicOwner}
+			</if>
+			<if test="musicName != null and musicName != ''">
+				AND a.music_name = #{musicName}
+			</if>
+			<if test="actor != null and actor != ''">
+				AND a.actor = #{actor}
+			</if>
+			<if test="special != null and special != ''">
+				AND a.special = #{special}
+			</if>
+			<if test="createDate != null and createDate != ''">
+				AND a.create_date = #{createDate}
+			</if>
+			<if test="delFlag != null and delFlag != ''">
+				AND a.del_flag = #{delFlag}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CdbooMusic">
+		SELECT 
+			<include refid="cdbooMusicColumns"/>
+		FROM cdboo_music a
+		<include refid="cdbooMusicJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cdboo_music(
+			id,
+			music_no,
+			music_owner,
+			music_name,
+			actor,
+			special,
+			volume,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			status,
+			path
+		) VALUES (
+			#{id},
+			#{musicNo},
+			#{musicOwner},
+			#{musicName},
+			#{actor},
+			#{special},
+			#{volume},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{status},
+			#{path}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cdboo_music SET 	
+			music_no = #{musicNo},
+			music_owner = #{musicOwner},
+			music_name = #{musicName},
+			actor = #{actor},
+			special = #{special},
+			volume = #{volume},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			status = #{status},
+			path = #{path}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE cdboo_music SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

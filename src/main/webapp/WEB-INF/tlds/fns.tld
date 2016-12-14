@@ -283,4 +283,12 @@
     <example>${fns:query(cacheKey,methodName,values)}</example>  
   </function>
   
+  <function>
+    <description>获得音量集合list，供下拉列表使用</description>
+    <name>getVolumeList</name>
+    <function-class>com.cdboo.common.func.FuncUtil</function-class>
+    <function-signature>java.util.List getVolumeList()</function-signature>
+    <example>${fns:getVolumeList()}</example>  
+  </function>
+  
 </taglib>

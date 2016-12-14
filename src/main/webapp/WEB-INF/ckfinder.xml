@@ -45,6 +45,13 @@
 			<allowedExtensions>swf,flv</allowedExtensions>
 			<deniedExtensions></deniedExtensions>
 		</type>
+		<type name="media">
+			<url>%BASE_URL%media/</url>
+			<directory>%BASE_DIR%media</directory>
+			<maxSize>15M</maxSize>
+			<allowedExtensions>mp3</allowedExtensions>
+			<deniedExtensions></deniedExtensions>
+		</type>
 	</types>
 	<accessControls>
 		<accessControl>
