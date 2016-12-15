@@ -138,5 +138,36 @@
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id} OR parent_ids LIKE '%,'||#{id}||',%'
 	</update>
-	
+
+	<insert id="insertBusinessTimestep">
+		INSERT INTO cdboo_business_timestep(
+			id,
+			business_id,
+			timestep_id,
+			name,
+			sort,
+			remarks,
+			del_flag,
+			status,
+			create_by,
+			create_date,
+			update_by,
+			update_date
+		) VALUES (
+			#{id},
+			#{business.id},
+			#{timestep.id},
+			#{name},
+			#{sort},
+			#{remarks},
+			#{delFlag},
+			#{status},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate}
+		)
+	</insert>
+
+
 </mapper>

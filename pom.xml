@@ -612,6 +612,12 @@
 			<artifactId>UserAgentUtils</artifactId>
 			<version>1.13</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>bitwalker</groupId>
+			<artifactId>jid3lib</artifactId>
+			<version>0.5.4</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.quartz-scheduler</groupId>
