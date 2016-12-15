@@ -25,8 +25,6 @@ public class Timestep extends DataEntity<Timestep> {
 	private String beginEndtime;		// 开始 结束时间
 	private String endEndtime;		// 结束 结束时间
 
-
-
 	public Timestep() {
 		super();
 	}

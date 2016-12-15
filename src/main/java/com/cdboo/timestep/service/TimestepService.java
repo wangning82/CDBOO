@@ -24,9 +24,6 @@ import com.cdboo.timestep.dao.TimestepDao;
 @Transactional(readOnly = true)
 public class TimestepService extends CrudService<TimestepDao, Timestep> {
 
-	@Autowired
-	private TimestepDao timestepDao;
-
 	public Timestep get(String id) {
 		return super.get(id);
 	}
@@ -35,18 +32,8 @@ public class TimestepService extends CrudService<TimestepDao, Timestep> {
 		return super.findList(timestep);
 	}
 
-	public List<Timestep> findListByBusinessTimestep(BusinessTimestep businessTimestep) {
-		return timestepDao.findListByBusinessTimestep(businessTimestep);
-	}
-
 	public Page<Timestep> findPage(Page<Timestep> page, Timestep timestep) {
 		return super.findPage(page, timestep);
-	}
-
-	public Page<Timestep> findPage(Page<Timestep> page, BusinessTimestep businessTimestep) {
-		List<Timestep> list = this.findListByBusinessTimestep(businessTimestep);
-		page.setList(list);
-		return page;
 	}
 
 	@Transactional(readOnly = false)

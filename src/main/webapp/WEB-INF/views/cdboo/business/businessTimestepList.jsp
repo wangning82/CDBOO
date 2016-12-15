@@ -55,6 +55,7 @@
 <table id="contentTable" class="table table-striped table-bordered table-condensed">
     <thead>
     <tr>
+        <th>行业名称</th>
         <th>时段编号</th>
         <th>时段名称</th>
         <th>开始时间</th>
@@ -65,29 +66,32 @@
     </tr>
     </thead>
     <tbody>
-    <c:forEach items="${page.list}" var="timestep">
+    <c:forEach items="${page.list}" var="businessTimestep">
         <tr>
+            <td>
+                    ${businessTimestep.business.name}
+            </td>
             <td><a href="${ctx}/timestep/timestep/form?id=${timestep.id}">
-                    ${timestep.timestepNo}
+                    ${businessTimestep.timestep.timestepNo}
             </a></td>
             <td>
-                    ${timestep.timestepName}
+                    ${businessTimestep.timestep.timestepName}
             </td>
             <td>
-                    ${timestep.starttime}
+                    ${businessTimestep.timestep.starttime}
             </td>
             <td>
-                    ${timestep.endtime}
+                    ${businessTimestep.timestep.endtime}
             </td>
             <td>
-                <fmt:formatDate value="${timestep.updateDate}" pattern="yyyy-MM-dd"/>
+                <fmt:formatDate value="${businessTimestep.timestep.updateDate}" pattern="yyyy-MM-dd"/>
             </td>
             <td>
-                    ${timestep.remarks}
+                    ${businessTimestep.timestep.remarks}
             </td>
             <shiro:hasPermission name="business:timestep:edit"><td>
-                <a href="${ctx}/timestep/timestep/form?id=${timestep.id}">修改</a>
-                <a href="${ctx}/timestep/timestep/delete?id=${timestep.id}" onclick="return confirmx('确认要删除该时段吗？', this.href)">删除</a>
+                <a href="${ctx}/timestep/timestep/form?id=${businessTimestep.id}">修改</a>
+                <a href="${ctx}/timestep/timestep/delete?id=${businessTimestep.id}" onclick="return confirmx('确认要删除该时段吗？', this.href)">删除</a>
             </td></shiro:hasPermission>
         </tr>
     </c:forEach>

@@ -58,33 +58,6 @@
 		</choose>
 	</select>
 
-	<select id="findListByBusinessTimestep" resultType="Timestep">
-		SELECT
-		<include refid="timestepColumns"/>
-		FROM cdboo_timestep a
-		<include refid="timestepJoins"/>
-
-		<if test="business != null and business.id != null and business.id != ''">
-			JOIN cdboo_business_timestep b on b.timestep_id = a.id
-		</if>
-
-		<where>
-			a.del_flag = #{DEL_FLAG_NORMAL}
-			<if test="business != null and business.id != ''">
-				AND b.business_id = #{business.id}
-			</if>
-
-		</where>
-		<choose>
-			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
-				ORDER BY ${page.orderBy}
-			</when>
-			<otherwise>
-				ORDER BY a.update_date DESC
-			</otherwise>
-		</choose>
-	</select>
-
 	<select id="findAllList" resultType="Timestep">
 		SELECT 
 			<include refid="timestepColumns"/>

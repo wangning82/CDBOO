@@ -140,9 +140,8 @@ public class BusinessController extends BaseController {
 	@RequiresPermissions("business:timestep:view")
 	@RequestMapping(value = {"listTimestep"})
 	public String listTimestep(BusinessTimestep businessTimestep, HttpServletRequest request, HttpServletResponse response, Model model) {
-		Page<Timestep> page = timestepService.findPage(new Page<>(request, response), businessTimestep);
+		Page<BusinessTimestep> page = businessService.findTimestepByBusinessTimestep(new Page<>(request, response), businessTimestep);
 
-//		model.addAttribute("timestepList", timestepService.findListByBusinessTimestep(businessTimestep));
 		model.addAttribute("page", page);
 		return "cdboo/business/businessTimestepList";
 	}

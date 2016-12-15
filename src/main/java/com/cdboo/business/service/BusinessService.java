@@ -9,6 +9,7 @@ import com.cdboo.business.entity.BusinessTimestep;
 import com.cdboo.timestep.dao.TimestepDao;
 import com.cdboo.timestep.entity.Timestep;
 import com.google.common.collect.Lists;
+import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.utils.IdGen;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,9 +32,6 @@ public class BusinessService extends TreeService<BusinessDao, Business> {
 	@Autowired
 	private BusinessDao businessDao;
 
-	@Autowired
-	private TimestepDao timestepDao;
-
 	public Business get(String id) {
 		return super.get(id);
 	}
@@ -55,10 +53,14 @@ public class BusinessService extends TreeService<BusinessDao, Business> {
 		super.delete(business);
 	}
 
+	public Page<BusinessTimestep> findTimestepByBusinessTimestep(Page<BusinessTimestep> page, BusinessTimestep businessTimestep) {
+		List<BusinessTimestep> list = businessDao.findTimestepByBusinessTimestep(businessTimestep);
+		page.setList(list);
+		return page;
+	}
+
 	@Transactional(readOnly = false)
 	public void insertBusinessTimestep(BusinessTimestep businessTimestep) {
-
-		List<BusinessTimestep> businessTimestepList = Lists.newArrayList();
 
 		for (Timestep timestep : businessTimestep.getTimestepList()) {
 			BusinessTimestep _businessTimestep = new BusinessTimestep();
