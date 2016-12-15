@@ -13,6 +13,11 @@
 				width: 100,
 				showdownload: "true"
 			});
+			
+			$("#btnImport").click(function(){
+				$.jBox($("#importBox").html(), {title:"导入数据", buttons:{"关闭":true}, 
+					bottomText:"导入文件不能超过500M，仅允许导入“zip”格式文件！"});
+			});
 	    });
 	
 		function page(n,s){
@@ -24,6 +29,13 @@
 	</script>
 </head>
 <body>
+	<div id="importBox" class="hide">
+		<form id="importForm" action="${ctx}/music/cdbooMusic/import" method="post" enctype="multipart/form-data"
+			class="form-search" style="padding-left:20px;text-align:center;" onsubmit="loading('正在导入，请稍等...');"><br/>
+			<input id="uploadFile" name="file" type="file" style="width:330px"/><br/><br/>　　
+			<input id="btnImportSubmit" class="btn btn-primary" type="submit" value="   导    入   "/>
+		</form>
+	</div>
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/music/cdbooMusic/">歌曲信息列表</a></li>
 		<shiro:hasPermission name="music:cdbooMusic:edit"><li><a href="${ctx}/music/cdbooMusic/form">歌曲信息添加</a></li></shiro:hasPermission>
@@ -62,7 +74,7 @@
 				</form:select>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
-			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="导入"/></li>
+			<li class="btns"><input id="btnImport" class="btn btn-primary" type="button" value="导入"/></li></li>
 			<li class="clearfix"></li>
 		</ul>
 	</form:form>

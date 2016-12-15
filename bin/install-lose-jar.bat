@@ -1,6 +1,6 @@
 @echo off
 echo.
-echo [ÐÅÏ¢] °²×°ÖÐÑë²Ö¿âÈ±Ê§jar¡£
+echo [ï¿½ï¿½Ï¢] ï¿½ï¿½×°ï¿½ï¿½ï¿½ï¿½Ö¿ï¿½È±Ê§jarï¿½ï¿½
 echo.
 rem pause
 rem echo.
@@ -13,5 +13,6 @@ call mvn install:install-file -Dfile=../lib/ckfinder-2.3.jar -DgroupId=com.ckfin
 call  mvn install:install-file -Dfile=../lib/ckfinderplugin-fileeditor-2.3.jar -DgroupId=com.ckfinder -DartifactId=ckfinderplugin-fileeditor -Dversion=2.3 -Dpackaging=jar
 call mvn install:install-file -Dfile=../lib/ckfinderplugin-imageresize-2.3.jar -DgroupId=com.ckfinder -DartifactId=ckfinderplugin-imageresize -Dversion=2.3 -Dpackaging=jar
 call mvn install:install-file -Dfile=../lib/UserAgentUtils-1.13.jar -DgroupId=bitwalker -DartifactId=UserAgentUtils -Dversion=1.13 -Dpackaging=jar
+call mvn install:install-file -Dfile=../lib/jid3lib-0.5.4.jar -DgroupId=bitwalker -DartifactId=jid3lib -Dversion=0.5.4 -Dpackaging=jar
 
 pause

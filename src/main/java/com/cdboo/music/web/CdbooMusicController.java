@@ -5,22 +5,24 @@ package com.cdboo.music.web;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import com.cdboo.music.entity.CdbooMusic;
 import com.cdboo.music.service.CdbooMusicService;
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.common.web.BaseController;
+import com.thinkgem.jeesite.common.web.Servlets;
+import com.thinkgem.jeesite.modules.sys.utils.LogUtils;
 
 /**
  * 曲库管理Controller
@@ -78,6 +80,25 @@ public class CdbooMusicController extends BaseController {
 		cdbooMusicService.delete(cdbooMusic);
 		addMessage(redirectAttributes, "删除歌曲信息成功");
 		return "redirect:"+Global.getAdminPath()+"/music/cdbooMusic/?repage";
+	}
+	
+	/**
+	 * 导入用户数据
+	 * @param file
+	 * @param redirectAttributes
+	 * @return
+	 */
+	@RequiresPermissions("music:cdbooMusic:edit")
+    @RequestMapping(value = "import", method=RequestMethod.POST)
+	public String importFile(MultipartFile file, RedirectAttributes redirectAttributes) {
+		try {
+			cdbooMusicService.importMusicFile(file);
+			addMessage(redirectAttributes, "导入歌曲信息成功");
+		} catch (Exception e) {
+			LogUtils.saveLog(Servlets.getRequest(), null, e, "导入歌曲");
+			addMessage(redirectAttributes, "导入歌曲信息失败");
+		}
+		return "redirect:" + Global.getAdminPath() + "/music/cdbooMusic/?repage";
 	}
 
 }
