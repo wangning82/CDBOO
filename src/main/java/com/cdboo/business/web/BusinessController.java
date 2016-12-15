@@ -112,7 +112,7 @@ public class BusinessController extends BaseController {
 		return "redirect:"+Global.getAdminPath()+"/business/business/?repage";
 	}
 
-	@RequiresPermissions("user")
+	@RequiresPermissions("business:business:view")
 	@ResponseBody
 	@RequestMapping(value = "treeData")
 	public List<Map<String, Object>> treeData(@RequestParam(required=false) String extId, HttpServletResponse response) {
@@ -131,13 +131,13 @@ public class BusinessController extends BaseController {
 		return mapList;
 	}
 
-	@RequiresPermissions("business:time:view")
+	@RequiresPermissions("business:timestep:view")
 	@RequestMapping(value = {"index"})
-	public String index(User user, Model model) {
+	public String index(BusinessTimestep businessTimestep, Model model) {
 		return "cdboo/business/businessIndex";
 	}
 
-	@RequiresPermissions("sys:office:view")
+	@RequiresPermissions("business:timestep:view")
 	@RequestMapping(value = {"listTimestep"})
 	public String listTimestep(BusinessTimestep businessTimestep, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<Timestep> page = timestepService.findPage(new Page<>(request, response), businessTimestep);
@@ -145,6 +145,22 @@ public class BusinessController extends BaseController {
 //		model.addAttribute("timestepList", timestepService.findListByBusinessTimestep(businessTimestep));
 		model.addAttribute("page", page);
 		return "cdboo/business/businessTimestepList";
+	}
+
+	@RequiresPermissions("business:timestep:edit")
+	@RequestMapping(value = "businessTimestepForm")
+	public String businessTimestepForm(BusinessTimestep businessTimestep, Model model) {
+		List<Timestep> timestepList = timestepService.findList(new Timestep());
+		model.addAttribute("timestepList", timestepList);
+		return "cdboo/business/businessTimestepForm";
+	}
+
+	@RequiresPermissions("business:timestep:edit")
+	@RequestMapping(value = "businessTimestepSave")
+	public String businessTimestepSave(BusinessTimestep businessTimestep, Model model, RedirectAttributes redirectAttributes) {
+		businessService.insertBusinessTimestep(businessTimestep);
+		addMessage(redirectAttributes, "保存行业时段成功");
+		return "redirect:"+Global.getAdminPath()+"/business/business/listTimestep?repage";
 	}
 
 	

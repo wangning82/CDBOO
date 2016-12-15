@@ -18,8 +18,8 @@
 </head>
 <body>
 <ul class="nav nav-tabs">
-    <li class="active"><a href="${ctx}/timestep/timestep/">时段列表</a></li>
-    <shiro:hasPermission name="timestep:timestep:edit"><li><a href="${ctx}/timestep/timestep/form">时段添加</a></li></shiro:hasPermission>
+    <li class="active"><a href="${ctx}/business/business/listTimestep">时段列表</a></li>
+    <shiro:hasPermission name="business:timestep:edit"><li><a href="${ctx}/business/business/businessTimestepForm">行业时段添加</a></li></shiro:hasPermission>
 </ul>
 <form:form id="searchForm" modelAttribute="businessTimestep" action="${ctx}/timestep/timestep/" method="post" class="breadcrumb form-search">
     <input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
@@ -61,7 +61,7 @@
         <th>结束时间</th>
         <th>更新时间</th>
         <th>备注信息</th>
-        <shiro:hasPermission name="timestep:timestep:edit"><th>操作</th></shiro:hasPermission>
+        <shiro:hasPermission name="business:timestep:edit"><th>操作</th></shiro:hasPermission>
     </tr>
     </thead>
     <tbody>
@@ -85,7 +85,7 @@
             <td>
                     ${timestep.remarks}
             </td>
-            <shiro:hasPermission name="timestep:timestep:edit"><td>
+            <shiro:hasPermission name="business:timestep:edit"><td>
                 <a href="${ctx}/timestep/timestep/form?id=${timestep.id}">修改</a>
                 <a href="${ctx}/timestep/timestep/delete?id=${timestep.id}" onclick="return confirmx('确认要删除该时段吗？', this.href)">删除</a>
             </td></shiro:hasPermission>
