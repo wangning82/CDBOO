@@ -3,9 +3,12 @@
  */
 package com.cdboo.business.dao;
 
+import com.cdboo.business.entity.BusinessTimestep;
 import com.thinkgem.jeesite.common.persistence.TreeDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
 import com.cdboo.business.entity.Business;
+
+import java.util.List;
 
 /**
  * 行业DAO接口
@@ -14,5 +17,5 @@ import com.cdboo.business.entity.Business;
  */
 @MyBatisDao
 public interface BusinessDao extends TreeDao<Business> {
-	
+    public void insertBusinessTimestep(BusinessTimestep businessTimestep);
 }

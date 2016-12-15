@@ -5,6 +5,12 @@ package com.cdboo.business.service;
 
 import java.util.List;
 
+import com.cdboo.business.entity.BusinessTimestep;
+import com.cdboo.timestep.dao.TimestepDao;
+import com.cdboo.timestep.entity.Timestep;
+import com.google.common.collect.Lists;
+import com.thinkgem.jeesite.common.utils.IdGen;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +27,12 @@ import com.cdboo.business.dao.BusinessDao;
 @Service
 @Transactional(readOnly = true)
 public class BusinessService extends TreeService<BusinessDao, Business> {
+
+	@Autowired
+	private BusinessDao businessDao;
+
+	@Autowired
+	private TimestepDao timestepDao;
 
 	public Business get(String id) {
 		return super.get(id);
@@ -42,5 +54,22 @@ public class BusinessService extends TreeService<BusinessDao, Business> {
 	public void delete(Business business) {
 		super.delete(business);
 	}
-	
+
+	@Transactional(readOnly = false)
+	public void insertBusinessTimestep(BusinessTimestep businessTimestep) {
+
+		List<BusinessTimestep> businessTimestepList = Lists.newArrayList();
+
+		for (Timestep timestep : businessTimestep.getTimestepList()) {
+			BusinessTimestep _businessTimestep = new BusinessTimestep();
+			_businessTimestep.setTimestep(timestep);
+			_businessTimestep.setBusiness(businessTimestep.getBusiness());
+			_businessTimestep.setName(businessTimestep.getName());
+			_businessTimestep.setSort(businessTimestep.getSort());
+			_businessTimestep.setRemarks(businessTimestep.getRemarks());
+
+			_businessTimestep.preInsert();
+			businessDao.insertBusinessTimestep(_businessTimestep);
+		}
+	}
 }
