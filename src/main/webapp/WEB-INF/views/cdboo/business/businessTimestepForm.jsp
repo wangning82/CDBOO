@@ -30,6 +30,41 @@
                 }
             });
         });
+
+        function addRow(list, idx, tpl, row){
+            $(list).append(Mustache.render(tpl, {
+                idx: idx, delBtn: true, row: row
+            }));
+
+            $(list+idx).find("select").each(function(){
+                $(this).val($(this).attr("data-value"));
+            });
+            $(list+idx).find("input[type='checkbox'], input[type='radio']").each(function(){
+                var ss = $(this).attr("data-value").split(',');
+                for (var i=0; i<ss.length; i++){
+                    if($(this).val() == ss[i]){
+                        $(this).attr("checked","checked");
+                    }
+                }
+            });
+        }
+        function delRow(obj, prefix){
+            var id = $(prefix+"_id");
+            var delFlag = $(prefix+"_delFlag");
+            if (id.val() == ""){
+                $(obj).parent().parent().remove();
+            }else if(delFlag.val() == "0"){
+                delFlag.val("1");
+                $(obj).html("&divide;").attr("title", "撤销删除");
+                $(obj).parent().parent().addClass("error");
+            }else if(delFlag.val() == "1"){
+                delFlag.val("0");
+                $(obj).html("&times;").attr("title", "删除");
+                $(obj).parent().parent().removeClass("error");
+            }
+        }
+
+
     </script>
 </head>
 <body>
@@ -37,39 +72,77 @@
     <li><a href="${ctx}/business/business/listTimestep">时段列表</a></li>
     <shiro:hasPermission name="business:timestep:edit"><li class="active"><a href="${ctx}/business/business/businessTimestepForm">行业时段添加</a></li></shiro:hasPermission>
 </ul><br/>
-<form:form id="inputForm" modelAttribute="businessTimestep" action="${ctx}/business/business/businessTimestepSave" method="post" class="form-horizontal">
-    <form:hidden path="id"/>
+<form:form id="inputForm" modelAttribute="businessTimestepModel" action="${ctx}/business/business/businessTimestepSave" method="post" class="form-horizontal">
     <sys:message content="${message}"/>
 
     <input type="hidden" name="delFlag" value="0" />
     <div class="control-group">
         <label class="control-label">行业:</label>
         <div class="controls">
-            <sys:treeselect id="business" name="business.id" value="${businessTimestep.business.id}" labelName="business.name" labelValue="${businessTimestep.business.name}"
-                            title="行业" url="/business/business/treeData" cssClass="required"/>
+            <sys:treeselect id="businessId" name="businessId" value="${business.id}" labelName="business.name"
+                            labelValue="${business.name}"
+                            title="行业" url="/business/business/treeData" cssClass="required" />
         </div>
     </div>
 
     <div class="control-group">
-        <label class="control-label">名称:</label>
+        <label class="control-label">行业时段：</label>
         <div class="controls">
-            <form:input path="name" htmlEscape="false" maxlength="50" class="required"/>
-            <span class="help-inline"><font color="red">*</font> </span>
-        </div>
-    </div>
+            <table id="contentTable" class="table table-striped table-bordered table-condensed">
+                <thead>
+                <tr>
+                    <th class="hide"></th>
+                    <th>时段</th>
+                    <th>名称</th>
+                    <th>备注</th>
+                    <shiro:hasPermission name="business:timestep:edit"><th width="10">&nbsp;</th></shiro:hasPermission>
+                </tr>
+                </thead>
+                <tbody id="businessTimestepList">
+                </tbody>
+                <shiro:hasPermission name="business:timestep:edit"><tfoot>
+                <tr><td colspan="16"><a href="javascript:" onclick="addRow('#businessTimestepList', businessTimestepRowIdx, businessTimestepTpl);businessTimestepRowIdx = businessTimestepRowIdx + 1;" class="btn">新增</a></td></tr>
+                </tfoot></shiro:hasPermission>
+            </table>
+            <script type="text/template" id="businessTimestepTpl">//<!--
+						<tr id="businessTimestepList{{idx}}">
+							<td class="hide">
+								<input id="businessTimestepList{{idx}}_id" name="businessTimestepList[{{idx}}].id" type="hidden" value="{{row.id}}"/>
+								<input id="businessTimestepList{{idx}}_delFlag" name="businessTimestepList[{{idx}}].delFlag" type="hidden" value="0"/>
+							</td>
 
-    <div class="control-group">
-        <label class="control-label">时段:</label>
-        <div class="controls">
-            <form:checkboxes path="timestepIdList" items="${timestepList}" itemLabel="timestepName" itemValue="id" htmlEscape="false" class="required"/>
-            <span class="help-inline"><font color="red">*</font> </span>
-        </div>
-    </div>
+							<td>
+								<select id="businessTimestepList{{idx}}_timestep.id" name="businessTimestepList[{{idx}}].timestep.id" data-value="{{row.timestep.id}}" class="input-small ">
+									<option value=""></option>
+									<c:forEach items="${timestepList}" var="timestep">
+										<option value="${timestep.id}">${timestep.timestepName}</option>
+									</c:forEach>
+								</select>
+							</td>
 
-    <div class="control-group">
-        <label class="control-label">备注:</label>
-        <div class="controls">
-            <form:textarea path="remarks" htmlEscape="false" rows="3" maxlength="200" class="input-xlarge"/>
+							<td>
+								<input id="businessTimestepList{{idx}}_name" name="businessTimestepList[{{idx}}].name" type="text" value="{{row.name}}" maxlength="255" class="input-small "/>
+							</td>
+
+							<td>
+								<input id="businessTimestepList{{idx}}_remarks" name="businessTimestepList[{{idx}}].remarks" type="text" value="{{row.remarks}}" maxlength="255" class="input-small "/>
+							</td>
+
+							<shiro:hasPermission name="business:timestep:edit"><td class="text-center" width="10">
+								{{#delBtn}}<span class="close" onclick="delRow(this, '#businessTimestepList{{idx}}')" title="删除">&times;</span>{{/delBtn}}
+							</td></shiro:hasPermission>
+						</tr>//-->
+            </script>
+            <script type="text/javascript">
+                var businessTimestepRowIdx = 0, businessTimestepTpl = $("#businessTimestepTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
+                $(document).ready(function() {
+                    var data = ${fns:toJson(businessTimestepModel.businessTimestepList)};
+                    for (var i = 0; i < data.length; i++) {
+                        addRow('#businessTimestepList', businessTimestepRowIdx, businessTimestepTpl, data[i]);
+                        businessTimestepRowIdx = businessTimestepRowIdx + 1;
+                    }
+                });
+            </script>
         </div>
     </div>
 

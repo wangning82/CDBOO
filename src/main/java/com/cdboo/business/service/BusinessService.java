@@ -6,6 +6,7 @@ package com.cdboo.business.service;
 import java.util.List;
 
 import com.cdboo.business.entity.BusinessTimestep;
+import com.cdboo.business.model.BusinessTimestepModel;
 import com.cdboo.timestep.dao.TimestepDao;
 import com.cdboo.timestep.entity.Timestep;
 import com.google.common.collect.Lists;
@@ -60,18 +61,34 @@ public class BusinessService extends TreeService<BusinessDao, Business> {
 	}
 
 	@Transactional(readOnly = false)
-	public void insertBusinessTimestep(BusinessTimestep businessTimestep) {
+	public void save(BusinessTimestepModel businessTimestepModel) {
 
-		for (Timestep timestep : businessTimestep.getTimestepList()) {
-			BusinessTimestep _businessTimestep = new BusinessTimestep();
-			_businessTimestep.setTimestep(timestep);
-			_businessTimestep.setBusiness(businessTimestep.getBusiness());
-			_businessTimestep.setName(businessTimestep.getName());
-			_businessTimestep.setSort(businessTimestep.getSort());
-			_businessTimestep.setRemarks(businessTimestep.getRemarks());
+		Business business = new Business();
+		business.setId(businessTimestepModel.getBusinessId());
 
-			_businessTimestep.preInsert();
-			businessDao.insertBusinessTimestep(_businessTimestep);
+		for (BusinessTimestep businessTimestep : businessTimestepModel.getBusinessTimestepList()) {
+			if (businessTimestep.getId() == null){
+				continue;
+			}
+
+			businessTimestep.setBusiness(business);
+			if (BusinessTimestep.DEL_FLAG_NORMAL.equals(businessTimestep.getDelFlag())){
+				if (org.apache.commons.lang3.StringUtils.isBlank(businessTimestep.getId())) {
+					businessTimestep.preInsert();
+					businessDao.insertBusinessTimestep(businessTimestep);
+				} else {
+					businessTimestep.preUpdate();
+					businessDao.updateBusinessTimestep(businessTimestep);
+				}
+			} else {
+				businessDao.deleteBusinessTimestep(businessTimestep);
+			}
+
 		}
+
+	}
+
+	public BusinessTimestep getBusinessTimestep(String id) {
+		return businessDao.getBusinessTimestep(id);
 	}
 }

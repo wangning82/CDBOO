@@ -21,8 +21,6 @@ public class BusinessTimestep extends DataEntity<BusinessTimestep> {
     private Business business;
     private Timestep timestep;
 
-    private List<Timestep> timestepList = Lists.newArrayList(); // 拥有时段列表
-
     public String getName() {
         return name;
     }
@@ -63,33 +61,6 @@ public class BusinessTimestep extends DataEntity<BusinessTimestep> {
     @Override
     public void setRemarks(String remarks) {
         this.remarks = remarks;
-    }
-
-    @JsonIgnore
-    public List<Timestep> getTimestepList() {
-        return timestepList;
-    }
-
-    public void setTimestepList(List<Timestep> timestepList) {
-        this.timestepList = timestepList;
-    }
-
-    @JsonIgnore
-    public List<String> getTimestepIdList() {
-        List<String> timestepIdList = Lists.newArrayList();
-        for (Timestep timestep : timestepList) {
-            timestepIdList.add(timestep.getId());
-        }
-        return timestepIdList;
-    }
-
-    public void setTimestepIdList(List<String> timestepIdList) {
-        timestepList = Lists.newArrayList();
-        for (String id : timestepIdList) {
-            Timestep timestep = new Timestep();
-            timestep.setId(id);
-            timestepList.add(timestep);
-        }
     }
 
     public String getStatus() {

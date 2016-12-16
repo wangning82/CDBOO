@@ -20,4 +20,10 @@ import java.util.List;
 public interface BusinessDao extends TreeDao<Business> {
     public void insertBusinessTimestep(BusinessTimestep businessTimestep);
     List<BusinessTimestep> findTimestepByBusinessTimestep(BusinessTimestep businessTimestep);
+
+    BusinessTimestep getBusinessTimestep(String id);
+
+    void updateBusinessTimestep(BusinessTimestep businessTimestep);
+
+    void deleteBusinessTimestep(BusinessTimestep businessTimestep);
 }

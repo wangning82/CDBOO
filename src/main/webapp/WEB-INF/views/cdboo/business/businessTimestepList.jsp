@@ -21,7 +21,7 @@
     <li class="active"><a href="${ctx}/business/business/listTimestep">时段列表</a></li>
     <shiro:hasPermission name="business:timestep:edit"><li><a href="${ctx}/business/business/businessTimestepForm">行业时段添加</a></li></shiro:hasPermission>
 </ul>
-<form:form id="searchForm" modelAttribute="businessTimestep" action="${ctx}/timestep/timestep/" method="post" class="breadcrumb form-search">
+<form:form id="searchForm" modelAttribute="businessTimestep" action="${ctx}/business/business/listTimestep" method="post" class="breadcrumb form-search">
     <input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
     <input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
     <ul class="ul-form">
@@ -32,20 +32,20 @@
             <form:input path="timestep.timestepName" htmlEscape="false" maxlength="100" class="input-medium"/>
         </li>
         <li><label>开始时间：</label>
-            <input name="beginStarttime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-                   value="<fmt:formatDate value="${timestep.beginStarttime}" pattern="yyyy-MM-dd"/>"
-                   onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/> -
-            <input name="endStarttime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-                   value="<fmt:formatDate value="${timestep.endStarttime}" pattern="yyyy-MM-dd"/>"
-                   onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
+            <input name="timestep.beginStarttime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
+                   value="<fmt:formatDate value="${businessTimestep.timestep.beginStarttime}" pattern="HH:mm:ss"/>"
+                   onclick="WdatePicker({dateFmt:'HH:mm:ss',isShowClear:false});"/> -
+            <input name="timestep.endStarttime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
+                   value="<fmt:formatDate value="${businessTimestep.timestep.endStarttime}" pattern="HH:mm:ss"/>"
+                   onclick="WdatePicker({dateFmt:'HH:mm:ss',isShowClear:false});"/>
         </li>
         <li><label>结束时间：</label>
-            <input name="beginEndtime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-                   value="<fmt:formatDate value="${timestep.beginEndtime}" pattern="yyyy-MM-dd"/>"
-                   onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/> -
-            <input name="endEndtime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-                   value="<fmt:formatDate value="${timestep.endEndtime}" pattern="yyyy-MM-dd"/>"
-                   onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
+            <input name="timestep.beginEndtime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
+                   value="<fmt:formatDate value="${businessTimestep.timestep.beginEndtime}" pattern="HH:mm:ss"/>"
+                   onclick="WdatePicker({dateFmt:'HH:mm:ss',isShowClear:false});"/> -
+            <input name="timestep.endEndtime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
+                   value="<fmt:formatDate value="${businessTimestep.timestep.endEndtime}" pattern="HH:mm:ss"/>"
+                   onclick="WdatePicker({dateFmt:'HH:mm:ss',isShowClear:false});"/>
         </li>
         <li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
         <li class="clearfix"></li>
@@ -62,26 +62,26 @@
         <th>结束时间</th>
         <th>更新时间</th>
         <th>备注信息</th>
-        <shiro:hasPermission name="business:timestep:edit"><th>操作</th></shiro:hasPermission>
     </tr>
     </thead>
     <tbody>
     <c:forEach items="${page.list}" var="businessTimestep">
         <tr>
-            <td>
+            <td><a href="${ctx}/business/business/businessTimestepForm?businessId=${businessTimestep.business.id}">
                     ${businessTimestep.business.name}
+                </a>
             </td>
-            <td><a href="${ctx}/timestep/timestep/form?id=${timestep.id}">
+            <td>
                     ${businessTimestep.timestep.timestepNo}
-            </a></td>
+            </td>
             <td>
                     ${businessTimestep.timestep.timestepName}
             </td>
             <td>
-                    ${businessTimestep.timestep.starttime}
+                    <fmt:formatDate value="${businessTimestep.timestep.starttime}" pattern="HH:mm:ss"/>
             </td>
             <td>
-                    ${businessTimestep.timestep.endtime}
+                    <fmt:formatDate value="${businessTimestep.timestep.endtime}" pattern="HH:mm:ss"/>
             </td>
             <td>
                 <fmt:formatDate value="${businessTimestep.timestep.updateDate}" pattern="yyyy-MM-dd"/>
@@ -89,10 +89,6 @@
             <td>
                     ${businessTimestep.timestep.remarks}
             </td>
-            <shiro:hasPermission name="business:timestep:edit"><td>
-                <a href="${ctx}/timestep/timestep/form?id=${businessTimestep.id}">修改</a>
-                <a href="${ctx}/timestep/timestep/delete?id=${businessTimestep.id}" onclick="return confirmx('确认要删除该时段吗？', this.href)">删除</a>
-            </td></shiro:hasPermission>
         </tr>
     </c:forEach>
     </tbody>

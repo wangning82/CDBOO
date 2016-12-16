@@ -24,8 +24,6 @@ public class Business extends TreeEntity<Business> {
 	private String hierarchy;		// 所在层级
 	private String status;		// 状态位显示
 
-	private List<Timestep> timestepList = Lists.newArrayList(); // 拥有时段列表
-
 	public Business() {
 		super();
 	}
@@ -83,11 +81,4 @@ public class Business extends TreeEntity<Business> {
 		return parent != null && parent.getId() != null ? parent.getId() : "0";
 	}
 
-	public List<Timestep> getTimestepList() {
-		return timestepList;
-	}
-
-	public void setTimestepList(List<Timestep> timestepList) {
-		this.timestepList = timestepList;
-	}
 }

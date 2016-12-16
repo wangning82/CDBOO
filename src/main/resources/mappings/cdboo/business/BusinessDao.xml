@@ -61,7 +61,15 @@
 		<include refid="businessJoins"/>
 		WHERE a.id = #{id}
 	</select>
-	
+
+	<select id="getBusinessTimestep" resultType="BusinessTimestep">
+		SELECT
+		<include refid="businesstimestepColumns"/>
+		FROM cdboo_business_timestep a
+		<include refid="businessTimestepJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
 	<select id="findList" resultType="Business">
 		SELECT 
 			<include refid="businessColumns"/>
@@ -158,7 +166,20 @@
 			status = #{status}
 		WHERE id = #{id}
 	</update>
-	
+
+	<update id="updateBusinessTimestep">
+		UPDATE cdboo_business_timestep SET
+		business_id = #{business.id},
+		timestep_id = #{timestep.id},
+		name = #{name},
+		sort = #{sort},
+		update_by = #{updateBy.id},
+		update_date = #{updateDate},
+		remarks = #{remarks},
+		status = #{status}
+		WHERE id = #{id}
+	</update>
+
 	<update id="updateParentIds">
 		UPDATE cdboo_business SET 
 			parent_id = #{parent.id}, 
@@ -172,6 +193,12 @@
 		WHERE id = #{id} OR parent_ids LIKE '%,'||#{id}||',%'
 	</update>
 
+	<update id="deleteBusinessTimestep">
+		UPDATE cdboo_business_timestep SET
+		del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
 	<select id="findTimestepByBusinessTimestep" resultType="BusinessTimestep">
 		SELECT
 		<include refid="businesstimestepColumns"/>
@@ -182,6 +209,22 @@
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			<if test="business != null and business.id != ''">
 				AND a.business_id = #{business.id}
+			</if>
+
+			<if test="timestep != null and timestep.timestepNo != ''">
+				AND b.timestep_no = #{timestep.timestepNo}
+			</if>
+
+			<if test="timestep != null and timestep.timestepName != ''">
+				AND b.timestep_name = #{timestep.timestepName}
+			</if>
+
+			<if test="timestep != null and timestep.beginStarttime != null and timestep.endStarttime != null and timestep.beginStarttime != '' and timestep.endStarttime != ''">
+				AND b.starttime BETWEEN #{timestep.beginStarttime} AND #{timestep.endStarttime}
+			</if>
+
+			<if test="timestep != null and timestep.beginEndtime != null and timestep.endEndtime != null and timestep.beginEndtime != '' and timestep.endEndtime != ''">
+				AND b.endtime BETWEEN #{timestep.beginEndtime} AND #{timestep.endEndtime}
 			</if>
 
 		</where>
