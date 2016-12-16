@@ -57,7 +57,7 @@
 				<select name="volume" id="volume" class="input-xlarge ">
 					<option value="">请选择</option>
 					<c:forEach items="${fns:getVolumeList() }" var="volume">
-						<option value="${volume.value }">${volume.lable }</option>
+						<option value="${volume.value }" <c:if test="${volume.value eq cdbooMusic.volume}">selected</c:if> >${volume.lable }</option>
 					</c:forEach>
 				</select>
 			</div>

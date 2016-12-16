@@ -5,8 +5,6 @@ package com.cdboo.music.service;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -26,7 +24,6 @@ import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.common.utils.FileUtils;
 import com.thinkgem.jeesite.common.utils.Mp3ResolveUtils;
-import com.thinkgem.jeesite.common.utils.ZipUtils;
 import com.thinkgem.jeesite.common.web.Servlets;
 import com.thinkgem.jeesite.modules.sys.security.SystemAuthorizingRealm.Principal;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
@@ -62,10 +59,6 @@ public class CdbooMusicService extends CrudService<CdbooMusicDao, CdbooMusic> {
 		super.delete(cdbooMusic);
 	}
 	
-//	songName:余波荡漾
-//	artist:田馥甄
-//	year:2016
-//	album:日常
 	@Transactional(readOnly=false)
 	public void importMusicFile(MultipartFile file) throws Exception {
 		File tempPath = null;
@@ -88,7 +81,7 @@ public class CdbooMusicService extends CrudService<CdbooMusicDao, CdbooMusic> {
 			/****************** 获得当前时间的年月 End *******************/
 
 			/****************** 解压文件 Start *******************/
-			ZipUtils.unZipFiles(tempFile, tempFilePath+"/");
+			FileUtils.unZipFiles(tempFile.getAbsolutePath(), tempFilePath+"/");
 			/****************** 解压文件 End *******************/
 
 			/******************
@@ -109,15 +102,14 @@ public class CdbooMusicService extends CrudService<CdbooMusicDao, CdbooMusic> {
 				
 				Principal principal = (Principal) UserUtils.getPrincipal();
 				
-				String path = FileUtils.path(Servlets.getRequest().getContextPath() + Global.USERFILES_BASE_URL + principal + "/");
+				String dir = FileUtils.path(Servlets.getRequest().getContextPath() + Global.USERFILES_BASE_URL + principal + "/");
 				
-				String dir = FileUtils.path(Global.USERFILES_BASE_URL + Global.USERFILES_BASE_URL + principal + "/");
-				
-//				String path = FileUtils.path(Global.getUserfilesBaseDir() + Global.USERFILES_BASE_URL + principal);
+				String path = FileUtils.path(Global.getUserfilesBaseDir() + Global.USERFILES_BASE_URL + principal + "/");
 				
 				// 获取项目内部mp3文件待上传路径
-				String realDir = path + "media" + "/" + "music" + "/" + year + "/" + month;
-				String realPath = dir + "media" + "/" + "music" + "/" + year + "/" + month;
+				String realPath = path + "media" + "/" + "music" + "/" + year + "/" + month;
+				String realDir = dir + "media" + "/" + "music" + "/" + year + "/" + month;
+				
 				for (int i = 0; i < mp3Files.length; i++) {
 					File mp3File = mp3Files[i];
 					String destMp3Path = null;
