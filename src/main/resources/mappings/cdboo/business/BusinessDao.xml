@@ -17,10 +17,43 @@
 		a.del_flag AS "delFlag",
 		a.status AS "status"
 	</sql>
-	
+
+	<sql id="businesstimestepColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.sort AS "sort",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.status AS "status",
+
+		b.id AS "timestep.id",
+		b.timestep_no AS "timestep.timestepNo",
+		b.timestep_name AS "timestep.timestepName",
+		b.starttime AS "timestep.starttime",
+		b.endtime AS "timestep.endtime",
+		b.status AS "timestep.status",
+		b.remarks AS "timestep.remarks",
+		b.create_by AS "timestep.createBy.id",
+		b.create_date AS "timestep.createDate",
+		b.update_by AS "timestep.updateBy.id",
+		b.update_date AS "timestep.updateDate",
+
+		c.id AS "business.id",
+		c.name AS "business.name"
+	</sql>
+
 	<sql id="businessJoins">
 	</sql>
-    
+
+	<sql id="businessTimestepJoins">
+		JOIN cdboo_timestep b on b.id = a.timestep_id
+		JOIN cdboo_business c on c.id = a.business_id
+	</sql>
+
 	<select id="get" resultType="Business">
 		SELECT 
 			<include refid="businessColumns"/>
@@ -138,6 +171,29 @@
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id} OR parent_ids LIKE '%,'||#{id}||',%'
 	</update>
+
+	<select id="findTimestepByBusinessTimestep" resultType="BusinessTimestep">
+		SELECT
+		<include refid="businesstimestepColumns"/>
+		FROM cdboo_business_timestep a
+		<include refid="businessTimestepJoins"/>
+
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="business != null and business.id != ''">
+				AND a.business_id = #{business.id}
+			</if>
+
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
 
 	<insert id="insertBusinessTimestep">
 		INSERT INTO cdboo_business_timestep(

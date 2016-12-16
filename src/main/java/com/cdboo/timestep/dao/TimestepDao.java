@@ -17,6 +17,4 @@ import java.util.List;
  */
 @MyBatisDao
 public interface TimestepDao extends CrudDao<Timestep> {
-
-    List<Timestep> findListByBusinessTimestep(BusinessTimestep businessTimestep);
 }
