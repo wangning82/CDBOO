@@ -33,19 +33,19 @@
 			</li>
 			<li><label>开始时间：</label>
 				<input name="beginStarttime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-					value="<fmt:formatDate value="${timestep.beginStarttime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/> - 
+					value="<fmt:formatDate value="${timestep.beginStarttime}" pattern="HH:mm:ss"/>"
+					onclick="WdatePicker({dateFmt:'HH:mm:ss',isShowClear:false});"/> -
 				<input name="endStarttime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-					value="<fmt:formatDate value="${timestep.endStarttime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
+					value="<fmt:formatDate value="${timestep.endStarttime}" pattern="HH:mm:ss"/>"
+					onclick="WdatePicker({dateFmt:'HH:mm:ss',isShowClear:false});"/>
 			</li>
 			<li><label>结束时间：</label>
 				<input name="beginEndtime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-					value="<fmt:formatDate value="${timestep.beginEndtime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/> - 
+					value="<fmt:formatDate value="${timestep.beginEndtime}" pattern="HH:mm:ss"/>"
+					onclick="WdatePicker({dateFmt:'HH:mm:ss',isShowClear:false});"/> -
 				<input name="endEndtime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-					value="<fmt:formatDate value="${timestep.endEndtime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
+					value="<fmt:formatDate value="${timestep.endEndtime}" pattern="HH:mm:ss"/>"
+					onclick="WdatePicker({dateFmt:'HH:mm:ss',isShowClear:false});"/>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="clearfix"></li>
@@ -67,20 +67,22 @@
 		<tbody>
 		<c:forEach items="${page.list}" var="timestep">
 			<tr>
-				<td><a href="${ctx}/timestep/timestep/form?id=${timestep.id}">
+				<td>
 					${timestep.timestepNo}
-				</a></td>
-				<td>
-					${timestep.timestepName}
 				</td>
 				<td>
-					${timestep.starttime}
+					<a href="${ctx}/timestep/timestep/form?id=${timestep.id}">
+						${timestep.timestepName}
+					</a>
 				</td>
 				<td>
-					${timestep.endtime}
+					<fmt:formatDate value="${timestep.starttime}" pattern="HH:mm:ss"/>
 				</td>
 				<td>
-					<fmt:formatDate value="${timestep.updateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+					<fmt:formatDate value="${timestep.endtime}" pattern="HH:mm:ss"/>
+				</td>
+				<td>
+					<fmt:formatDate value="${timestep.updateDate}" pattern="yyyy-MM-dd"/>
 				</td>
 				<td>
 					${timestep.remarks}

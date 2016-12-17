@@ -49,16 +49,16 @@
 			<label class="control-label">开始时间：</label>
 			<div class="controls">
 				<input name="starttime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
-					value="<fmt:formatDate value="${timestep.starttime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
+					value="<fmt:formatDate value="${timestep.starttime}" pattern="HH:mm:ss"/>"
+					onclick="WdatePicker({dateFmt:'HH:mm:ss',isShowClear:false});"/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">结束时间：</label>
 			<div class="controls">
 				<input name="endtime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
-					value="<fmt:formatDate value="${timestep.endtime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
+					value="<fmt:formatDate value="${timestep.endtime}" pattern="HH:mm:ss"/>"
+					onclick="WdatePicker({dateFmt:'HH:mm:ss',isShowClear:false});"/>
 			</div>
 		</div>
 		<div class="control-group">
