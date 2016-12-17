@@ -9,8 +9,8 @@ import com.thinkgem.jeesite.common.persistence.DataEntity;
 
 /**
  * 曲库管理Entity
- * @author yubin
- * @version 2016-12-13
+ * @author 于滨
+ * @version 2016-12-17
  */
 public class CdbooMusic extends DataEntity<CdbooMusic> {
 	
@@ -21,8 +21,8 @@ public class CdbooMusic extends DataEntity<CdbooMusic> {
 	private String actor;		// 艺人
 	private String special;		// 专辑
 	private String volume;		// 音量
-	private String status;		// 状态位显示
-	private String path;
+	private String status;		// 状态
+	private String path;		// 音乐路径
 	
 	public CdbooMusic() {
 		super();
@@ -41,7 +41,7 @@ public class CdbooMusic extends DataEntity<CdbooMusic> {
 		this.musicNo = musicNo;
 	}
 	
-	@Length(min=0, max=100, message="音乐拥有者类型长度必须介于 0 和 100 之间")
+	@Length(min=0, max=1, message="音乐拥有者类型长度必须介于 0 和 1 之间")
 	public String getMusicOwner() {
 		return musicOwner;
 	}
@@ -50,7 +50,7 @@ public class CdbooMusic extends DataEntity<CdbooMusic> {
 		this.musicOwner = musicOwner;
 	}
 	
-	@Length(min=0, max=1000, message="音乐名称长度必须介于 0 和 1000 之间")
+	@Length(min=0, max=100, message="音乐名称长度必须介于 0 和 100 之间")
 	public String getMusicName() {
 		return musicName;
 	}
@@ -59,7 +59,7 @@ public class CdbooMusic extends DataEntity<CdbooMusic> {
 		this.musicName = musicName;
 	}
 	
-	@Length(min=0, max=1000, message="艺人长度必须介于 0 和 1000 之间")
+	@Length(min=0, max=100, message="艺人长度必须介于 0 和 100 之间")
 	public String getActor() {
 		return actor;
 	}
@@ -68,7 +68,7 @@ public class CdbooMusic extends DataEntity<CdbooMusic> {
 		this.actor = actor;
 	}
 	
-	@Length(min=0, max=1000, message="专辑长度必须介于 0 和 1000 之间")
+	@Length(min=0, max=100, message="专辑长度必须介于 0 和 100 之间")
 	public String getSpecial() {
 		return special;
 	}
@@ -77,7 +77,7 @@ public class CdbooMusic extends DataEntity<CdbooMusic> {
 		this.special = special;
 	}
 	
-	@Length(min=0, max=1000, message="音量长度必须介于 0 和 1000 之间")
+	@Length(min=0, max=10, message="音量长度必须介于 0 和 10 之间")
 	public String getVolume() {
 		return volume;
 	}
@@ -86,7 +86,7 @@ public class CdbooMusic extends DataEntity<CdbooMusic> {
 		this.volume = volume;
 	}
 	
-	@Length(min=0, max=1, message="状态位显示长度必须介于 0 和 1 之间")
+	@Length(min=0, max=1, message="状态长度必须介于 0 和 1 之间")
 	public String getStatus() {
 		return status;
 	}
@@ -94,7 +94,8 @@ public class CdbooMusic extends DataEntity<CdbooMusic> {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
+	
+	@Length(min=0, max=2000, message="音乐路径长度必须介于 0 和 2000 之间")
 	public String getPath() {
 		return path;
 	}
@@ -102,4 +103,5 @@ public class CdbooMusic extends DataEntity<CdbooMusic> {
 	public void setPath(String path) {
 		this.path = path;
 	}
+	
 }

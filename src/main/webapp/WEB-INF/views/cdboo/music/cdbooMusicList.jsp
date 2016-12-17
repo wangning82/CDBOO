@@ -47,12 +47,6 @@
 			<li><label>音乐编号：</label>
 				<form:input path="musicNo" htmlEscape="false" maxlength="100" class="input-medium"/>
 			</li>
-			<li><label>音乐类型：</label>
-				<form:select path="musicOwner" class="input-medium">
-					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('owner_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
-			</li>
 			<li><label>音乐名称：</label>
 				<form:input path="musicName" htmlEscape="false" maxlength="1000" class="input-medium"/>
 			</li>
@@ -62,16 +56,16 @@
 			<li><label>专辑：</label>
 				<form:input path="special" htmlEscape="false" maxlength="1000" class="input-medium"/>
 			</li>
+			<li><label>音乐类型：</label>
+				<form:select path="musicOwner" class="input-mini">
+					<form:option value="" label=""/>
+					<form:options items="${fns:getDictList('owner_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+				</form:select>
+			</li>
 			<li><label>创建时间：</label>
 				<input name="createDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-					value="<fmt:formatDate value="${cdbooMusic.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
-			</li>
-			<li><label>删除标志：</label>
-				<form:select path="delFlag" class="input-medium">
-					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('del_flag')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
+					value="<fmt:formatDate value="${cdbooMusic.createDate}" pattern="yyyy-MM-dd"/>"
+					onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="btns"><input id="btnImport" class="btn btn-primary" type="button" value="导入"/></li></li>

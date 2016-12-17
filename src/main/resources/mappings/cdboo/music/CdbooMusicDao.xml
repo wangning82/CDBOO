@@ -56,9 +56,6 @@
 			<if test="createDate != null and createDate != ''">
 				AND a.create_date = #{createDate}
 			</if>
-			<if test="delFlag != null and delFlag != ''">
-				AND a.del_flag = #{delFlag}
-			</if>
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">

@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdboo.channel.dao.CdbooChannelDao">
+    
+	<sql id="cdbooChannelColumns">
+		a.id AS "id",
+		a.channel_no AS "channelNo",
+		a.channel_name AS "channelName",
+		a.photo_path AS "photoPath",
+		a.theme_type AS "themeType",
+		a.theme_concrete_type AS "themeConcreteType",
+		a.channel_version AS "channelVersion",
+		a.music_style AS "musicStyle",
+		a.site AS "site",
+		a.speed AS "speed",
+		a.voice AS "voice",
+		a.element AS "element",
+		a.emotion AS "emotion",
+		a.instrument AS "instrument",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.status AS "status",
+		a.channel_type AS "channelType"
+	</sql>
+	
+	<sql id="cdbooChannelJoins">
+	</sql>
+    
+	<select id="get" resultType="CdbooChannel">
+		SELECT 
+			<include refid="cdbooChannelColumns"/>
+		FROM cdboo_child_channel a
+		<include refid="cdbooChannelJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CdbooChannel">
+		SELECT 
+			<include refid="cdbooChannelColumns"/>
+		FROM cdboo_child_channel a
+		<include refid="cdbooChannelJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="channelNo != null and channelNo != ''">
+				AND a.channel_no = #{channelNo}
+			</if>
+			<if test="channelName != null and channelName != ''">
+				AND a.channel_name = #{channelName}
+			</if>
+			<if test="themeType != null and themeType != ''">
+				AND a.theme_type = #{themeType}
+			</if>
+			<if test="themeConcreteType != null and themeConcreteType != ''">
+				AND a.theme_concrete_type = #{themeConcreteType}
+			</if>
+			<if test="channelVersion != null and channelVersion != ''">
+				AND a.channel_version = #{channelVersion}
+			</if>
+			<if test="musicStyle != null and musicStyle != ''">
+				AND a.music_style = #{musicStyle}
+			</if>
+			<if test="site != null and site != ''">
+				AND a.site = #{site}
+			</if>
+			<if test="speed != null and speed != ''">
+				AND a.speed = #{speed}
+			</if>
+			<if test="voice != null and voice != ''">
+				AND a.voice = #{voice}
+			</if>
+			<if test="element != null and element != ''">
+				AND a.element = #{element}
+			</if>
+			<if test="emotion != null and emotion != ''">
+				AND a.emotion = #{emotion}
+			</if>
+			<if test="instrument != null and instrument != ''">
+				AND a.instrument = #{instrument}
+			</if>
+			<if test="beginCreateDate != null and endCreateDate != null and beginCreateDate != '' and endCreateDate != ''">
+				AND a.create_date BETWEEN #{beginCreateDate} AND #{endCreateDate}
+			</if>
+			<if test="channelType != null and channelType != ''">
+				AND a.channel_type = #{channelType}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CdbooChannel">
+		SELECT 
+			<include refid="cdbooChannelColumns"/>
+		FROM cdboo_child_channel a
+		<include refid="cdbooChannelJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cdboo_child_channel(
+			id,
+			channel_no,
+			channel_name,
+			photo_path,
+			theme_type,
+			theme_concrete_type,
+			channel_version,
+			music_style,
+			site,
+			speed,
+			voice,
+			element,
+			emotion,
+			instrument,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			status,
+			channel_type
+		) VALUES (
+			#{id},
+			#{channelNo},
+			#{channelName},
+			#{photoPath},
+			#{themeType},
+			#{themeConcreteType},
+			#{channelVersion},
+			#{musicStyle},
+			#{site},
+			#{speed},
+			#{voice},
+			#{element},
+			#{emotion},
+			#{instrument},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{status},
+			#{channelType}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cdboo_child_channel SET 	
+			channel_no = #{channelNo},
+			channel_name = #{channelName},
+			photo_path = #{photoPath},
+			theme_type = #{themeType},
+			theme_concrete_type = #{themeConcreteType},
+			channel_version = #{channelVersion},
+			music_style = #{musicStyle},
+			site = #{site},
+			speed = #{speed},
+			voice = #{voice},
+			element = #{element},
+			emotion = #{emotion},
+			instrument = #{instrument},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			status = #{status},
+			channel_type = #{channelType}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE cdboo_child_channel SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

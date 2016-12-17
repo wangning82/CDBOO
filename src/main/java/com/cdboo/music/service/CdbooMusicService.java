@@ -90,6 +90,7 @@ public class CdbooMusicService extends CrudService<CdbooMusicDao, CdbooMusic> {
 			File[] mp3Files = tempPath.listFiles(new FileFilter() {
 				@Override
 				public boolean accept(File pathname) {
+					System.out.println(pathname.getName());
 					if (pathname.getName().endsWith(".mp3")) {
 						return true;
 					}
