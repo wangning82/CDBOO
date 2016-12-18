@@ -39,7 +39,8 @@ public class CdbooChannel extends DataEntity<CdbooChannel> {
 	private String channelType; // 频道类型
 	private Date beginCreateDate; // 开始 创建时间
 	private Date endCreateDate; // 结束 创建时间
-
+	private List<String> musicIds = Lists.newArrayList();
+	
 	public CdbooChannel() {
 		super();
 	}
@@ -198,31 +199,31 @@ public class CdbooChannel extends DataEntity<CdbooChannel> {
 	public void setEndCreateDate(Date endCreateDate) {
 		this.endCreateDate = endCreateDate;
 	}
-	
+
 	@JsonIgnore
-	public List<String> getMusicStyleList() {
+	public List<String> getMusicStyleList() {// 音乐风格
 		return getTypeList(this.musicStyle);
 	}
 
 	@JsonIgnore
-	public List<String> getElementTypeList() {
+	public List<String> getElementTypeList() {// 元素
 		return getTypeList(this.element);
 	}
 
 	@JsonIgnore
-	public List<String> getEmotionTypeList() {
+	public List<String> getEmotionTypeList() {// 情绪
 		return getTypeList(this.emotion);
 	}
 
 	@JsonIgnore
-	public List<String> getInstrumentTypeList() {
+	public List<String> getInstrumentTypeList() {// 乐器
 		return getTypeList(this.instrument);
 	}
-	
-	public List<String> getTypeList(String value){
+
+	public List<String> getTypeList(String value) {
 		List<String> elementTypeList = Lists.newArrayList();
 		if (StringUtils.isNotBlank(value)) {
-			String[] elementTypeArray = StringUtils.split(value,",");
+			String[] elementTypeArray = StringUtils.split(value, ",");
 			for (String elementTypeVal : elementTypeArray) {
 				elementTypeList.add(elementTypeVal);
 			}
@@ -230,21 +231,29 @@ public class CdbooChannel extends DataEntity<CdbooChannel> {
 
 		return elementTypeList;
 	}
-	
-	public void setMusicStyleList(List<String> musicStyleList) {
+
+	public void setMusicStyleList(List<String> musicStyleList) {// 音乐风格
 		this.musicStyle = StringUtils.join(musicStyleList, ",");
 	}
 
-	public void setElementTypeList(List<String> elementTypeList) {
+	public void setElementTypeList(List<String> elementTypeList) {// 元素
 		this.element = StringUtils.join(elementTypeList, ",");
 	}
 
-	public void setEmotionTypeList(List<String> emotionTypeList) {
+	public void setEmotionTypeList(List<String> emotionTypeList) {// 情绪
 		this.emotion = StringUtils.join(emotionTypeList, ",");
 	}
 
-	public void setInstrumentTypeList(List<String> instrumentTypeList) {
+	public void setInstrumentTypeList(List<String> instrumentTypeList) {// 乐器
 		this.instrument = StringUtils.join(instrumentTypeList, ",");
 	}
 
+	public List<String> getMusicIds() {
+		return musicIds;
+	}
+
+	public void setMusicIds(List<String> musicIds) {
+		this.musicIds = musicIds;
+	}
+	
 }

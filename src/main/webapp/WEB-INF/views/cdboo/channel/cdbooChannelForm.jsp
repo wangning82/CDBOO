@@ -51,6 +51,7 @@
 	<ul class="nav nav-tabs">
 		<li><a href="${ctx}/channel/cdbooChannel/">频道信息列表</a></li>
 		<li class="active"><a href="${ctx}/channel/cdbooChannel/form?id=${cdbooChannel.id}">频道信息<shiro:hasPermission name="channel:cdbooChannel:edit">${not empty cdbooChannel.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="channel:cdbooChannel:edit">查看</shiro:lacksPermission></a></li>
+		<li><a href="${ctx}/channel/cdbooChannel/mapping">频道音乐关联</a></li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="cdbooChannel" action="${ctx}/channel/cdbooChannel/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>

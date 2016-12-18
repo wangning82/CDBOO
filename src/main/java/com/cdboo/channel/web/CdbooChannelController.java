@@ -98,13 +98,36 @@ public class CdbooChannelController extends BaseController {
 		
 		return "cdboo/channel/cdbooChannelForm";
 	}
+	
+	@RequiresPermissions("channel:cdbooChannel:edit")
+	@RequestMapping(value = "mapping")
+	public String mapping(CdbooChannel cdbooChannel, Model model, HttpServletRequest request) {
 
+		model.addAttribute("cdbooChannel", cdbooChannel);
+
+		/***** 关联音乐的频道只能是子频道，组合频道不能再被组合 Start ******/
+		CdbooChannel queryChannel = new CdbooChannel();
+		queryChannel.setChannelType(Constants.CHANNEL_TYPE_CHILD);
+		List<CdbooChannel> channelList = cdbooChannelService.findList(queryChannel);
+		request.setAttribute("channelList", channelList);
+		/***** 关联音乐的频道只能是子频道，组合频道不能再被组合 End ******/
+
+		return "cdboo/channel/cdbooChannelMusicMapping";
+	}
+	
 	@RequiresPermissions("channel:cdbooChannel:edit")
 	@RequestMapping(value = "save")
 	public String save(CdbooChannel cdbooChannel, Model model, RedirectAttributes redirectAttributes, HttpServletRequest request) {
 		if (!beanValidator(model, cdbooChannel)){
 			return form(cdbooChannel, model,request);
 		}
+		cdbooChannelService.save(cdbooChannel);
+		addMessage(redirectAttributes, "保存频道信息成功");
+		return "redirect:"+Global.getAdminPath()+"/channel/cdbooChannel/?repage";
+	}
+	
+	@RequestMapping(value = "saveMapping")
+	public String saveMapping(CdbooChannel cdbooChannel, Model model, RedirectAttributes redirectAttributes, HttpServletRequest request) {
 		cdbooChannelService.save(cdbooChannel);
 		addMessage(redirectAttributes, "保存频道信息成功");
 		return "redirect:"+Global.getAdminPath()+"/channel/cdbooChannel/?repage";

@@ -55,7 +55,14 @@ public class CdbooMusicController extends BaseController {
 		model.addAttribute("page", page);
 		return "cdboo/music/cdbooMusicList";
 	}
-
+	
+	@RequestMapping(value = {"openMusicWin"})
+	public String openMusicWin(CdbooMusic cdbooMusic, HttpServletRequest request, HttpServletResponse response, Model model) {
+		Page<CdbooMusic> page = cdbooMusicService.findPage(new Page<CdbooMusic>(request, response), cdbooMusic); 
+		model.addAttribute("page", page);
+		return "cdboo/music/cdbooMusicOpenWin";
+	}
+	
 	@RequiresPermissions("music:cdbooMusic:view")
 	@RequestMapping(value = "form")
 	public String form(CdbooMusic cdbooMusic, Model model) {
