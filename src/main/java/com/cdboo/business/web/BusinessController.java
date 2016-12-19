@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.cdboo.business.entity.BusinessTimestep;
 import com.cdboo.business.model.BusinessTimestepModel;
+import com.cdboo.channel.entity.CdbooChannel;
+import com.cdboo.channel.service.CdbooChannelService;
 import com.cdboo.timestep.entity.Timestep;
 import com.cdboo.timestep.service.TimestepService;
 import com.thinkgem.jeesite.common.persistence.Page;
@@ -48,6 +50,9 @@ public class BusinessController extends BaseController {
 
 	@Autowired
 	private TimestepService timestepService;
+
+	@Autowired
+	private CdbooChannelService channelService;
 
 	@ModelAttribute
 	public Business get(@RequestParam(required=false) String id) {
@@ -166,6 +171,9 @@ public class BusinessController extends BaseController {
 		//所有时段
 		List<Timestep> timestepList = timestepService.findList(new Timestep());
 
+		Page<CdbooChannel> page = channelService.findPage(new Page<>(request, response), new CdbooChannel());
+
+		model.addAttribute("channelList", page.getList());
 		model.addAttribute("timestepList", timestepList);
 		model.addAttribute("businessTimestepModel", businessTimestepModel);
 		return "cdboo/business/businessTimestepForm";

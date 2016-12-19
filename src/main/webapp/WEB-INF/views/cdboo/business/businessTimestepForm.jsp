@@ -93,6 +93,7 @@
                 <tr>
                     <th class="hide"></th>
                     <th>时段</th>
+                    <th>频道</th>
                     <th>名称</th>
                     <th>备注</th>
                     <shiro:hasPermission name="business:timestep:edit"><th width="10">&nbsp;</th></shiro:hasPermission>
@@ -113,9 +114,18 @@
 
 							<td>
 								<select id="businessTimestepList{{idx}}_timestep.id" name="businessTimestepList[{{idx}}].timestep.id" data-value="{{row.timestep.id}}" class="input-small ">
-									<option value=""></option>
+									<option value="">请选择</option>
 									<c:forEach items="${timestepList}" var="timestep">
 										<option value="${timestep.id}">${timestep.timestepName}</option>
+									</c:forEach>
+								</select>
+							</td>
+
+                            <td>
+								<select id="businessTimestepList{{idx}}_channel.id" name="businessTimestepList[{{idx}}].channel.id" data-value="{{row.channel.id}}" class="input-small ">
+									<option value="">请选择</option>
+									<c:forEach items="${channelList}" var="channel">
+										<option value="${channel.id}">${channel.channelName}</option>
 									</c:forEach>
 								</select>
 							</td>

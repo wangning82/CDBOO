@@ -43,15 +43,20 @@
 		b.update_date AS "timestep.updateDate",
 
 		c.id AS "business.id",
-		c.name AS "business.name"
+		c.name AS "business.name",
+
+		d.id AS "channel.id",
+		d.channel_no AS "channel.channelNo",
+		d.channel_name AS "channel.channelName"
 	</sql>
 
 	<sql id="businessJoins">
 	</sql>
 
 	<sql id="businessTimestepJoins">
-		JOIN cdboo_timestep b on b.id = a.timestep_id
 		JOIN cdboo_business c on c.id = a.business_id
+		JOIN cdboo_timestep b on b.id = a.timestep_id
+		JOIN cdboo_child_channel d on d.id = a.channel_id
 	</sql>
 
 	<select id="get" resultType="Business">
@@ -171,6 +176,7 @@
 		UPDATE cdboo_business_timestep SET
 		business_id = #{business.id},
 		timestep_id = #{timestep.id},
+		channel_id = #{channel.id},
 		name = #{name},
 		sort = #{sort},
 		update_by = #{updateBy.id},
@@ -243,6 +249,7 @@
 			id,
 			business_id,
 			timestep_id,
+			channel_id,
 			name,
 			sort,
 			remarks,
@@ -256,6 +263,7 @@
 			#{id},
 			#{business.id},
 			#{timestep.id},
+			#{channel.id},
 			#{name},
 			#{sort},
 			#{remarks},

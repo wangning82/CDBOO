@@ -58,6 +58,8 @@
         <th>行业名称</th>
         <th>时段编号</th>
         <th>时段名称</th>
+        <th>频道编号</th>
+        <th>频道名称</th>
         <th>开始时间</th>
         <th>结束时间</th>
         <th>更新时间</th>
@@ -78,16 +80,22 @@
                     ${businessTimestep.timestep.timestepName}
             </td>
             <td>
+                    ${businessTimestep.channel.channelNo}
+            </td>
+            <td>
+                    ${businessTimestep.channel.channelName}
+            </td>
+            <td>
                     <fmt:formatDate value="${businessTimestep.timestep.starttime}" pattern="HH:mm:ss"/>
             </td>
             <td>
                     <fmt:formatDate value="${businessTimestep.timestep.endtime}" pattern="HH:mm:ss"/>
             </td>
             <td>
-                <fmt:formatDate value="${businessTimestep.timestep.updateDate}" pattern="yyyy-MM-dd"/>
+                <fmt:formatDate value="${businessTimestep.updateDate}" pattern="yyyy-MM-dd"/>
             </td>
             <td>
-                    ${businessTimestep.timestep.remarks}
+                    ${businessTimestep.remarks}
             </td>
         </tr>
     </c:forEach>

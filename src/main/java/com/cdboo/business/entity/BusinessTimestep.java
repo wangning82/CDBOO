@@ -1,5 +1,6 @@
 package com.cdboo.business.entity;
 
+import com.cdboo.channel.entity.CdbooChannel;
 import com.cdboo.timestep.entity.Timestep;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Lists;
@@ -20,6 +21,7 @@ public class BusinessTimestep extends DataEntity<BusinessTimestep> {
 
     private Business business;
     private Timestep timestep;
+    private CdbooChannel channel;
 
     public String getName() {
         return name;
@@ -69,5 +71,13 @@ public class BusinessTimestep extends DataEntity<BusinessTimestep> {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public CdbooChannel getChannel() {
+        return channel;
+    }
+
+    public void setChannel(CdbooChannel channel) {
+        this.channel = channel;
     }
 }
