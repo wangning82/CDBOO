@@ -55,6 +55,25 @@
 		</choose>
 	</select>
 	
+	<select id="findGroupByList" resultType="CdbooUserChannel">
+		SELECT 
+			a.user_id AS "user.id",a.channel_id AS "channel.id",COUNT(a.music_id) AS "musicSize"
+		FROM cdboo_user_channel a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.user_id = #{user.id}
+			</if>
+			<if test="channel != null and channel.id != null and channel.id != ''">
+				AND a.channel_id = #{channel.id}
+			</if>
+			<if test="music != null and music.id != null and music.id != ''">
+				AND a.music_id = #{music.id}
+			</if>
+		</where>
+		group by a.user_id,a.channel_id
+	</select>
+	
 	<select id="findAllList" resultType="CdbooUserChannel">
 		SELECT 
 			<include refid="cdbooUserChannelColumns"/>

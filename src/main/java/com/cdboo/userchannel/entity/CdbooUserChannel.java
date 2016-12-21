@@ -20,7 +20,7 @@ public class CdbooUserChannel extends DataEntity<CdbooUserChannel> {
 	private User user;		// 用户id
 	private CdbooChannel channel;		// 频道id
 	private CdbooMusic music;		// 音乐id
-	
+	private int musicSize;
 	public CdbooUserChannel() {
 		super();
 	}
@@ -51,6 +51,14 @@ public class CdbooUserChannel extends DataEntity<CdbooUserChannel> {
 
 	public void setMusic(CdbooMusic music) {
 		this.music = music;
+	}
+
+	public int getMusicSize() {
+		return musicSize;
+	}
+
+	public void setMusicSize(int musicSize) {
+		this.musicSize = musicSize;
 	}
 	
 }

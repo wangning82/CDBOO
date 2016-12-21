@@ -3,6 +3,8 @@
  */
 package com.cdboo.userchannel.web;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,14 +15,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.thinkgem.jeesite.common.config.Global;
-import com.thinkgem.jeesite.common.persistence.Page;
-import com.thinkgem.jeesite.common.web.BaseController;
-import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.cdboo.userchannel.entity.CdbooUserChannel;
 import com.cdboo.userchannel.service.CdbooUserChannelService;
+import com.thinkgem.jeesite.common.config.Global;
+import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.common.web.BaseController;
 
 /**
  * 用户频道表Controller
@@ -49,7 +52,7 @@ public class CdbooUserChannelController extends BaseController {
 	@RequiresPermissions("userchannel:cdbooUserChannel:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(CdbooUserChannel cdbooUserChannel, HttpServletRequest request, HttpServletResponse response, Model model) {
-		Page<CdbooUserChannel> page = cdbooUserChannelService.findPage(new Page<CdbooUserChannel>(request, response), cdbooUserChannel); 
+		Page<CdbooUserChannel> page = cdbooUserChannelService.findPageForGroupBy(new Page<CdbooUserChannel>(request, response), cdbooUserChannel); 
 		model.addAttribute("page", page);
 		return "cdboo/userchannel/cdbooUserChannelList";
 	}
@@ -78,6 +81,14 @@ public class CdbooUserChannelController extends BaseController {
 		cdbooUserChannelService.delete(cdbooUserChannel);
 		addMessage(redirectAttributes, "删除用户频道成功");
 		return "redirect:"+Global.getAdminPath()+"/userchannel/cdbooUserChannel/?repage";
+	}
+	
+	@RequiresPermissions("business:business:view")
+	@ResponseBody
+	@RequestMapping(value = "getChannelList")
+	public List<CdbooUserChannel> getChannelList(@RequestParam(required=false) String userId, HttpServletResponse response) {
+		List<CdbooUserChannel> channel = cdbooUserChannelService.getChannelListByUser(userId);
+		return channel;
 	}
 
 }

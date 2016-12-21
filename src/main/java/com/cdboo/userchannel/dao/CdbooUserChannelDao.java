@@ -5,6 +5,9 @@ package com.cdboo.userchannel.dao;
 
 import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
+
+import java.util.List;
+
 import com.cdboo.userchannel.entity.CdbooUserChannel;
 
 /**
@@ -14,5 +17,5 @@ import com.cdboo.userchannel.entity.CdbooUserChannel;
  */
 @MyBatisDao
 public interface CdbooUserChannelDao extends CrudDao<CdbooUserChannel> {
-	
+	public List<CdbooUserChannel> findGroupByList(CdbooUserChannel cdbooUserChannel);
 }
