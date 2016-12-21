@@ -21,6 +21,10 @@
 	<sql id="businesstimestepColumns">
 		a.id AS "id",
 		a.name AS "name",
+		a.music_style AS "musicStyle",
+		a.week AS "week",
+		a.start_date AS "startDate",
+		a.end_date AS "endDate",
 		a.sort AS "sort",
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
