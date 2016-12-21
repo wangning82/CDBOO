@@ -103,8 +103,10 @@
 					<form:option value="" label="请选择"/>
 					<form:options items="${channelList}" itemLabel="channelName" itemValue="id" htmlEscape="false"/>
 				</form:select>
+				&nbsp;
 				<input id="assignButton" class="btn btn-primary" type="button" value="分配音乐" onclick="openMappingWin()"/>
 			</div>
+			
 		</div>
 		
 		<table id="contentTable" class="table table-striped table-bordered table-condensed">
