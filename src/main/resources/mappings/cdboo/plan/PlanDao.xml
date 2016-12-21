@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdboo.plan.dao.PlanDao">
+
+    <sql id="planColumns">
+        a.id AS "id",
+        a.parent_id AS "parent.id",
+        a.parent_ids AS "parentIds",
+        a.name AS "name",
+        a.hierarchy AS "hierarchy",
+        a.sort AS "sort",
+        a.create_by AS "createBy.id",
+        a.create_date AS "createDate",
+        a.update_by AS "updateBy.id",
+        a.update_date AS "updateDate",
+        a.remarks AS "remarks",
+        a.del_flag AS "delFlag",
+        a.status AS "status"
+    </sql>
+
+    <sql id="businesstimestepColumns">
+        a.id AS "id",
+        a.name AS "name",
+        a.sort AS "sort",
+        a.create_by AS "createBy.id",
+        a.create_date AS "createDate",
+        a.update_by AS "updateBy.id",
+        a.update_date AS "updateDate",
+        a.remarks AS "remarks",
+        a.del_flag AS "delFlag",
+        a.status AS "status",
+
+        b.id AS "timestep.id",
+        b.timestep_no AS "timestep.timestepNo",
+        b.timestep_name AS "timestep.timestepName",
+        b.starttime AS "timestep.starttime",
+        b.endtime AS "timestep.endtime",
+        b.status AS "timestep.status",
+        b.remarks AS "timestep.remarks",
+        b.create_by AS "timestep.createBy.id",
+        b.create_date AS "timestep.createDate",
+        b.update_by AS "timestep.updateBy.id",
+        b.update_date AS "timestep.updateDate",
+
+        c.id AS "business.id",
+        c.name AS "business.name",
+
+        d.id AS "channel.id",
+        d.channel_no AS "channel.channelNo",
+        d.channel_name AS "channel.channelName"
+    </sql>
+
+    <sql id="businessJoins">
+    </sql>
+
+    <sql id="businessTimestepJoins">
+        JOIN cdboo_business c on c.id = a.business_id
+        JOIN cdboo_timestep b on b.id = a.timestep_id
+        JOIN cdboo_child_channel d on d.id = a.channel_id
+    </sql>
+
+    <select id="get" resultType="Business">
+        SELECT
+        <include refid="planColumns"/>
+        FROM cdboo_business a
+        <include refid="businessJoins"/>
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="getBusinessTimestep" resultType="BusinessTimestep">
+        SELECT
+        <include refid="businesstimestepColumns"/>
+        FROM cdboo_business_timestep a
+        <include refid="businessTimestepJoins"/>
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="findList" resultType="Business">
+        SELECT
+        <include refid="planColumns"/>
+        FROM cdboo_business a
+        <include refid="businessJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            <if test="parent != null and parent.id != null and parent.id != ''">
+                AND a.parent_id = #{parent.id}
+            </if>
+            <if test="parentIds != null and parentIds != ''">
+                AND a.parent_ids LIKE
+                <if test="dbName == 'oracle'">'%'||#{parentIds}||'%'</if>
+                <if test="dbName == 'mssql'">'%'+#{parentIds}+'%'</if>
+                <if test="dbName == 'mysql'">concat('%',#{parentIds},'%')</if>
+            </if>
+            <if test="name != null and name != ''">
+                AND a.name LIKE
+                <if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+                <if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+                <if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+            </if>
+        </where>
+        ORDER BY a.sort ASC
+    </select>
+
+    <select id="findAllList" resultType="Business">
+        SELECT
+        <include refid="planColumns"/>
+        FROM cdboo_business a
+        <include refid="businessJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+        </where>
+        ORDER BY a.sort ASC
+    </select>
+
+    <select id="findByParentIdsLike" resultType="Business">
+        SELECT
+        a.id,
+        a.parent_id AS "parent.id",
+        a.parent_ids
+        FROM cdboo_business a
+        <include refid="businessJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            AND a.parent_ids LIKE #{parentIds}
+        </where>
+        ORDER BY a.sort ASC
+    </select>
+
+    <insert id="insert">
+        INSERT INTO cdboo_business(
+        id,
+        parent_id,
+        parent_ids,
+        name,
+        hierarchy,
+        sort,
+        create_by,
+        create_date,
+        update_by,
+        update_date,
+        remarks,
+        del_flag,
+        status
+        ) VALUES (
+        #{id},
+        #{parent.id},
+        #{parentIds},
+        #{name},
+        #{hierarchy},
+        #{sort},
+        #{createBy.id},
+        #{createDate},
+        #{updateBy.id},
+        #{updateDate},
+        #{remarks},
+        #{delFlag},
+        #{status}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE cdboo_business SET
+        parent_id = #{parent.id},
+        parent_ids = #{parentIds},
+        name = #{name},
+        hierarchy = #{hierarchy},
+        sort = #{sort},
+        update_by = #{updateBy.id},
+        update_date = #{updateDate},
+        remarks = #{remarks},
+        status = #{status}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateBusinessTimestep">
+        UPDATE cdboo_business_timestep SET
+        business_id = #{business.id},
+        timestep_id = #{timestep.id},
+        channel_id = #{channel.id},
+        name = #{name},
+        sort = #{sort},
+        update_by = #{updateBy.id},
+        update_date = #{updateDate},
+        remarks = #{remarks},
+        status = #{status}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateParentIds">
+        UPDATE cdboo_business SET
+        parent_id = #{parent.id},
+        parent_ids = #{parentIds}
+        WHERE id = #{id}
+    </update>
+
+    <update id="delete">
+        UPDATE cdboo_business SET
+        del_flag = #{DEL_FLAG_DELETE}
+        WHERE id = #{id} OR parent_ids LIKE '%,'||#{id}||',%'
+    </update>
+
+    <update id="deleteBusinessTimestep">
+        UPDATE cdboo_business_timestep SET
+        del_flag = #{DEL_FLAG_DELETE}
+        WHERE id = #{id}
+    </update>
+
+    <select id="findTimestepByBusinessTimestep" resultType="BusinessTimestep">
+        SELECT
+        <include refid="businesstimestepColumns"/>
+        FROM cdboo_business_timestep a
+        <include refid="businessTimestepJoins"/>
+
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            <if test="business != null and business.id != ''">
+                AND a.business_id = #{business.id}
+            </if>
+
+            <if test="timestep != null and timestep.timestepNo != ''">
+                AND b.timestep_no = #{timestep.timestepNo}
+            </if>
+
+            <if test="timestep != null and timestep.timestepName != ''">
+                AND b.timestep_name = #{timestep.timestepName}
+            </if>
+
+            <if test="timestep != null and timestep.beginStarttime != null and timestep.endStarttime != null and timestep.beginStarttime != '' and timestep.endStarttime != ''">
+                AND b.starttime BETWEEN #{timestep.beginStarttime} AND #{timestep.endStarttime}
+            </if>
+
+            <if test="timestep != null and timestep.beginEndtime != null and timestep.endEndtime != null and timestep.beginEndtime != '' and timestep.endEndtime != ''">
+                AND b.endtime BETWEEN #{timestep.beginEndtime} AND #{timestep.endEndtime}
+            </if>
+
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insertBusinessTimestep">
+        INSERT INTO cdboo_business_timestep(
+        id,
+        business_id,
+        timestep_id,
+        channel_id,
+        name,
+        sort,
+        remarks,
+        del_flag,
+        status,
+        create_by,
+        create_date,
+        update_by,
+        update_date
+        ) VALUES (
+        #{id},
+        #{business.id},
+        #{timestep.id},
+        #{channel.id},
+        #{name},
+        #{sort},
+        #{remarks},
+        #{delFlag},
+        #{status},
+        #{createBy.id},
+        #{createDate},
+        #{updateBy.id},
+        #{updateDate}
+        )
+    </insert>
+
+
+</mapper>
