@@ -7,6 +7,7 @@ import com.google.common.collect.Lists;
 import com.thinkgem.jeesite.common.persistence.DataEntity;
 import com.thinkgem.jeesite.modules.sys.entity.Role;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,6 +19,11 @@ public class BusinessTimestep extends DataEntity<BusinessTimestep> {
     private String sort;
     private String remarks;
     private String status;
+
+    private String musicStyle;
+    private String week;
+    private Date startDate;
+    private Date endDate;
 
     private Business business;
     private Timestep timestep;
@@ -79,5 +85,37 @@ public class BusinessTimestep extends DataEntity<BusinessTimestep> {
 
     public void setChannel(CdbooChannel channel) {
         this.channel = channel;
+    }
+
+    public String getWeek() {
+        return week;
+    }
+
+    public void setWeek(String week) {
+        this.week = week;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getMusicStyle() {
+        return musicStyle;
+    }
+
+    public void setMusicStyle(String musicStyle) {
+        this.musicStyle = musicStyle;
     }
 }

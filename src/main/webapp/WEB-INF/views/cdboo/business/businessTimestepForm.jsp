@@ -95,6 +95,10 @@
                     <th>时段</th>
                     <th>频道</th>
                     <th>名称</th>
+                    <th>风格</th>
+                    <th>星期</th>
+                    <th>开始日期</th>
+                    <th>结束日期</th>
                     <th>备注</th>
                     <shiro:hasPermission name="business:timestep:edit"><th width="10">&nbsp;</th></shiro:hasPermission>
                 </tr>
@@ -132,6 +136,38 @@
 
 							<td>
 								<input id="businessTimestepList{{idx}}_name" name="businessTimestepList[{{idx}}].name" type="text" value="{{row.name}}" maxlength="255" class="input-small "/>
+							</td>
+
+                            <td>
+                                <select id="businessTimestepList{{idx}}_musicStyle" name="businessTimestepList[{{idx}}].musicStyle" data-value="{{row.musicStyle}}" class="input-small ">
+                                    <option value="">请选择</option>
+                                    <c:forEach items="${fns:getDictList('music_style')}" var="style">
+										<option value="${style.value}">${style.label}</option>
+									</c:forEach>
+                                </select>
+							</td>
+
+                            <td>
+                                <select id="businessTimestepList{{idx}}_week" name="businessTimestepList[{{idx}}].week" data-value="{{row.week}}" class="input-small ">
+                                    <option value="">请选择</option>
+									<option value="1">星期一</option>
+									<option value="2">星期二</option>
+									<option value="3">星期三</option>
+									<option value="4">星期四</option>
+									<option value="5">星期五</option>
+									<option value="6">星期六</option>
+									<option value="7">星期日</option>
+                                </select>
+							</td>
+
+                            <td>
+								<input id="businessTimestepList{{idx}}_startDate" name="serviceFundList[{{idx}}].startDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
+									value="{{row.startDate}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
+							</td>
+
+                            <td>
+								<input id="businessTimestepList{{idx}}_endDate" name="serviceFundList[{{idx}}].endDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
+									value="{{row.endDate}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
 							</td>
 
 							<td>

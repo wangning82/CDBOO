@@ -62,6 +62,10 @@
         <th>频道名称</th>
         <th>开始时间</th>
         <th>结束时间</th>
+        <th>风格</th>
+        <th>星期</th>
+        <th>开始日期</th>
+        <th>结束日期</th>
         <th>更新时间</th>
         <th>备注信息</th>
     </tr>
@@ -91,6 +95,22 @@
             <td>
                     <fmt:formatDate value="${businessTimestep.timestep.endtime}" pattern="HH:mm:ss"/>
             </td>
+
+            <td>
+                    ${businessTimestep.musicStyle}
+            </td>
+
+            <td>
+                    ${businessTimestep.week}
+            </td>
+
+            <td>
+                <fmt:formatDate value="${businessTimestep.startDate}" pattern="yyyy-MM-dd"/>
+            </td>
+            <td>
+                <fmt:formatDate value="${businessTimestep.endDate}" pattern="yyyy-MM-dd"/>
+            </td>
+
             <td>
                 <fmt:formatDate value="${businessTimestep.updateDate}" pattern="yyyy-MM-dd"/>
             </td>
