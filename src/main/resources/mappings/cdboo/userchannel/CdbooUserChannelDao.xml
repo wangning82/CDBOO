@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdboo.userchannel.dao.CdbooUserChannelDao">
+    
+	<sql id="cdbooUserChannelColumns">
+		a.id AS "id",
+		a.user_id AS "user.id",
+		a.channel_id AS "channel.id",
+		a.music_id AS "music.id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		u2.name AS "user.name"
+	</sql>
+	
+	<sql id="cdbooUserChannelJoins">
+		LEFT JOIN sys_user u2 ON u2.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="CdbooUserChannel">
+		SELECT 
+			<include refid="cdbooUserChannelColumns"/>
+		FROM cdboo_user_channel a
+		<include refid="cdbooUserChannelJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CdbooUserChannel">
+		SELECT 
+			<include refid="cdbooUserChannelColumns"/>
+		FROM cdboo_user_channel a
+		<include refid="cdbooUserChannelJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.user_id = #{user.id}
+			</if>
+			<if test="channel != null and channel.id != null and channel.id != ''">
+				AND a.channel_id = #{channel.id}
+			</if>
+			<if test="music != null and music.id != null and music.id != ''">
+				AND a.music_id = #{music.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CdbooUserChannel">
+		SELECT 
+			<include refid="cdbooUserChannelColumns"/>
+		FROM cdboo_user_channel a
+		<include refid="cdbooUserChannelJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cdboo_user_channel(
+			id,
+			user_id,
+			channel_id,
+			music_id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{user.id},
+			#{channel.id},
+			#{music.id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cdboo_user_channel SET 	
+			user_id = #{user.id},
+			channel_id = #{channel.id},
+			music_id = #{music.id},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE cdboo_user_channel SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

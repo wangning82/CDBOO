@@ -51,6 +51,9 @@
 		<dict value="com.cdboo.notice.entity.CabinetmsNotice" label="Notice"/>
 		<dict value="com.cdboo.programtactic.entity.CabinetmsProgramTactic" label="CabinetmsProgramTactic"/>
 		<dict value="com.cdboo.program.entity.Program" label="Program"/>
+		<dict value="com.cdboo.channel.entity.CdbooChannel" label="Channel"/>
+		<dict value="com.cdboo.timestep.entity.Timestep" label="TimeStep"/>
+		<dict value="com.cdboo.music.entity.CdbooMusic" label="Music"/>
 		<dict value="This" label="ThisObj" description="生成当前对象"/>
 		<dict value="Custom" label="Custom" description="自定义对象，生成后手动设置"/>
 		
