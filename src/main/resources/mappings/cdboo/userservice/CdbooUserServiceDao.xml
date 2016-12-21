@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdboo.userservice.dao.CdbooUserServiceDao">
+    
+	<sql id="cdbooUserServiceColumns">
+		a.id AS "id",
+		a.user_id AS "user.id",
+		a.contract_start_time AS "contractStartTime",
+		a.contract_end_time AS "contractEndTime",
+		a.service_note AS "serviceNote",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.status AS "status",
+		u2.name AS "user.name"
+	</sql>
+	
+	<sql id="cdbooUserServiceJoins">
+		LEFT JOIN sys_user u2 ON u2.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="CdbooUserService">
+		SELECT 
+			<include refid="cdbooUserServiceColumns"/>
+		FROM cdboo_user_service a
+		<include refid="cdbooUserServiceJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CdbooUserService">
+		SELECT 
+			<include refid="cdbooUserServiceColumns"/>
+		FROM cdboo_user_service a
+		<include refid="cdbooUserServiceJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.user_id = #{user.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CdbooUserService">
+		SELECT 
+			<include refid="cdbooUserServiceColumns"/>
+		FROM cdboo_user_service a
+		<include refid="cdbooUserServiceJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cdboo_user_service(
+			id,
+			user_id,
+			contract_start_time,
+			contract_end_time,
+			service_note,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			status
+		) VALUES (
+			#{id},
+			#{user.id},
+			#{contractStartTime},
+			#{contractEndTime},
+			#{serviceNote},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{status}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cdboo_user_service SET 	
+			user_id = #{user.id},
+			contract_start_time = #{contractStartTime},
+			contract_end_time = #{contractEndTime},
+			service_note = #{serviceNote},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			status = #{status}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE cdboo_user_service SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdboo.userplan.dao.CdbooPlanDao">
+    
+	<sql id="cdbooPlanColumns">
+		a.id AS "id",
+		a.plan_no AS "planNo",
+		a.play_name AS "playName",
+		a.user_id AS "user.id",
+		a.user_timestep_id AS "userTimestepId",
+		a.user_channel_id AS "userChannelId",
+		a.music_style AS "musicStyle",
+		a.week AS "week",
+		a.start_date AS "startDate",
+		a.end_date AS "endDate",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.status AS "status",
+		u4.name AS "user.name"
+	</sql>
+	
+	<sql id="cdbooPlanJoins">
+		LEFT JOIN sys_user u4 ON u4.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="CdbooPlan">
+		SELECT 
+			<include refid="cdbooPlanColumns"/>
+		FROM cdboo_plan a
+		<include refid="cdbooPlanJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CdbooPlan">
+		SELECT 
+			<include refid="cdbooPlanColumns"/>
+		FROM cdboo_plan a
+		<include refid="cdbooPlanJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="planNo != null and planNo != ''">
+				AND a.plan_no = #{planNo}
+			</if>
+			<if test="playName != null and playName != ''">
+				AND a.play_name = #{playName}
+			</if>
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.user_id = #{user.id}
+			</if>
+			<if test="userTimestepId != null and userTimestepId != ''">
+				AND a.user_timestep_id = #{userTimestepId}
+			</if>
+			<if test="userChannelId != null and userChannelId != ''">
+				AND a.user_channel_id = #{userChannelId}
+			</if>
+			<if test="musicStyle != null and musicStyle != ''">
+				AND a.music_style = #{musicStyle}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CdbooPlan">
+		SELECT 
+			<include refid="cdbooPlanColumns"/>
+		FROM cdboo_plan a
+		<include refid="cdbooPlanJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cdboo_plan(
+			id,
+			plan_no,
+			play_name,
+			user_id,
+			user_timestep_id,
+			user_channel_id,
+			music_style,
+			week,
+			start_date,
+			end_date,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			status
+		) VALUES (
+			#{id},
+			#{planNo},
+			#{playName},
+			#{user.id},
+			#{userTimestepId},
+			#{userChannelId},
+			#{musicStyle},
+			#{week},
+			#{startDate},
+			#{endDate},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{status}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cdboo_plan SET 	
+			plan_no = #{planNo},
+			play_name = #{playName},
+			user_id = #{user.id},
+			user_timestep_id = #{userTimestepId},
+			user_channel_id = #{userChannelId},
+			music_style = #{musicStyle},
+			week = #{week},
+			start_date = #{startDate},
+			end_date = #{endDate},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			status = #{status}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE cdboo_plan SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

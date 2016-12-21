@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdboo.musicinsert.dao.CdbooMusicInsertDao">
+    
+	<sql id="cdbooMusicInsertColumns">
+		a.id AS "id",
+		a.insert_no AS "insertNo",
+		a.insert_name AS "insertName",
+		a.start_date AS "startDate",
+		a.end_date AS "endDate",
+		a.music__id AS "musicId",
+		a.time AS "time",
+		a.number AS "number",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.status AS "status",
+		a.user_id AS "user.id",
+		u16.name AS "user.name"
+	</sql>
+	
+	<sql id="cdbooMusicInsertJoins">
+		LEFT JOIN sys_user u16 ON u16.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="CdbooMusicInsert">
+		SELECT 
+			<include refid="cdbooMusicInsertColumns"/>
+		FROM cdboo_music_insert a
+		<include refid="cdbooMusicInsertJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CdbooMusicInsert">
+		SELECT 
+			<include refid="cdbooMusicInsertColumns"/>
+		FROM cdboo_music_insert a
+		<include refid="cdbooMusicInsertJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="insertNo != null and insertNo != ''">
+				AND a.insert_no = #{insertNo}
+			</if>
+			<if test="insertName != null and insertName != ''">
+				AND a.insert_name = #{insertName}
+			</if>
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.user_id = #{user.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CdbooMusicInsert">
+		SELECT 
+			<include refid="cdbooMusicInsertColumns"/>
+		FROM cdboo_music_insert a
+		<include refid="cdbooMusicInsertJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cdboo_music_insert(
+			id,
+			insert_no,
+			insert_name,
+			start_date,
+			end_date,
+			music__id,
+			time,
+			number,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			status,
+			user_id
+		) VALUES (
+			#{id},
+			#{insertNo},
+			#{insertName},
+			#{startDate},
+			#{endDate},
+			#{musicId},
+			#{time},
+			#{number},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{status},
+			#{user.id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cdboo_music_insert SET 	
+			insert_no = #{insertNo},
+			insert_name = #{insertName},
+			start_date = #{startDate},
+			end_date = #{endDate},
+			music__id = #{musicId},
+			time = #{time},
+			number = #{number},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			status = #{status},
+			user_id = #{user.id}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE cdboo_music_insert SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
