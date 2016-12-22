@@ -5,6 +5,10 @@ package com.cdboo.userplan.service;
 
 import java.util.List;
 
+import com.cdboo.userplan.model.PlanModel;
+import com.thinkgem.jeesite.modules.sys.entity.User;
+import org.h2.table.Plan;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +26,9 @@ import com.cdboo.userplan.dao.CdbooPlanDao;
 @Transactional(readOnly = true)
 public class CdbooPlanService extends CrudService<CdbooPlanDao, CdbooPlan> {
 
+	@Autowired
+	private CdbooPlanDao cdbooPlanDao;
+
 	public CdbooPlan get(String id) {
 		return super.get(id);
 	}
@@ -35,8 +42,31 @@ public class CdbooPlanService extends CrudService<CdbooPlanDao, CdbooPlan> {
 	}
 	
 	@Transactional(readOnly = false)
-	public void save(CdbooPlan cdbooPlan) {
-		super.save(cdbooPlan);
+	public void save(PlanModel planModel) {
+
+		User user = new User();
+		user.setId(planModel.getUserId());
+
+		for (CdbooPlan cdbooPlan : planModel.getPlanList()) {
+			if (cdbooPlan.getId() == null){
+				continue;
+			}
+
+			cdbooPlan.setUser(user);
+			if (CdbooPlan.DEL_FLAG_NORMAL.equals(cdbooPlan.getDelFlag())){
+				if (org.apache.commons.lang3.StringUtils.isBlank(cdbooPlan.getId())) {
+					cdbooPlan.preInsert();
+					cdbooPlanDao.insert(cdbooPlan);
+				} else {
+					cdbooPlan.preUpdate();
+					cdbooPlanDao.update(cdbooPlan);
+				}
+			} else {
+				cdbooPlanDao.update(cdbooPlan);
+			}
+
+		}
+
 	}
 	
 	@Transactional(readOnly = false)

@@ -28,7 +28,12 @@ public class CdbooPlan extends DataEntity<CdbooPlan> {
 	private Date startDate;		// 开始日期
 	private Date endDate;		// 结束日期
 	private String status;		// 状态位显示
-	
+
+	//列表显示用
+	private String timestepName;
+	private String channelName;
+
+
 	public CdbooPlan() {
 		super();
 	}
@@ -99,7 +104,7 @@ public class CdbooPlan extends DataEntity<CdbooPlan> {
 		this.week = week;
 	}
 	
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	public Date getStartDate() {
 		return startDate;
 	}
@@ -108,7 +113,7 @@ public class CdbooPlan extends DataEntity<CdbooPlan> {
 		this.startDate = startDate;
 	}
 	
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	public Date getEndDate() {
 		return endDate;
 	}
@@ -125,5 +130,20 @@ public class CdbooPlan extends DataEntity<CdbooPlan> {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
+
+	public String getTimestepName() {
+		return timestepName;
+	}
+
+	public void setTimestepName(String timestepName) {
+		this.timestepName = timestepName;
+	}
+
+	public String getChannelName() {
+		return channelName;
+	}
+
+	public void setChannelName(String channelName) {
+		this.channelName = channelName;
+	}
 }

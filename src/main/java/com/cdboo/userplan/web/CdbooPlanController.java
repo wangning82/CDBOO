@@ -6,6 +6,14 @@ package com.cdboo.userplan.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.cdboo.business.model.BusinessTimestepModel;
+import com.cdboo.channel.entity.CdbooChannel;
+import com.cdboo.channel.service.CdbooChannelService;
+import com.cdboo.timestep.entity.Timestep;
+import com.cdboo.timestep.service.TimestepService;
+import com.cdboo.userplan.model.PlanModel;
+import com.thinkgem.jeesite.modules.sys.entity.User;
+import com.thinkgem.jeesite.modules.sys.service.SystemService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +30,8 @@ import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.cdboo.userplan.entity.CdbooPlan;
 import com.cdboo.userplan.service.CdbooPlanService;
 
+import java.util.List;
+
 /**
  * 用户计划表Controller
  * @author yubin
@@ -33,7 +43,16 @@ public class CdbooPlanController extends BaseController {
 
 	@Autowired
 	private CdbooPlanService cdbooPlanService;
-	
+
+	@Autowired
+	private TimestepService timestepService;
+
+	@Autowired
+	private CdbooChannelService channelService;
+
+	@Autowired
+	private SystemService systemService;
+
 	@ModelAttribute
 	public CdbooPlan get(@RequestParam(required=false) String id) {
 		CdbooPlan entity = null;
@@ -49,25 +68,47 @@ public class CdbooPlanController extends BaseController {
 	@RequiresPermissions("userplan:cdbooPlan:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(CdbooPlan cdbooPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
-		Page<CdbooPlan> page = cdbooPlanService.findPage(new Page<CdbooPlan>(request, response), cdbooPlan); 
+		Page<CdbooPlan> page = cdbooPlanService.findPage(new Page<CdbooPlan>(request, response), cdbooPlan);
+
+		List<Timestep> timestepList = timestepService.findList(new Timestep());
+		List<CdbooChannel> channelList = channelService.findList(new CdbooChannel());
+
+		model.addAttribute("channelList", channelList);
+		model.addAttribute("timestepList", timestepList);
+
 		model.addAttribute("page", page);
 		return "cdboo/userplan/cdbooPlanList";
 	}
 
 	@RequiresPermissions("userplan:cdbooPlan:view")
 	@RequestMapping(value = "form")
-	public String form(CdbooPlan cdbooPlan, Model model) {
-		model.addAttribute("cdbooPlan", cdbooPlan);
+	public String form(CdbooPlan cdbooPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
+
+		PlanModel planModel = new PlanModel();
+
+		if (org.apache.commons.lang3.StringUtils.isNotBlank(cdbooPlan.getUser().getId())) {
+			List<CdbooPlan> list = cdbooPlanService.findList(cdbooPlan);
+			User user = systemService.getUser(cdbooPlan.getUser().getId());
+
+			planModel.setPlanList(list);
+			planModel.setUserId(user.getId());
+			planModel.setUserName(user.getName());
+		}
+
+		//所有时段
+		List<Timestep> timestepList = timestepService.findList(new Timestep());
+		List<CdbooChannel> channelList = channelService.findList(new CdbooChannel());
+
+		model.addAttribute("channelList", channelList);
+		model.addAttribute("timestepList", timestepList);
+		model.addAttribute("planModel", planModel);
 		return "cdboo/userplan/cdbooPlanForm";
 	}
 
 	@RequiresPermissions("userplan:cdbooPlan:edit")
 	@RequestMapping(value = "save")
-	public String save(CdbooPlan cdbooPlan, Model model, RedirectAttributes redirectAttributes) {
-		if (!beanValidator(model, cdbooPlan)){
-			return form(cdbooPlan, model);
-		}
-		cdbooPlanService.save(cdbooPlan);
+	public String save(PlanModel planModel, Model model, RedirectAttributes redirectAttributes) {
+		cdbooPlanService.save(planModel);
 		addMessage(redirectAttributes, "保存用户计划成功");
 		return "redirect:"+Global.getAdminPath()+"/userplan/cdbooPlan/?repage";
 	}

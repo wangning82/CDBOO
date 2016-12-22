@@ -31,20 +31,26 @@
 			<li><label>计划名称：</label>
 				<form:input path="playName" htmlEscape="false" maxlength="100" class="input-medium"/>
 			</li>
-			<li><label>用户id：</label>
+			<li><label>用户：</label>
 				<sys:treeselect id="user" name="user.id" value="${cdbooPlan.user.id}" labelName="user.name" labelValue="${cdbooPlan.user.name}"
 					title="用户" url="/sys/office/treeData?type=3" cssClass="input-small" allowClear="true" notAllowSelectParent="true"/>
 			</li>
-			<li><label>用户时段id：</label>
-				<form:input path="userTimestepId" htmlEscape="false" maxlength="64" class="input-medium"/>
+			<li><label>用户时段：</label>
+				<form:select path="userTimestepId" class="input-medium">
+					<form:option value="" label=""/>
+					<form:options items="${timestepList}" itemLabel="timestepName" itemValue="id" htmlEscape="false"/>
+				</form:select>
 			</li>
 			<li><label>用户频道id：</label>
-				<form:input path="userChannelId" htmlEscape="false" maxlength="64" class="input-medium"/>
+				<form:select path="userChannelId" class="input-medium">
+					<form:option value="" label=""/>
+					<form:options items="${channelList}" itemLabel="channelName" itemValue="id" htmlEscape="false"/>
+				</form:select>
 			</li>
 			<li><label>风格：</label>
 				<form:select path="musicStyle" class="input-medium">
 					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+					<form:options items="${fns:getDictList('music_style')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</form:select>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
@@ -57,9 +63,9 @@
 			<tr>
 				<th>计划编号</th>
 				<th>计划名称</th>
-				<th>用户id</th>
-				<th>用户时段id</th>
-				<th>用户频道id</th>
+				<th>用户</th>
+				<th>用户时段</th>
+				<th>用户频道</th>
 				<th>风格</th>
 				<th>日期</th>
 				<th>开始日期</th>
@@ -72,7 +78,7 @@
 		<tbody>
 		<c:forEach items="${page.list}" var="cdbooPlan">
 			<tr>
-				<td><a href="${ctx}/userplan/cdbooPlan/form?id=${cdbooPlan.id}">
+				<td><a href="${ctx}/userplan/cdbooPlan/form?user.id=${cdbooPlan.user.id}">
 					${cdbooPlan.planNo}
 				</a></td>
 				<td>
@@ -82,31 +88,31 @@
 					${cdbooPlan.user.name}
 				</td>
 				<td>
-					${cdbooPlan.userTimestepId}
+					${cdbooPlan.timestepName}
 				</td>
 				<td>
-					${cdbooPlan.userChannelId}
+					${cdbooPlan.channelName}
 				</td>
 				<td>
-					${fns:getDictLabel(cdbooPlan.musicStyle, '', '')}
+					${fns:getDictLabel(cdbooPlan.musicStyle, 'music_style', '')}
 				</td>
 				<td>
-					${cdbooPlan.week}
+					${fns:getDictLabel(cdbooPlan.week, 'week', '')}
 				</td>
 				<td>
-					<fmt:formatDate value="${cdbooPlan.startDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+					<fmt:formatDate value="${cdbooPlan.startDate}" pattern="yyyy-MM-dd"/>
 				</td>
 				<td>
-					<fmt:formatDate value="${cdbooPlan.endDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+					<fmt:formatDate value="${cdbooPlan.endDate}" pattern="yyyy-MM-dd"/>
 				</td>
 				<td>
-					<fmt:formatDate value="${cdbooPlan.updateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+					<fmt:formatDate value="${cdbooPlan.updateDate}" pattern="yyyy-MM-dd"/>
 				</td>
 				<td>
 					${cdbooPlan.remarks}
 				</td>
 				<shiro:hasPermission name="userplan:cdbooPlan:edit"><td>
-    				<a href="${ctx}/userplan/cdbooPlan/form?id=${cdbooPlan.id}">修改</a>
+    				<a href="${ctx}/userplan/cdbooPlan/form?user.id=${cdbooPlan.user.id}">修改</a>
 					<a href="${ctx}/userplan/cdbooPlan/delete?id=${cdbooPlan.id}" onclick="return confirmx('确认要删除该用户计划吗？', this.href)">删除</a>
 				</td></shiro:hasPermission>
 			</tr>
