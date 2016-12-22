@@ -15,9 +15,9 @@
 			});
 	    });
 		
-		function MusicEntity(id,name,actor,special,musicOwner,volume){
+		function MusicEntity(id,musicName,actor,special,musicOwner,volume){
 			this.id = id;
-			this.name = name;
+			this.musicName = musicName;
 			this.actor = actor;
 			this.special = special;
 			this.musicOwner = musicOwner;
@@ -26,15 +26,18 @@
 		
 		function getCheckData(){
 			var checkArray = new Array();
-			$('input[name="musicIds"]:checked').each(function(index){
+			$('input[name="musicIds"]:checkbox:checked').each(function(){
 				var id = $(this).val();
-				var name = $('#name'+index).val();
-				var actor = $('#actor'+index).val();
-				var special = $('#special'+index).val();
-				var musicOwner = $('#musicOwner'+index).val();
-				var volume = $('#volume'+index).val();
+				var idName = $(this).attr('id');
+				var idNameArray = idName.split("_");
+				var rowIndex = idNameArray[1];
+				var musicName = $('#name_'+rowIndex).val();
+				var actor = $('#actor_'+rowIndex).val();
+				var special = $('#special_'+rowIndex).val();
+				var musicOwner = $('#musicOwner_'+rowIndex).val();
+				var volume = $('#volume_'+rowIndex).val();
 				
-				var musicEntity = new MusicEntity(id,name,actor,special,musicOwner,volume);
+				var musicEntity = new MusicEntity(id,musicName,actor,special,musicOwner,volume);
 				checkArray.push(musicEntity);
 			});
 			return checkArray;
@@ -84,7 +87,7 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th></th>
+				<th><input type="checkbox" onclick="changeCB(this.checked,'musicIds')" /></th>
 				<th>音乐名称</th>
 				<th>艺人</th>
 				<th>专辑</th>
@@ -95,12 +98,12 @@
 		<tbody>
 		<c:forEach items="${page.list}" var="cdbooMusic" varStatus="status">
 			<tr>
-				<td><input type="checkbox" id="id${status.index }" name="musicIds" value="${cdbooMusic.id }"/>
-					<input type="hidden" id="name${status.index }" value = "${cdbooMusic.musicName}"/>
-					<input type="hidden" id="actor${status.index }" value = "${cdbooMusic.actor}"/>
-					<input type="hidden" id="special${status.index }" value = "${cdbooMusic.special}"/>
-					<input type="hidden" id="musicOwner${status.index }" value = "${fns:getDictLabel(cdbooMusic.musicOwner, 'owner_type', '')}"/>
-					<input type="hidden" id="volume${status.index }" value = "${cdbooMusic.volume}"/>
+				<td><input type="checkbox" id="id_${status.index }" name="musicIds" value="${cdbooMusic.id }"/>
+					<input type="hidden" id="name_${status.index }" value = "${cdbooMusic.musicName}"/>
+					<input type="hidden" id="actor_${status.index }" value = "${cdbooMusic.actor}"/>
+					<input type="hidden" id="special_${status.index }" value = "${cdbooMusic.special}"/>
+					<input type="hidden" id="musicOwner_${status.index }" value = "${fns:getDictLabel(cdbooMusic.musicOwner, 'owner_type', '')}"/>
+					<input type="hidden" id="volume_${status.index }" value = "${cdbooMusic.volume}"/>
 				</td>
 				<td>
 					${cdbooMusic.musicName}<br/>

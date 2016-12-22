@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.TreeEntity;
 
 /**
@@ -17,7 +18,7 @@ import com.thinkgem.jeesite.common.persistence.TreeEntity;
  * @version 2013-05-15
  */
 public class Office extends TreeEntity<Office> {
-
+	
 	private static final long serialVersionUID = 1L;
 //	private Office parent;	// 父级编号
 //	private String parentIds; // 所有父级编号
@@ -37,6 +38,10 @@ public class Office extends TreeEntity<Office> {
 	private User primaryPerson;//主负责人
 	private User deputyPerson;//副负责人
 	private List<String> childDeptList;//快速添加子部门
+	
+	public static final String USER_TYPE_NORMAL = "3";
+	public static final String USER_ABLE_YES = Global.YES;
+	public static final String USER_ABLE_NO = Global.NO;
 	
 	public Office(){
 		super();

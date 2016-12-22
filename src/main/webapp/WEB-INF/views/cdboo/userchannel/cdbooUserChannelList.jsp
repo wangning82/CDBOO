@@ -4,33 +4,11 @@
 <head>
 	<title>用户频道管理</title>
 	<meta name="decorator" content="default"/>
+	<script type="text/javascript" src="${ctxStatic}/cdboo/userchannel/userchannel.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
+			
 		});
-		
-		function userTreeselectCallBack(v, h, f){
-			var userId = $('#userId').val();
-			 $.ajax({
-                 type: "post",
-                 async: false,
-                 url: "${ctx}/userchannel/cdbooUserChannel/getChannelList",
-                 data: {
-                     userId: userId
-                 },
-                 dataType: "json",
-                 success: function (data) {
-                	$('#channelId').empty();
-         			$('#channelId').append('<option value="">请选择</option>');
-         			
-                	 var dataArray = eval(data);
-                	 for(var i = 0;i<dataArray.length;i++){
-                		 var channelId = dataArray[i].channel.id;
-                		 var channelName = dataArray[i].channel.channelName;
-                		 $('#channelId').append('<option value="'+channelId+'">'+channelName+'</option>');
-                	 }
-                 }
-             });
-		}
 		
 		function page(n,s){
 			$("#pageNo").val(n);
@@ -38,6 +16,7 @@
 			$("#searchForm").submit();
         	return false;
         }
+		
 	</script>
 </head>
 <body>
@@ -56,7 +35,8 @@
 			</li>
 			<li><label>频道：</label>
 				<form:select id="channelId" path="channel.id" class="input-medium">
-					<form:option value="" label=""/>
+					<form:option value="" label="请选择"/>
+					<form:options items="${cdbooUserChannel.channelList }" itemLabel="channelName" itemValue="id"/>
 				</form:select>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>

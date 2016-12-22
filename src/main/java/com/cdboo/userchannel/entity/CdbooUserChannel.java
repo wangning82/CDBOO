@@ -4,9 +4,12 @@
 package com.cdboo.userchannel.entity;
 
 import com.thinkgem.jeesite.modules.sys.entity.User;
+
+import java.util.List;
+
 import com.cdboo.channel.entity.CdbooChannel;
 import com.cdboo.music.entity.CdbooMusic;
-
+import com.google.common.collect.Lists;
 import com.thinkgem.jeesite.common.persistence.DataEntity;
 
 /**
@@ -21,6 +24,13 @@ public class CdbooUserChannel extends DataEntity<CdbooUserChannel> {
 	private CdbooChannel channel;		// 频道id
 	private CdbooMusic music;		// 音乐id
 	private int musicSize;
+	
+	private List<CdbooChannel> channelList = Lists.newArrayList();
+	
+	private List<CdbooMusic> musicList = Lists.newArrayList();
+	
+	private List<String> musicIds = Lists.newArrayList();
+	
 	public CdbooUserChannel() {
 		super();
 	}
@@ -60,5 +70,29 @@ public class CdbooUserChannel extends DataEntity<CdbooUserChannel> {
 	public void setMusicSize(int musicSize) {
 		this.musicSize = musicSize;
 	}
-	
+
+	public List<CdbooChannel> getChannelList() {
+		return channelList;
+	}
+
+	public void setChannelList(List<CdbooChannel> channelList) {
+		this.channelList = channelList;
+	}
+
+	public List<CdbooMusic> getMusicList() {
+		return musicList;
+	}
+
+	public void setMusicList(List<CdbooMusic> musicList) {
+		this.musicList = musicList;
+	}
+
+	public List<String> getMusicIds() {
+		return musicIds;
+	}
+
+	public void setMusicIds(List<String> musicIds) {
+		this.musicIds = musicIds;
+	}
+
 }

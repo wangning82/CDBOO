@@ -74,6 +74,18 @@
 		group by a.user_id,a.channel_id
 	</select>
 	
+	<select id="findChannelByUser" resultType="CdbooUserChannel">
+		SELECT a.channel_id AS "channel.id"
+		FROM cdboo_user_channel a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.user_id = #{user.id}
+			</if>
+		</where>
+		group by a.channel_id
+	</select>
+	
 	<select id="findAllList" resultType="CdbooUserChannel">
 		SELECT 
 			<include refid="cdbooUserChannelColumns"/>
@@ -133,6 +145,10 @@
 		UPDATE cdboo_user_channel SET 
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM cdboo_user_channel WHERE id = #{id}
 	</update>
 	
 </mapper>

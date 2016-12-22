@@ -53,7 +53,6 @@
 		function openMappingWin(){
 			var ids = '';
 			var musicIdSize = $("input[name = 'musicIds']").size();
-			alert('musicSize:'+musicIdSize)
 			if(musicIdSize > 0){
 				$("input[name = 'musicIds']").each(function(index){
 					var id = $(this).val();
@@ -63,7 +62,6 @@
 					}
 				});
 			}
-			alert('ids:'+ids)
 			top.$.jBox.open("iframe:${ctx}/music/cdbooMusic/openMusicWin?ids="+ids, "分配音乐",$(top.document).width()-240,$(top.document).height()-240,{
 				buttons:{"确定分配":"ok", "清除已选":"clear", "关闭":true}, bottomText:"通过查询条件选择音乐，选择后窗口不会关闭，可以连续选择。",submit:function(v, h, f){
 					var checkArray = h.find("iframe")[0].contentWindow.getCheckData();

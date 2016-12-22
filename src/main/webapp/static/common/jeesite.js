@@ -305,3 +305,9 @@ Date.prototype.Format = function(fmt)
   fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length))); 
   return fmt; 
 }
+
+function changeCB(checkFlag,elementId){
+	$('input[name="'+elementId+'"]').each(function(){
+		$(this).attr('checked',checkFlag);
+	});
+}

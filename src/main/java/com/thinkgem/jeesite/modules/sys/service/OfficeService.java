@@ -56,4 +56,7 @@ public class OfficeService extends TreeService<OfficeDao, Office> {
 		UserUtils.removeCache(UserUtils.CACHE_OFFICE_LIST);
 	}
 	
+	public List<Office> findOfficeForNormalUser(Office office){
+		return dao.findOfficeForNormalUser(office);
+	}
 }
