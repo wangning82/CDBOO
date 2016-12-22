@@ -161,12 +161,12 @@
 							</td>
 
                             <td>
-								<input id="businessTimestepList{{idx}}_startDate" name="serviceFundList[{{idx}}].startDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
+								<input id="businessTimestepList{{idx}}_startDate" name="businessTimestepList[{{idx}}].startDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
 									value="{{row.startDate}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
 							</td>
 
                             <td>
-								<input id="businessTimestepList{{idx}}_endDate" name="serviceFundList[{{idx}}].endDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
+								<input id="businessTimestepList{{idx}}_endDate" name="businessTimestepList[{{idx}}].endDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
 									value="{{row.endDate}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
 							</td>
 
