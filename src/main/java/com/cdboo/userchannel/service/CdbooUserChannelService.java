@@ -142,7 +142,10 @@ public class CdbooUserChannelService extends CrudService<CdbooUserChannelDao, Cd
 
 	@Transactional(readOnly = false)
 	public void delete(CdbooUserChannel cdbooUserChannel) {
-		super.delete(cdbooUserChannel);
+		List<CdbooUserChannel> cdbooUserChannels = dao.findList(cdbooUserChannel);
+		for (CdbooUserChannel delUserChannel : cdbooUserChannels) {
+			dao.remove(delUserChannel);
+		}
 	}
 
 	/**
