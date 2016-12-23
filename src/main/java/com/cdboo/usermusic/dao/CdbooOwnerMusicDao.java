@@ -14,5 +14,5 @@ import com.cdboo.usermusic.entity.CdbooOwnerMusic;
  */
 @MyBatisDao
 public interface CdbooOwnerMusicDao extends CrudDao<CdbooOwnerMusic> {
-	
+	public void remove(CdbooOwnerMusic cdbooOwnerMusic);
 }

@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" import="com.cdboo.common.Constants" %>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
@@ -23,6 +23,40 @@
 				}
 			});
 		});
+		
+		function userTreeselectCallBack(v, h, f){
+			$('#tb').empty();
+			
+			var userId = $('#userId').val();
+			var owner_type_public = '${Constants.MUSICOWNER_PUBLIC}';
+			var owner_type_private = '${Constants.MUSICOWNER_PRIVATE}';
+			
+			$.ajax({
+		        type: "post",
+		        async: false,
+		        url: "getMusicList",
+		        data: {
+		            userId: userId
+		        },
+		        dataType: "json",
+		        success: function (data) {
+					var dataArray = eval(data);
+		        	var tpl = $("#musicTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
+					for (var i = 0; i < dataArray.length; i++) {
+						var entity = dataArray[i];
+						var musicOwner = entity.musicOwner;
+						if(musicOwner == owner_type_public){
+							entity.musicOwner = '公有';
+						}
+						if(musicOwner == owner_type_private){
+							entity.musicOwner = '私有';
+						}
+						//alert(entity.id+":"+entity.name+":"+entity.actor+":"+entity.special+":"+entity.musicOwner+":"+entity.volume)
+						$('#tb').append(Mustache.render(tpl, {row: entity}));
+					}
+		        }
+		   });
+		}
 	</script>
 </head>
 <body>
@@ -32,37 +66,33 @@
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="cdbooOwnerMusic" action="${ctx}/usermusic/cdbooOwnerMusic/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
-		<sys:message content="${message}"/>		
+		<sys:message content="${message}"/>
 		<div class="control-group">
-			<label class="control-label">音乐id：</label>
+			<label class="control-label">用户：</label>
 			<div class="controls">
-				<form:select path="musicId" class="input-xlarge ">
-					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
+				<!-- 如果是修改，则用户锁定，不能编辑 -->
+				<c:if test = "${not empty cdbooOwnerMusic.id}">
+					<sys:treeselect disabled="disabled" id="user" name="user.id" value="${cdbooOwnerMusic.user.id}" labelName="user.name" labelValue="${cdbooOwnerMusic.user.name}"
+						title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true" notAllowSelectParent="true" />
+				</c:if>
+				<!-- 如果是新增，则用户不锁定，允许编辑 -->
+				<c:if test = "${empty cdbooOwnerMusic.id}">
+					<sys:treeselect id="user" name="user.id" value="${cdbooOwnerMusic.user.id}" labelName="user.name" labelValue="${cdbooOwnerMusic.user.name}"
+						title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true" notAllowSelectParent="true" />
+				</c:if>
+				
+				&nbsp;
+				<input id="assignButton" class="btn btn-primary" type="button" value="分配音乐" onclick="openMappingWin()"/>
 			</div>
 		</div>
+		
 		<div class="control-group">
-			<label class="control-label">用户id：</label>
+			<label class="control-label">音乐列表：</label>
 			<div class="controls">
-				<form:select path="user.id" class="input-xlarge ">
-					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
+				<music:musicListTag musicIdElementName="musicIds" musicList="${cdbooOwnerMusic.musicList }"></music:musicListTag>
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label">备注信息：</label>
-			<div class="controls">
-				<form:textarea path="remarks" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">状态位显示：</label>
-			<div class="controls">
-				<form:input path="status" htmlEscape="false" maxlength="1" class="input-xlarge "/>
-			</div>
-		</div>
+		
 		<div class="form-actions">
 			<shiro:hasPermission name="usermusic:cdbooOwnerMusic:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>

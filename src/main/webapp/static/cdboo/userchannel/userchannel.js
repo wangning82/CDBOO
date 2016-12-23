@@ -1,11 +1,11 @@
 function userTreeselectCallBack(v, h, f){
 	var userId = $('#userId').val();
-	 $.ajax({
+	$.ajax({
         type: "post",
         async: false,
         url: "getChannelList",
         data: {
-            userId: userId
+        	userId: userId
         },
         dataType: "json",
         success: function (data) {

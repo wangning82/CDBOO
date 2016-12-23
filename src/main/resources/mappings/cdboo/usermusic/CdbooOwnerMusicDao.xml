@@ -4,7 +4,7 @@
     
 	<sql id="cdbooOwnerMusicColumns">
 		a.id AS "id",
-		a.music_id AS "musicId",
+		a.music_id AS "musicId.id",
 		a.user_id AS "user.id",
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
@@ -33,8 +33,8 @@
 		<include refid="cdbooOwnerMusicJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
-			<if test="musicId != null and musicId != ''">
-				AND a.music_id = #{musicId}
+			<if test="musicId != null and musicId.id != null and musicId.id != ''">
+				AND a.music_id = #{musicId.id}
 			</if>
 			<if test="user != null and user.id != null and user.id != ''">
 				AND a.user_id = #{user.id}
@@ -82,7 +82,7 @@
 			status
 		) VALUES (
 			#{id},
-			#{musicId},
+			#{musicId.id},
 			#{user.id},
 			#{createBy.id},
 			#{createDate},
@@ -96,7 +96,7 @@
 	
 	<update id="update">
 		UPDATE cdboo_owner_music SET 	
-			music_id = #{musicId},
+			music_id = #{musicId.id},
 			user_id = #{user.id},
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
@@ -109,6 +109,10 @@
 		UPDATE cdboo_owner_music SET 
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM cdboo_owner_music WHERE id = #{id}
 	</update>
 	
 </mapper>

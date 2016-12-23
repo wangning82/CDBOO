@@ -3,6 +3,8 @@
  */
 package com.cdboo.usermusic.web;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,14 +15,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.thinkgem.jeesite.common.config.Global;
-import com.thinkgem.jeesite.common.persistence.Page;
-import com.thinkgem.jeesite.common.web.BaseController;
-import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.cdboo.music.entity.CdbooMusic;
 import com.cdboo.usermusic.entity.CdbooOwnerMusic;
 import com.cdboo.usermusic.service.CdbooOwnerMusicService;
+import com.thinkgem.jeesite.common.config.Global;
+import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.common.web.BaseController;
+import com.thinkgem.jeesite.modules.sys.entity.User;
+import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 
 /**
  * 用户曲库信息Controller
@@ -51,13 +57,31 @@ public class CdbooOwnerMusicController extends BaseController {
 	public String list(CdbooOwnerMusic cdbooOwnerMusic, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<CdbooOwnerMusic> page = cdbooOwnerMusicService.findPage(new Page<CdbooOwnerMusic>(request, response), cdbooOwnerMusic); 
 		model.addAttribute("page", page);
+		
+		User user = cdbooOwnerMusic.getUser();
+		if (user != null && StringUtils.isNotBlank(user.getId())) {
+			List<CdbooMusic> cdbooMusics = cdbooOwnerMusicService.getMusicByUser(user);
+			cdbooOwnerMusic.setMusicList(cdbooMusics);
+		}
 		return "cdboo/usermusic/cdbooOwnerMusicList";
 	}
 
 	@RequiresPermissions("usermusic:cdbooOwnerMusic:view")
 	@RequestMapping(value = "form")
 	public String form(CdbooOwnerMusic cdbooOwnerMusic, Model model) {
+
 		model.addAttribute("cdbooOwnerMusic", cdbooOwnerMusic);
+
+		User user = cdbooOwnerMusic.getUser();
+		if(user!=null && StringUtils.isNotBlank(user.getId())){
+			String id = user.getId();
+			user = UserUtils.get(id);
+			cdbooOwnerMusic.setUser(user);
+
+			List<CdbooMusic> cdbooMusics = cdbooOwnerMusicService.getMusicByUser(user);
+			cdbooOwnerMusic.setMusicList(cdbooMusics);
+		}
+
 		return "cdboo/usermusic/cdbooOwnerMusicForm";
 	}
 
@@ -80,4 +104,11 @@ public class CdbooOwnerMusicController extends BaseController {
 		return "redirect:"+Global.getAdminPath()+"/usermusic/cdbooOwnerMusic/?repage";
 	}
 
+	@ResponseBody
+	@RequestMapping(value = "getMusicList")
+	public List<CdbooMusic> getMusicList(@RequestParam(required = false) String userId) {
+		User user = new User(userId);
+		List<CdbooMusic> cdbooMusics = cdbooOwnerMusicService.getMusicByUser(user);
+		return cdbooMusics;
+	}
 }

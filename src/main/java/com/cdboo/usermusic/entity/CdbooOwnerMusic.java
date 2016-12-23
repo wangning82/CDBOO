@@ -4,7 +4,11 @@
 package com.cdboo.usermusic.entity;
 
 import com.cdboo.music.entity.CdbooMusic;
+import com.google.common.collect.Lists;
 import com.thinkgem.jeesite.modules.sys.entity.User;
+
+import java.util.List;
+
 import org.hibernate.validator.constraints.Length;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
@@ -20,6 +24,9 @@ public class CdbooOwnerMusic extends DataEntity<CdbooOwnerMusic> {
 	private CdbooMusic musicId;		// 音乐id
 	private User user;		// 用户id
 	private String status;		// 状态位显示
+	private List<CdbooMusic> musicList = Lists.newArrayList();
+	
+	private List<String> musicIds = Lists.newArrayList();
 	
 	public CdbooOwnerMusic() {
 		super();
@@ -52,6 +59,22 @@ public class CdbooOwnerMusic extends DataEntity<CdbooOwnerMusic> {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public List<CdbooMusic> getMusicList() {
+		return musicList;
+	}
+
+	public void setMusicList(List<CdbooMusic> musicList) {
+		this.musicList = musicList;
+	}
+
+	public List<String> getMusicIds() {
+		return musicIds;
+	}
+
+	public void setMusicIds(List<String> musicIds) {
+		this.musicIds = musicIds;
 	}
 	
 }
