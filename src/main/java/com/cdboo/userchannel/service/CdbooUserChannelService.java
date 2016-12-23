@@ -64,7 +64,7 @@ public class CdbooUserChannelService extends CrudService<CdbooUserChannelDao, Cd
 		List<CdbooMusic> musicList = Lists.newArrayList();
 		if(StringUtils.isNotBlank(musicIds)){
 			CdbooMusic cdbooMusic = new CdbooMusic();
-			cdbooMusic.setIds(musicIds);
+			cdbooMusic.setInIds(musicIds);
 			musicList = cdbooMusicService.findList(cdbooMusic);
 		}
 		/******************* 把音乐id集合转成音乐对象集合 End ********************/

@@ -74,24 +74,36 @@ public class CdbooUserChannelController extends BaseController {
 	@RequestMapping(value = "form")
 	public String form(CdbooUserChannel cdbooUserChannel, Model model) {
 		model.addAttribute("cdbooUserChannel", cdbooUserChannel);
-		String id = cdbooUserChannel.getId();
-		if (StringUtils.isNotBlank(id)) {
-			/************************根据用户检索绑定频道信息列表 Start***********************/
-			User user = cdbooUserChannel.getUser();
+		User user = cdbooUserChannel.getUser();
+		CdbooChannel channel = cdbooUserChannel.getChannel();
+		if (user != null && StringUtils.isNotBlank(user.getId()) && channel != null
+				&& StringUtils.isNotBlank(channel.getId())) {
+			/************************
+			 * 根据用户检索绑定频道信息列表 Start
+			 ***********************/
 			List<CdbooChannel> userChannels = cdbooUserChannelService.getChannelListByUser(user);
 			model.addAttribute("channelList", userChannels);
-			/************************根据用户检索绑定频道信息列表 End***********************/
-			
-			/************************根据用户和频道检索绑定音乐信息列表 Start***********************/
-			CdbooChannel channel = cdbooUserChannel.getChannel();
+			/************************
+			 * 根据用户检索绑定频道信息列表 End
+			 ***********************/
+
+			/************************
+			 * 根据用户和频道检索绑定音乐信息列表 Start
+			 ***********************/
 			List<CdbooMusic> musicList = cdbooUserChannelService.getMusicListByUserAndChannel(user, channel);
 			model.addAttribute("musicList", musicList);
-			/************************根据用户和频道检索绑定音乐信息列表 Start***********************/
+			/************************
+			 * 根据用户和频道检索绑定音乐信息列表 End
+			 ***********************/
 		} else {
-			/************************新增时查询所有频道列表信息返回 Start***********************/
+			/************************
+			 * 新增时查询所有频道列表信息返回 Start
+			 ***********************/
 			List<CdbooChannel> channels = cdbooChannelService.findList(new CdbooChannel());
-			model.addAttribute("channels", channels);
-			/************************新增时查询所有频道列表信息返回 Start***********************/
+			model.addAttribute("channelList", channels);
+			/************************
+			 * 新增时查询所有频道列表信息返回 End
+			 ***********************/
 		}
 		return "cdboo/userchannel/cdbooUserChannelForm";
 	}

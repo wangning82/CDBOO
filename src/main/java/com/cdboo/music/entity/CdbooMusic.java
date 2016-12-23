@@ -4,9 +4,7 @@
 package com.cdboo.music.entity;
 
 import java.util.List;
-
 import org.hibernate.validator.constraints.Length;
-
 import com.google.common.collect.Lists;
 import com.thinkgem.jeesite.common.persistence.DataEntity;
 import com.thinkgem.jeesite.common.utils.StringUtils;
@@ -28,8 +26,8 @@ public class CdbooMusic extends DataEntity<CdbooMusic> {
 	private String status;		// 状态
 	private String path;		// 音乐路径
 	private String ids;
-	
 	private List<String> idArray;
+	private List<String> inIdArray;
 	
 	public CdbooMusic() {
 		super();
@@ -131,6 +129,24 @@ public class CdbooMusic extends DataEntity<CdbooMusic> {
 
 	public void setIdArray(List<String> idArray) {
 		this.idArray = idArray;
+	}
+
+	public void setInIds(String ids) {
+		if (StringUtils.isNotBlank(ids)) {
+			inIdArray = Lists.newArrayList();
+			String[] idsArray = StringUtils.split(ids, ",");
+			for (int i = 0; i < idsArray.length; i++) {
+				inIdArray.add("'"+idsArray[i]+"'");
+			}
+		}
+	}
+	
+	public List<String> getInIdArray() {
+		return inIdArray;
+	}
+
+	public void setInIdArray(List<String> inIdArray) {
+		this.inIdArray = inIdArray;
 	}
 	
 }

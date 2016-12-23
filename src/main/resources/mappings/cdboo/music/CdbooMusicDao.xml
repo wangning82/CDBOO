@@ -57,8 +57,14 @@
 				AND a.create_date = #{createDate}
 			</if>
 			<if test="idArray != null">
-				AND a.id not in 
+				AND a.id not in
 				<foreach item="item" index="index" collection="idArray" open="(" separator="," close=")">  
+  					${item}  
+ 				</foreach>  
+			</if>
+			<if test="inIdArray != null">
+				AND a.id in
+				<foreach item="item" index="index" collection="inIdArray" open="(" separator="," close=")">  
   					${item}  
  				</foreach>  
 			</if>

@@ -52,7 +52,7 @@
 								if(checkMusicIsExists(entity.id)){
 									continue;
 								}
-								//alert(entity.id+":"+entity.name+":"+entity.actor+":"+entity.special+":"+entity.musicOwner+":"+entity.volume)
+								//alert(entity.id+":"+entity.musicName+":"+entity.actor+":"+entity.special+":"+entity.musicOwner+":"+entity.volume)
 								$('#tb').append(Mustache.render(tpl, {row: entity}));
 							}
 							showTip('追加歌曲成功，请继续选择歌曲','success');
@@ -70,10 +70,6 @@
 		
 		//检查音乐id是否存在
 		function checkMusicIsExists(musicId){
-			var musicIdSize = $("input[name = 'musicIds']").size();
-			if(musicIdSize <= 0){
-				return true;
-			}
 			var flag = false;
 			$("input[name = 'musicIds']").each(function(index){
 				var id = $(this).val();
@@ -85,25 +81,39 @@
 			});
 			return flag;
 		}
+		
+		<c:if test="${empty cdbooUserChannel.id }">
+			//新增的时候不做频道联动，覆盖用户选择回调函数
+			function userTreeselectCallBack(v, h, f) {
+				$('#tb').empty();
+				linkMusic();
+			}
+		</c:if>
 	</script>
 </head>
 <body>
 	<ul class="nav nav-tabs">
 		<li><a href="${ctx}/userchannel/cdbooUserChannel/">用户频道列表</a></li>
-		<li class="active"><a href="${ctx}/userchannel/cdbooUserChannel/form?id=${cdbooUserChannel.id}">用户频道<shiro:hasPermission name="userchannel:cdbooUserChannel:edit">${not empty cdbooUserChannel.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="userchannel:cdbooUserChannel:edit">查看</shiro:lacksPermission></a></li>
+		<li class="active"><a href="${ctx}/userchannel/cdbooUserChannel/form?id=${cdbooUserChannel.id}">用户频道<shiro:hasPermission name="userchannel:cdbooUserChannel:edit">${not empty cdbooUserChannel.user.id && not empty cdbooUserChannel.channel.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="userchannel:cdbooUserChannel:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="cdbooUserChannel" action="${ctx}/userchannel/cdbooUserChannel/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
 		<input type="hidden" id="owner_type_public" value="${Constants.MUSICOWNER_PUBLIC}"/>
 		<input type="hidden" id="owner_type_private" value="${Constants.MUSICOWNER_PRIVATE}"/>
-		<input type="hidden" id="isLinkMusic" value="true"/>
-		
 		<sys:message content="${message}"/>		
 		<div class="control-group">
 			<label class="control-label">用户：</label>
 			<div class="controls">
-				<sys:treeselect id="user" name="user.id" value="${cdbooUserChannel.user.id}" labelName="user.name" labelValue="${cdbooUserChannel.user.name}"
-					title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true" notAllowSelectParent="true"/>
+				<!-- 如果是修改，则用户锁定，不能编辑 -->
+				<c:if test = "${not empty cdbooUserChannel.user.id && not empty cdbooUserChannel.channel.id}">
+					<sys:treeselect disabled="disabled" id="user" name="user.id" value="${cdbooUserChannel.user.id}" labelName="user.name" labelValue="${cdbooUserChannel.user.name}"
+						title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true" notAllowSelectParent="true" />
+				</c:if>
+				<!-- 如果是新增，则用户不锁定，允许编辑 -->
+				<c:if test = "${empty cdbooUserChannel.user.id && empty cdbooUserChannel.channel.id}">
+					<sys:treeselect id="user" name="user.id" value="${cdbooUserChannel.user.id}" labelName="user.name" labelValue="${cdbooUserChannel.user.name}"
+						title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true" notAllowSelectParent="true" />
+				</c:if>
 			</div>
 		</div>
 		<div class="control-group">
@@ -111,7 +121,7 @@
 			<div class="controls">
 				<form:select id="channelId" path="channel.id" class="input-xlarge " onchange="linkMusic()">
 					<form:option value="" label="请选择"/>
-					<form:options items="${channels}" itemLabel="channelName" itemValue="id" htmlEscape="false"/>
+					<form:options items="${channelList}" itemLabel="channelName" itemValue="id" htmlEscape="false"/>
 				</form:select>
 				&nbsp;
 				<input id="assignButton" class="btn btn-primary" type="button" value="分配音乐" onclick="openMappingWin()"/>

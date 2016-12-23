@@ -1,9 +1,4 @@
 function userTreeselectCallBack(v, h, f){
-	var isLinkMusic = $('#isLinkMusic').val();
-	if(isLinkMusic){
-		$('#tb').empty();
-	}
-	
 	var userId = $('#userId').val();
 	 $.ajax({
         type: "post",
