@@ -32,7 +32,10 @@ public class User extends DataEntity<User> {
 	private Office company;	// 归属公司
 	private Office office;	// 归属部门
 	private String loginName;// 登录名
+
 	private String password;// 密码
+	private String cdbooPassword;// 密码
+
 	private String no;		// 工号
 	private String name;	// 姓名
 	private String email;	// 邮箱
@@ -320,5 +323,13 @@ public class User extends DataEntity<User> {
 	@Override
 	public String toString() {
 		return id;
+	}
+
+	public String getCdbooPassword() {
+		return cdbooPassword;
+	}
+
+	public void setCdbooPassword(String cdbooPassword) {
+		this.cdbooPassword = cdbooPassword;
 	}
 }

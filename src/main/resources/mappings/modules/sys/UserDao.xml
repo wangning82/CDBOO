@@ -64,6 +64,7 @@
     	a.office_id AS "office.id",
     	a.login_name,
     	a.password,
+    	a.cdboo_password AS "cdbooPassword",
     	a.no,
 		a.name,
 		a.email,
