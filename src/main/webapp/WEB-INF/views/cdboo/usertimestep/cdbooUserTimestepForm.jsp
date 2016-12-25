@@ -24,29 +24,31 @@
 			});
 		});
 		
-		function linkTimeStepInfo(timeStepId){
-			$('#name').val('');
-        	$('#startTime').val('');
-        	$('#endTime').val('');
-        	$('#remarks').val('');
-        	
-			$.ajax({
-		        type: "post",
-		        async: false,
-		        url: "getTimeStep",
-		        data: {
-		        	timeStepId: timeStepId
-		        },
-		        dataType: "json",
-		        success: function (data) {
-					var timeStep = eval(data);
-		        	$('#name').val(timeStep.timestepName);
-		        	$('#startTime').val(timeStep.starttime);
-		        	$('#endTime').val(timeStep.endtime);
-		        	$('#remarks').val(timeStep.remarks);
-		        }
-		   });
-		}
+		<c:if test="${empty cdbooUserTimestep.id }">
+			function linkTimeStepInfo(timeStepId){
+				$('#name').val('');
+	        	$('#startTime').val('');
+	        	$('#endTime').val('');
+	        	$('#remarks').val('');
+	        	
+				$.ajax({
+			        type: "post",
+			        async: false,
+			        url: "getTimeStep",
+			        data: {
+			        	timeStepId: timeStepId
+			        },
+			        dataType: "json",
+			        success: function (data) {
+						var timeStep = eval(data);
+			        	$('#name').val(timeStep.timestepName);
+			        	$('#startTime').val(timeStep.starttime);
+			        	$('#endTime').val(timeStep.endtime);
+			        	$('#remarks').val(timeStep.remarks);
+			        }
+			   });
+			}
+		</c:if>
 	</script>
 </head>
 <body>
@@ -70,23 +72,17 @@
 				</c:if>
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label">时段选择：</label>
-			<div class="controls">
-				<c:if test="${not empty cdbooUserTimestep.id }">
-					<form:select id="lastTimeStepId" path="lastTimeStepId" class="input-medium" disabled="true">
-						<form:option value="" label="请选择"/>
-						<form:options items="${cdbooUserTimestep.timestepEntityList }" itemLabel="timestepName" itemValue="id"/>
-					</form:select>
-				</c:if>
-				<c:if test="${empty cdbooUserTimestep.id }">
-					<form:select id="lastTimeStepId" path="lastTimeStepId" class="input-medium" onchange="linkTimeStepInfo(this.value)">
-						<form:option value="" label="请选择"/>
-						<form:options items="${cdbooUserTimestep.timestepEntityList }" itemLabel="timestepName" itemValue="id"/>
-					</form:select>
-				</c:if>
+		<c:if test="${empty cdbooUserTimestep.id }">
+			<div class="control-group">
+				<label class="control-label">时段选择：</label>
+				<div class="controls">
+						<form:select path="lastTimeStepId" class="input-medium" onchange="linkTimeStepInfo(this.value)">
+							<form:option value="" label="请选择"/>
+							<form:options items="${cdbooUserTimestep.timestepEntityList }" itemLabel="timestepName" itemValue="id"/>
+						</form:select>
+				</div>
 			</div>
-		</div>
+		</c:if>
 		<div class="control-group">
 			<label class="control-label">时段名称：</label>
 			<div class="controls">

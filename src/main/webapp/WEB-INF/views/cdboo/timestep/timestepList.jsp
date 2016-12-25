@@ -31,22 +31,6 @@
 			<li><label>时段名称：</label>
 				<form:input path="timestepName" htmlEscape="false" maxlength="100" class="input-medium"/>
 			</li>
-			<li><label>开始时间：</label>
-				<input name="beginStarttime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-					value="${timestep.beginStarttime}"
-					onclick="WdatePicker({dateFmt:'HH:mm:ss',isShowClear:false});"/> -
-				<input name="endStarttime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-					value="${timestep.endStarttime}"
-					onclick="WdatePicker({dateFmt:'HH:mm:ss',isShowClear:false});"/>
-			</li>
-			<li><label>结束时间：</label>
-				<input name="beginEndtime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-					value="${timestep.beginEndtime}"
-					onclick="WdatePicker({dateFmt:'HH:mm:ss',isShowClear:false});"/> -
-				<input name="endEndtime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-					value="${timestep.endEndtime}"
-					onclick="WdatePicker({dateFmt:'HH:mm:ss',isShowClear:false});"/>
-			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="clearfix"></li>
 		</ul>

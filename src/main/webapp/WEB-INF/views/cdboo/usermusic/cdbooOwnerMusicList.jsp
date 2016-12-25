@@ -51,6 +51,8 @@
 				<th>专辑</th>
 				<th>音乐类型</th>
 				<th>音量</th>
+				<th>创建人</th>
+				<th>创建时间</th>
 				<shiro:hasPermission name="usermusic:cdbooOwnerMusic:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
@@ -74,6 +76,9 @@
 				</td>
 				<td>
 					${cdbooOwnerMusic.musicId.volume }
+				</td>
+				<td>
+					${fns:getUserById(cdbooOwnerMusic.createBy.id).name}
 				</td>
 				<td>
 					<fmt:formatDate value="${cdbooOwnerMusic.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>

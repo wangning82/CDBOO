@@ -23,7 +23,7 @@ public class CdbooUserTimestep extends DataEntity<CdbooUserTimestep> {
 	private String name;		// 时段名称
 	private String startTime;		// 开始时间
 	private String endTime;		// 结束时间
-	private String lastTimeStepId;//最后选择的时段id，仅为了页面回显使用，所有时段具体信息以此表的字段为准
+	private String lastTimeStepId;//最后选择的时段id，为了配合页面使用，没有存到数据库，备用
 	
 	private List<CdbooUserTimestep> timestepList = Lists.newArrayList();
 	private List<Timestep> timestepEntityList = Lists.newArrayList();
