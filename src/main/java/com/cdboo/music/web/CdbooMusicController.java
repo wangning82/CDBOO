@@ -5,6 +5,7 @@ package com.cdboo.music.web;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.cdboo.music.entity.CdbooMusic;
 import com.cdboo.music.service.CdbooMusicService;
 import com.thinkgem.jeesite.common.config.Global;
@@ -55,10 +57,17 @@ public class CdbooMusicController extends BaseController {
 		model.addAttribute("page", page);
 		return "cdboo/music/cdbooMusicList";
 	}
-	
+
 	@RequestMapping(value = {"openMusicWin"})
-	public String openMusicWin(CdbooMusic cdbooMusic, HttpServletRequest request, HttpServletResponse response, Model model) {
-		Page<CdbooMusic> page = cdbooMusicService.findPage(new Page<CdbooMusic>(request, response), cdbooMusic); 
+	public String openMusicWin(CdbooMusic cdbooMusic, HttpServletRequest request, HttpServletResponse response,
+			Model model) {
+		String userId = cdbooMusic.getUserId();
+		Page<CdbooMusic> page = null;
+		if (StringUtils.isNotBlank(userId)) {
+			page = cdbooMusicService.findPageByUserId(new Page<CdbooMusic>(request, response), cdbooMusic);
+		} else {
+			page = cdbooMusicService.findPage(new Page<CdbooMusic>(request, response), cdbooMusic);
+		}
 		model.addAttribute("page", page);
 		return "cdboo/music/cdbooMusicOpenWin";
 	}

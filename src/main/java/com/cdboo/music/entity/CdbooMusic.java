@@ -29,6 +29,8 @@ public class CdbooMusic extends DataEntity<CdbooMusic> {
 	private List<String> idArray;
 	private List<String> inIdArray;
 	
+	private String userId;
+	
 	public CdbooMusic() {
 		super();
 	}
@@ -147,6 +149,14 @@ public class CdbooMusic extends DataEntity<CdbooMusic> {
 
 	public void setInIdArray(List<String> inIdArray) {
 		this.inIdArray = inIdArray;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 	
 }

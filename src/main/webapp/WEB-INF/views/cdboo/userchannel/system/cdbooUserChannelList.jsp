@@ -47,8 +47,14 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th>用户名称</th>
+				<th>频道编号</th>
 				<th>频道名称</th>
+				<th>频道图片</th>
+				<th>风格类型</th>
+				<th>风格类型明细</th>
+				<th>频道版本</th>
+				<th>创建时间</th>
+				<th>频道类型</th>
 				<th>歌曲数量</th>
 				<shiro:hasPermission name="userchannel:cdbooUserChannel:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
@@ -56,19 +62,44 @@
 		<tbody>
 		<c:forEach items="${page.list}" var="cdbooUserChannel">
 			<tr>
+			
 				<td><a href="${ctx}/userchannel/cdbooUserChannel/form?user.id=${cdbooUserChannel.user.id}&&channel.id=${cdbooUserChannel.channel.id}&&user.name=${cdbooUserChannel.user.name}&&channel.channelName=${cdbooUserChannel.channel.channelName}">
-					${cdbooUserChannel.user.name}
-				</a></td>
-				<td>
-					${cdbooUserChannel.channel.channelName}
-				</td>
-				<td>
-					${cdbooUserChannel.musicSize}
-				</td>
-				<shiro:hasPermission name="userchannel:cdbooUserChannel:edit"><td>
-    				<a href="${ctx}/userchannel/cdbooUserChannel/form?user.id=${cdbooUserChannel.user.id}&&channel.id=${cdbooUserChannel.channel.id}&&user.name=${cdbooUserChannel.user.name}&&channel.channelName=${cdbooUserChannel.channel.channelName}">修改</a>
-					<a href="${ctx}/userchannel/cdbooUserChannel/delete?user.id=${cdbooUserChannel.user.id}&&channel.id=${cdbooUserChannel.channel.id}" onclick="return confirmx('确认要删除该用户频道吗？', this.href)">删除</a>
-				</td></shiro:hasPermission>
+							${cdbooUserChannel.channel.channelNo}
+						</a></td>
+						<td>
+							${cdbooUserChannel.channel.channelName}
+						</td>
+						<td>
+							<img alt="" src="${cdbooUserChannel.channel.photoPath}" height="100" width="100">
+							
+						</td>
+						<td>
+							${fns:getDictLabel(cdbooUserChannel.channel.themeType, 'theme_type', '')}
+						</td>
+						<td>
+							<c:if test="${cdbooUserChannel.channel.themeType eq Constants.THEMETYPE_THEME }">
+								${fns:getDictLabel(cdbooUserChannel.channel.themeConcreteType,'season_type', '')}
+							</c:if>
+							<c:if test="${cdbooUserChannel.channel.themeType eq Constants.THEMETYPE_HOLIDAY }">
+								${fns:getDictLabel(cdbooUserChannel.channel.themeConcreteType,'holiday_type', '')}
+							</c:if>
+						</td>
+						<td>
+							${cdbooUserChannel.channel.channelVersion}
+						</td>
+						<td>
+							<fmt:formatDate value="${cdbooUserChannel.channel.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+						</td>
+						<td>
+							${fns:getDictLabel(cdbooUserChannel.channel.channelType, 'channel_type', '')}
+						</td>
+						<td>
+							${cdbooUserChannel.musicSize}
+						</td>
+						<shiro:hasPermission name="userchannel:cdbooUserChannel:edit"><td>
+		    				<a href="${ctx}/userchannel/cdbooUserChannel/form?user.id=${cdbooUserChannel.user.id}&&channel.id=${cdbooUserChannel.channel.id}&&user.name=${cdbooUserChannel.user.name}&&channel.channelName=${cdbooUserChannel.channel.channelName}">修改</a>
+							<a href="${ctx}/userchannel/cdbooUserChannel/delete?user.id=${cdbooUserChannel.user.id}&&channel.id=${cdbooUserChannel.channel.id}" onclick="return confirmx('确认要删除该用户频道吗？', this.href)">删除</a>
+						</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>
 		</tbody>

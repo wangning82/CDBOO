@@ -49,6 +49,13 @@ public class CdbooMusicService extends CrudService<CdbooMusicDao, CdbooMusic> {
 		return super.findPage(page, cdbooMusic);
 	}
 	
+	public Page<CdbooMusic> findPageByUserId(Page<CdbooMusic> page, CdbooMusic cdbooMusic) {
+		cdbooMusic.setPage(page);
+		List<CdbooMusic> list = dao.findListFromUserId(cdbooMusic);
+		page.setList(list);
+		return page;
+	}
+	
 	@Transactional(readOnly = false)
 	public void save(CdbooMusic cdbooMusic) {
 		super.save(cdbooMusic);

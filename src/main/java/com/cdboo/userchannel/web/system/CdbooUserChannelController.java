@@ -1,7 +1,7 @@
 /**
  * Copyright &copy; 2012-2014 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
  */
-package com.cdboo.userchannel.web;
+package com.cdboo.userchannel.web.system;
 
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +20,7 @@ import com.cdboo.channel.service.CdbooChannelService;
 import com.cdboo.music.entity.CdbooMusic;
 import com.cdboo.userchannel.entity.CdbooUserChannel;
 import com.cdboo.userchannel.service.CdbooUserChannelService;
+import com.cdboo.usermusic.service.CdbooOwnerMusicService;
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.utils.StringUtils;
@@ -42,6 +43,9 @@ public class CdbooUserChannelController extends BaseController {
 	@Autowired
 	private CdbooChannelService cdbooChannelService;
 
+	@Autowired
+	private CdbooOwnerMusicService cdbooOwnerMusicService;
+	
 	@ModelAttribute
 	public CdbooUserChannel get(@RequestParam(required = false) String id) {
 		CdbooUserChannel entity = null;
@@ -67,7 +71,7 @@ public class CdbooUserChannelController extends BaseController {
 			List<CdbooChannel> channelList = cdbooUserChannelService.getChannelListByUser(user);
 			cdbooUserChannel.setChannelList(channelList);
 		}
-		return "cdboo/userchannel/cdbooUserChannelList";
+		return "cdboo/userchannel/system/cdbooUserChannelList";
 	}
 
 	@RequiresPermissions("userchannel:cdbooUserChannel:view")
@@ -105,7 +109,7 @@ public class CdbooUserChannelController extends BaseController {
 			 * 新增时查询所有频道列表信息返回 End
 			 ***********************/
 		}
-		return "cdboo/userchannel/cdbooUserChannelForm";
+		return "cdboo/userchannel/system/cdbooUserChannelForm";
 	}
 
 	@RequiresPermissions("userchannel:cdbooUserChannel:edit")
@@ -145,5 +149,4 @@ public class CdbooUserChannelController extends BaseController {
 		List<CdbooMusic> musicList = cdbooUserChannelService.getMusicListByUserAndChannel(user, channel);
 		return musicList;
 	}
-
 }

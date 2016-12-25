@@ -79,6 +79,55 @@
 		</choose>
 	</select>
 	
+	<select id="findListFromUserId" resultType="CdbooMusic">
+		SELECT 
+			<include refid="cdbooMusicColumns"/>
+		FROM cdboo_owner_music b,cdboo_music a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND b.music_id = a.id
+			AND b.user_id = #{userId}
+			<if test="musicNo != null and musicNo != ''">
+				AND a.music_no = #{musicNo}
+			</if>
+			<if test="musicOwner != null and musicOwner != ''">
+				AND a.music_owner = #{musicOwner}
+			</if>
+			<if test="musicName != null and musicName != ''">
+				AND a.music_name = #{musicName}
+			</if>
+			<if test="actor != null and actor != ''">
+				AND a.actor = #{actor}
+			</if>
+			<if test="special != null and special != ''">
+				AND a.special = #{special}
+			</if>
+			<if test="createDate != null and createDate != ''">
+				AND a.create_date = #{createDate}
+			</if>
+			<if test="idArray != null">
+				AND a.id not in
+				<foreach item="item" index="index" collection="idArray" open="(" separator="," close=")">  
+  					${item}  
+ 				</foreach>  
+			</if>
+			<if test="inIdArray != null">
+				AND a.id in
+				<foreach item="item" index="index" collection="inIdArray" open="(" separator="," close=")">  
+  					${item}  
+ 				</foreach>  
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
 	<select id="findAllList" resultType="CdbooMusic">
 		SELECT 
 			<include refid="cdbooMusicColumns"/>

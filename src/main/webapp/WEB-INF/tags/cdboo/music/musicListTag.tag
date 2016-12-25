@@ -2,6 +2,7 @@
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <%@ attribute name="musicList" type="java.util.List" required="true" description="音乐集合"%>
 <%@ attribute name="musicIdElementName" type="java.lang.String" required="true" description="音乐隐藏域id名称"%>
+<%@ attribute name="userElementId" type="java.lang.String" required="false" description="查询对应用户id所购买的曲目,不传查询所有"%>
 <script type="text/javascript">
 	function deleteRow(obj){
 		$(obj).parent().parent().remove();
@@ -19,8 +20,13 @@
 				}
 			});
 		}
+		var elementId = '${userElementId}';
+		var userId = '';
+		if(elementId){
+			userId = $('#'+elementId).val();
+		}
 		
-		top.$.jBox.open("iframe:${ctx}/music/cdbooMusic/openMusicWin?ids="+ids, "分配音乐",$(top.document).width()-240,$(top.document).height()-400,{
+		top.$.jBox.open("iframe:${ctx}/music/cdbooMusic/openMusicWin?userId="+userId+"&ids="+ids, "分配音乐",$(top.document).width()-240,$(top.document).height()-400,{
 			buttons:{"确定分配":"ok", "关闭":true}, bottomText:"通过查询条件选择音乐，选择后窗口不会关闭，可以连续选择。",submit:function(v, h, f){
 				var checkArray = h.find("iframe")[0].contentWindow.getCheckData();
 				if (v=="ok"){

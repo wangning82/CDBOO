@@ -42,8 +42,14 @@
 		<c:if test="${empty cdbooUserChannel.id }">
 			//新增的时候不做频道联动，覆盖用户选择回调函数
 			function userTreeselectCallBack(v, h, f) {
-				$('#tb').empty();
-				linkMusic();
+				if(v == 'ok'){
+					$('#assignButton').attr('disabled',false);
+					$('#tb').empty();
+					linkMusic();
+				}
+				if(v == 'clear' ){
+					$('#assignButton').attr('disabled',true);
+				}
 			}
 		</c:if>
 	</script>
@@ -81,14 +87,14 @@
 					<form:options items="${channelList}" itemLabel="channelName" itemValue="id" htmlEscape="false"/>
 				</form:select>
 				&nbsp;
-				<input id="assignButton" class="btn btn-primary" type="button" value="分配音乐" onclick="openMappingWin()"/>
+				<input id="assignButton" <c:if test = "${empty cdbooUserChannel.user.id && empty cdbooUserChannel.channel.id}">disabled="disabled"</c:if> class="btn btn-primary" type="button" value="分配音乐" onclick="openMappingWin()"/>
 			</div>
 		</div>
 		
 		<div class="control-group">
 			<label class="control-label">音乐列表：</label>
 			<div class="controls">
-				<music:musicListTag musicIdElementName="musicIds" musicList="${musicList }"></music:musicListTag>
+				<music:musicListTag musicIdElementName="musicIds" musicList="${musicList }" userElementId="userId"></music:musicListTag>
 			</div>
 		</div>
 		

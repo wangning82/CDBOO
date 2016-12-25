@@ -5,6 +5,9 @@ package com.cdboo.music.dao;
 
 import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
+
+import java.util.List;
+
 import com.cdboo.music.entity.CdbooMusic;
 
 /**
@@ -14,5 +17,5 @@ import com.cdboo.music.entity.CdbooMusic;
  */
 @MyBatisDao
 public interface CdbooMusicDao extends CrudDao<CdbooMusic> {
-	
+	public List<CdbooMusic> findListFromUserId(CdbooMusic cdbooMusic);
 }
