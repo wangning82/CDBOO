@@ -14,7 +14,8 @@
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
-		u2.name AS "user.name"
+		u2.name AS "user.name",
+		a.last_time_step_id AS "lastTimeStepId"
 	</sql>
 	
 	<sql id="cdbooUserTimestepJoins">
@@ -86,7 +87,8 @@
 			update_by,
 			update_date,
 			remarks,
-			del_flag
+			del_flag,
+			last_time_step_id
 		) VALUES (
 			#{id},
 			#{user.id},
@@ -98,7 +100,8 @@
 			#{updateBy.id},
 			#{updateDate},
 			#{remarks},
-			#{delFlag}
+			#{delFlag},
+			#{lastTimeStepId}
 		)
 	</insert>
 	
@@ -110,7 +113,8 @@
 			end_time = #{endTime},
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
-			remarks = #{remarks}
+			remarks = #{remarks},
+			last_time_step_id = #{lastTimeStepId}
 		WHERE id = #{id}
 	</update>
 	

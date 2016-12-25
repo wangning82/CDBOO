@@ -33,18 +33,18 @@
 			</li>
 			<li><label>开始时间：</label>
 				<input name="beginStarttime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-					value="<fmt:formatDate value="${timestep.beginStarttime}" pattern="HH:mm:ss"/>"
+					value="${timestep.beginStarttime}"
 					onclick="WdatePicker({dateFmt:'HH:mm:ss',isShowClear:false});"/> -
 				<input name="endStarttime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-					value="<fmt:formatDate value="${timestep.endStarttime}" pattern="HH:mm:ss"/>"
+					value="${timestep.endStarttime}"
 					onclick="WdatePicker({dateFmt:'HH:mm:ss',isShowClear:false});"/>
 			</li>
 			<li><label>结束时间：</label>
 				<input name="beginEndtime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-					value="<fmt:formatDate value="${timestep.beginEndtime}" pattern="HH:mm:ss"/>"
+					value="${timestep.beginEndtime}"
 					onclick="WdatePicker({dateFmt:'HH:mm:ss',isShowClear:false});"/> -
 				<input name="endEndtime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-					value="<fmt:formatDate value="${timestep.endEndtime}" pattern="HH:mm:ss"/>"
+					value="${timestep.endEndtime}"
 					onclick="WdatePicker({dateFmt:'HH:mm:ss',isShowClear:false});"/>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
@@ -76,10 +76,10 @@
 					</a>
 				</td>
 				<td>
-					<fmt:formatDate value="${timestep.starttime}" pattern="HH:mm:ss"/>
+					${timestep.starttime}
 				</td>
 				<td>
-					<fmt:formatDate value="${timestep.endtime}" pattern="HH:mm:ss"/>
+					${timestep.endtime}
 				</td>
 				<td>
 					<fmt:formatDate value="${timestep.updateDate}" pattern="yyyy-MM-dd"/>

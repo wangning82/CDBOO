@@ -14,6 +14,29 @@
 			$("#searchForm").submit();
         	return false;
         }
+		
+		function userTreeselectCallBack(v, h, f){
+			var userId = $('#userId').val();
+			$.ajax({
+		        type: "post",
+		        async: false,
+		        url: "getTimeStepListByUser",
+		        data: {
+		        	userId: userId
+		        },
+		        dataType: "json",
+		        success: function (data) {
+		        	$('#name').empty();
+					$('#name').append('<option value="" selected>请选择</option>');
+					
+			       	var dataArray = eval(data);
+			       	for(var i = 0;i<dataArray.length;i++){
+			       		var name = dataArray[i].name;
+			       		$('#name').append('<option value="'+name+'">'+name+'</option>');
+			       	}
+		        }
+		    });
+		}			
 	</script>
 </head>
 <body>
@@ -25,12 +48,15 @@
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
-			<li><label>用户id：</label>
+			<li><label>用户：</label>
 				<sys:treeselect id="user" name="user.id" value="${cdbooUserTimestep.user.id}" labelName="user.name" labelValue="${cdbooUserTimestep.user.name}"
 					title="用户" url="/sys/office/treeData?type=3" cssClass="input-small" allowClear="true" notAllowSelectParent="true"/>
 			</li>
 			<li><label>时段名称：</label>
-				<form:input path="name" htmlEscape="false" maxlength="64" class="input-medium"/>
+				<form:select id="name" path="name" class="input-medium">
+					<form:option value="" label="请选择"/>
+					<form:options items="${cdbooUserTimestep.timestepList }" itemLabel="name" itemValue="name"/>
+				</form:select>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="clearfix"></li>
@@ -40,7 +66,7 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th>用户id</th>
+				<th>用户名称</th>
 				<th>时段名称</th>
 				<th>开始时间</th>
 				<th>结束时间</th>
@@ -65,7 +91,7 @@
 					${cdbooUserTimestep.endTime}
 				</td>
 				<td>
-					${cdbooUserTimestep.createBy.id}
+					${fns:getUserById(cdbooUserTimestep.createBy.id).name}
 				</td>
 				<td>
 					<fmt:formatDate value="${cdbooUserTimestep.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>

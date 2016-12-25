@@ -4,8 +4,11 @@
 package com.cdboo.usertimestep.entity;
 
 import com.thinkgem.jeesite.modules.sys.entity.User;
+import jersey.repackaged.com.google.common.collect.Lists;
+import java.util.List;
 import org.hibernate.validator.constraints.Length;
 
+import com.cdboo.timestep.entity.Timestep;
 import com.thinkgem.jeesite.common.persistence.DataEntity;
 
 /**
@@ -20,6 +23,10 @@ public class CdbooUserTimestep extends DataEntity<CdbooUserTimestep> {
 	private String name;		// 时段名称
 	private String startTime;		// 开始时间
 	private String endTime;		// 结束时间
+	private String lastTimeStepId;//最后选择的时段id，仅为了页面回显使用，所有时段具体信息以此表的字段为准
+	
+	private List<CdbooUserTimestep> timestepList = Lists.newArrayList();
+	private List<Timestep> timestepEntityList = Lists.newArrayList();
 	
 	public CdbooUserTimestep() {
 		super();
@@ -61,5 +68,29 @@ public class CdbooUserTimestep extends DataEntity<CdbooUserTimestep> {
 	public void setEndTime(String endTime) {
 		this.endTime = endTime;
 	}
+
+	public List<CdbooUserTimestep> getTimestepList() {
+		return timestepList;
+	}
+
+	public void setTimestepList(List<CdbooUserTimestep> timestepList) {
+		this.timestepList = timestepList;
+	}
 	
+	public List<Timestep> getTimestepEntityList() {
+		return timestepEntityList;
+	}
+
+	public void setTimestepEntityList(List<Timestep> timestepEntityList) {
+		this.timestepEntityList = timestepEntityList;
+	}
+
+	public String getLastTimeStepId() {
+		return lastTimeStepId;
+	}
+
+	public void setLastTimeStepId(String lastTimeStepId) {
+		this.lastTimeStepId = lastTimeStepId;
+	}
+
 }

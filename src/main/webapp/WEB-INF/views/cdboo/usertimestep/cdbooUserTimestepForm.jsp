@@ -23,6 +23,30 @@
 				}
 			});
 		});
+		
+		function linkTimeStepInfo(timeStepId){
+			$('#name').val('');
+        	$('#startTime').val('');
+        	$('#endTime').val('');
+        	$('#remarks').val('');
+        	
+			$.ajax({
+		        type: "post",
+		        async: false,
+		        url: "getTimeStep",
+		        data: {
+		        	timeStepId: timeStepId
+		        },
+		        dataType: "json",
+		        success: function (data) {
+					var timeStep = eval(data);
+		        	$('#name').val(timeStep.timestepName);
+		        	$('#startTime').val(timeStep.starttime);
+		        	$('#endTime').val(timeStep.endtime);
+		        	$('#remarks').val(timeStep.remarks);
+		        }
+		   });
+		}
 	</script>
 </head>
 <body>
@@ -34,34 +58,61 @@
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>		
 		<div class="control-group">
-			<label class="control-label">用户id：</label>
+			<label class="control-label">用户名称：</label>
 			<div class="controls">
-				<sys:treeselect id="user" name="user.id" value="${cdbooUserTimestep.user.id}" labelName="user.name" labelValue="${cdbooUserTimestep.user.name}"
-					title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true" notAllowSelectParent="true"/>
+				<c:if test="${not empty cdbooUserTimestep.id }">
+					<sys:treeselect id="user" disabled="disabled" name="user.id" value="${cdbooUserTimestep.user.id}" labelName="user.name" labelValue="${cdbooUserTimestep.user.name}"
+						title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true" notAllowSelectParent="true"/>
+				</c:if>
+				<c:if test="${empty cdbooUserTimestep.id }">
+					<sys:treeselect id="user" name="user.id" value="${cdbooUserTimestep.user.id}" labelName="user.name" labelValue="${cdbooUserTimestep.user.name}"
+						title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true" notAllowSelectParent="true"/>
+				</c:if>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">时段选择：</label>
+			<div class="controls">
+				<c:if test="${not empty cdbooUserTimestep.id }">
+					<form:select id="lastTimeStepId" path="lastTimeStepId" class="input-medium" disabled="true">
+						<form:option value="" label="请选择"/>
+						<form:options items="${cdbooUserTimestep.timestepEntityList }" itemLabel="timestepName" itemValue="id"/>
+					</form:select>
+				</c:if>
+				<c:if test="${empty cdbooUserTimestep.id }">
+					<form:select id="lastTimeStepId" path="lastTimeStepId" class="input-medium" onchange="linkTimeStepInfo(this.value)">
+						<form:option value="" label="请选择"/>
+						<form:options items="${cdbooUserTimestep.timestepEntityList }" itemLabel="timestepName" itemValue="id"/>
+					</form:select>
+				</c:if>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">时段名称：</label>
 			<div class="controls">
-				<form:input path="name" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+				<form:input id="name" path="name" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">开始时间：</label>
 			<div class="controls">
-				<form:input path="startTime" htmlEscape="false" class="input-xlarge "/>
+				<input id="startTime" name="startTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
+					value="${cdbooUserTimestep.startTime}"
+					onclick="WdatePicker({dateFmt:'HH:mm:ss',isShowClear:false});"/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">结束时间：</label>
 			<div class="controls">
-				<form:input path="endTime" htmlEscape="false" class="input-xlarge "/>
+				<input id="endTime" name="endTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
+					value="${cdbooUserTimestep.endTime}"
+					onclick="WdatePicker({dateFmt:'HH:mm:ss',isShowClear:false});"/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">备注：</label>
 			<div class="controls">
-				<form:textarea path="remarks" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
+				<form:textarea id="remarks" path="remarks" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
 			</div>
 		</div>
 		<div class="form-actions">

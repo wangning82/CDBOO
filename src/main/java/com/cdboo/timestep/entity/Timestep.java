@@ -7,8 +7,6 @@ import org.hibernate.validator.constraints.Length;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
 
-import java.util.Date;
-
 /**
  * 时段管理Entity
  * @author 朱广成
@@ -19,13 +17,13 @@ public class Timestep extends DataEntity<Timestep> {
 	private static final long serialVersionUID = 1L;
 	private String timestepNo;		// 时段编号
 	private String timestepName;		// 时段名称
-	private Date starttime;		// 开始时间
-	private Date endtime;		// 结束时间
+	private String starttime;		// 开始时间
+	private String endtime;		// 结束时间
 	private String status;		// 状态位显示
-	private Date beginStarttime;		// 开始 开始时间
-	private Date endStarttime;		// 结束 开始时间
-	private Date beginEndtime;		// 开始 结束时间
-	private Date endEndtime;		// 结束 结束时间
+	private String beginStarttime;		// 开始 开始时间
+	private String endStarttime;		// 结束 开始时间
+	private String beginEndtime;		// 开始 结束时间
+	private String endEndtime;		// 结束 结束时间
 
 	public Timestep() {
 		super();
@@ -62,51 +60,52 @@ public class Timestep extends DataEntity<Timestep> {
 		this.status = status;
 	}
 
-	public Date getStarttime() {
+	public String getStarttime() {
 		return starttime;
 	}
 
-	public void setStarttime(Date starttime) {
+	public void setStarttime(String starttime) {
 		this.starttime = starttime;
 	}
 
-	public Date getEndtime() {
+	public String getEndtime() {
 		return endtime;
 	}
 
-	public void setEndtime(Date endtime) {
+	public void setEndtime(String endtime) {
 		this.endtime = endtime;
 	}
 
-	public Date getBeginStarttime() {
+	public String getBeginStarttime() {
 		return beginStarttime;
 	}
 
-	public void setBeginStarttime(Date beginStarttime) {
+	public void setBeginStarttime(String beginStarttime) {
 		this.beginStarttime = beginStarttime;
 	}
 
-	public Date getEndStarttime() {
+	public String getEndStarttime() {
 		return endStarttime;
 	}
 
-	public void setEndStarttime(Date endStarttime) {
+	public void setEndStarttime(String endStarttime) {
 		this.endStarttime = endStarttime;
 	}
 
-	public Date getBeginEndtime() {
+	public String getBeginEndtime() {
 		return beginEndtime;
 	}
 
-	public void setBeginEndtime(Date beginEndtime) {
+	public void setBeginEndtime(String beginEndtime) {
 		this.beginEndtime = beginEndtime;
 	}
 
-	public Date getEndEndtime() {
+	public String getEndEndtime() {
 		return endEndtime;
 	}
 
-	public void setEndEndtime(Date endEndtime) {
+	public void setEndEndtime(String endEndtime) {
 		this.endEndtime = endEndtime;
 	}
+
 }
