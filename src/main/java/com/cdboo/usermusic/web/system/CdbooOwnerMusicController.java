@@ -1,7 +1,7 @@
 /**
  * Copyright &copy; 2012-2014 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
  */
-package com.cdboo.usermusic.web;
+package com.cdboo.usermusic.web.system;
 
 import java.util.List;
 
@@ -63,7 +63,7 @@ public class CdbooOwnerMusicController extends BaseController {
 			List<CdbooMusic> cdbooMusics = cdbooOwnerMusicService.getMusicByUser(user);
 			cdbooOwnerMusic.setMusicList(cdbooMusics);
 		}
-		return "cdboo/usermusic/cdbooOwnerMusicList";
+		return "cdboo/usermusic/system/cdbooOwnerMusicList";
 	}
 
 	@RequiresPermissions("usermusic:cdbooOwnerMusic:view")
@@ -82,7 +82,7 @@ public class CdbooOwnerMusicController extends BaseController {
 			cdbooOwnerMusic.setMusicList(cdbooMusics);
 		}
 
-		return "cdboo/usermusic/cdbooOwnerMusicForm";
+		return "cdboo/usermusic/system/cdbooOwnerMusicForm";
 	}
 
 	@RequiresPermissions("usermusic:cdbooOwnerMusic:edit")
