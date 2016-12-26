@@ -3,6 +3,9 @@
  */
 package com.cdboo.userplan.entity;
 
+import com.cdboo.channel.entity.CdbooChannel;
+import com.cdboo.music.entity.CdbooMusic;
+import com.cdboo.timestep.entity.Timestep;
 import org.hibernate.validator.constraints.Length;
 import com.thinkgem.jeesite.modules.sys.entity.User;
 import java.util.Date;
@@ -29,10 +32,9 @@ public class CdbooPlan extends DataEntity<CdbooPlan> {
 	private Date endDate;		// 结束日期
 	private String status;		// 状态位显示
 
-	//列表显示用
-	private String timestepName;
-	private String channelName;
-
+	private Timestep timestep;
+	private CdbooChannel channel;
+	private CdbooMusic music;
 
 	public CdbooPlan() {
 		super();
@@ -131,19 +133,27 @@ public class CdbooPlan extends DataEntity<CdbooPlan> {
 		this.status = status;
 	}
 
-	public String getTimestepName() {
-		return timestepName;
+	public Timestep getTimestep() {
+		return timestep;
 	}
 
-	public void setTimestepName(String timestepName) {
-		this.timestepName = timestepName;
+	public void setTimestep(Timestep timestep) {
+		this.timestep = timestep;
 	}
 
-	public String getChannelName() {
-		return channelName;
+	public CdbooChannel getChannel() {
+		return channel;
 	}
 
-	public void setChannelName(String channelName) {
-		this.channelName = channelName;
+	public void setChannel(CdbooChannel channel) {
+		this.channel = channel;
+	}
+
+	public CdbooMusic getMusic() {
+		return music;
+	}
+
+	public void setMusic(CdbooMusic music) {
+		this.music = music;
 	}
 }

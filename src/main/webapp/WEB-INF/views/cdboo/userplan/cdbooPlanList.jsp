@@ -88,10 +88,10 @@
 					${cdbooPlan.user.name}
 				</td>
 				<td>
-					${cdbooPlan.timestepName}
+					${cdbooPlan.timestep.timestepName}
 				</td>
 				<td>
-					${cdbooPlan.channelName}
+					${cdbooPlan.channel.channelName}
 				</td>
 				<td>
 					${fns:getDictLabel(cdbooPlan.musicStyle, 'music_style', '')}
