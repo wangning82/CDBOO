@@ -46,10 +46,16 @@
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			<if test="channelNo != null and channelNo != ''">
-				AND a.channel_no = #{channelNo}
+				AND a.channel_no LIKE 
+				<if test="dbName == 'oracle'">'%'||#{channelNo}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{channelNo}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{channelNo},'%')</if>
 			</if>
 			<if test="channelName != null and channelName != ''">
-				AND a.channel_name = #{channelName}
+				AND a.channel_name LIKE 
+				<if test="dbName == 'oracle'">'%'||#{channelName}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{channelName}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{channelName},'%')</if>
 			</if>
 			<if test="themeType != null and themeType != ''">
 				AND a.theme_type = #{themeType}
@@ -58,10 +64,16 @@
 				AND a.theme_concrete_type = #{themeConcreteType}
 			</if>
 			<if test="channelVersion != null and channelVersion != ''">
-				AND a.channel_version = #{channelVersion}
+				AND a.channel_version LIKE
+				<if test="dbName == 'oracle'">'%'||#{channelVersion}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{channelVersion}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{channelVersion},'%')</if>
 			</if>
 			<if test="musicStyle != null and musicStyle != ''">
-				AND a.music_style = #{musicStyle}
+				AND a.music_style LIKE
+				<if test="dbName == 'oracle'">'%'||#{musicStyle}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{musicStyle}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{musicStyle},'%')</if>
 			</if>
 			<if test="site != null and site != ''">
 				AND a.site = #{site}
@@ -73,13 +85,22 @@
 				AND a.voice = #{voice}
 			</if>
 			<if test="element != null and element != ''">
-				AND a.element = #{element}
+				AND a.element LIKE
+				<if test="dbName == 'oracle'">'%'||#{element}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{element}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{element},'%')</if>
 			</if>
 			<if test="emotion != null and emotion != ''">
-				AND a.emotion = #{emotion}
+				AND a.emotion LIKE
+				<if test="dbName == 'oracle'">'%'||#{emotion}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{emotion}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{emotion},'%')</if>
 			</if>
 			<if test="instrument != null and instrument != ''">
-				AND a.instrument = #{instrument}
+				AND a.instrument LIKE 
+				<if test="dbName == 'oracle'">'%'||#{instrument}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{instrument}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{instrument},'%')</if>
 			</if>
 			<if test="beginCreateDate != null and endCreateDate != null and beginCreateDate != '' and endCreateDate != ''">
 				AND a.create_date BETWEEN #{beginCreateDate} AND #{endCreateDate}

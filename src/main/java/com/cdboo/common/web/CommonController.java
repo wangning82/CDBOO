@@ -32,6 +32,14 @@ public class CommonController extends BaseController{
 		} catch (Exception e) {
 			request.setAttribute("pathArray", null);
 		}
-		return "crht/common/picCarousel";
+		return "cdboo/common/picCarousel";
+	}
+	
+	@RequestMapping(value = "disPicFromPath")
+	public String disPicFromPath(PicBean picBean, HttpServletRequest request, Model model) {
+		String path = picBean.getPath();
+		String[] pathArray = {path};
+		request.setAttribute("pathArray", pathArray);
+		return "cdboo/common/picCarousel";
 	}
 }

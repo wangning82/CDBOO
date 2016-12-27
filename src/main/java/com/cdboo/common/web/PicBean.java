@@ -4,7 +4,7 @@ public class PicBean {
 	private String tableName;
 	private String id;
 	private String pathFieldName;
-
+	private String path;
 	public PicBean() {
 	}
 
@@ -38,4 +38,13 @@ public class PicBean {
 	public void setPathFieldName(String pathFieldName) {
 		this.pathFieldName = pathFieldName;
 	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
+	
 }

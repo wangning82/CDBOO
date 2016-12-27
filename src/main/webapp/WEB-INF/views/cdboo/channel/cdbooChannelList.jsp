@@ -44,7 +44,6 @@
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/channel/cdbooChannel/">频道信息列表</a></li>
 		<shiro:hasPermission name="channel:cdbooChannel:edit"><li><a href="${ctx}/channel/cdbooChannel/form">频道信息添加</a></li></shiro:hasPermission>
-		<shiro:hasPermission name="channel:cdbooChannel:edit"><li><a href="${ctx}/channel/cdbooChannel/mapping">频道音乐关联</a></li></shiro:hasPermission>
 	</ul>
 	<form:form id="searchForm" modelAttribute="cdbooChannel" action="${ctx}/channel/cdbooChannel/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
@@ -156,7 +155,7 @@
 					${cdbooChannel.channelName}
 				</td>
 				<td>
-					${cdbooChannel.photoPath}
+					<pic:preview path="${cdbooChannel.photoPath}" ></pic:preview>
 				</td>
 				<td>
 					${fns:getDictLabel(cdbooChannel.themeType, 'theme_type', '')}
