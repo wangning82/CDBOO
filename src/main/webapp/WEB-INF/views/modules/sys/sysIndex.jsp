@@ -162,8 +162,8 @@
 		<div id="header" class="navbar navbar-fixed-top ">
 			<div class="navbar-inner">
 				<div class="dgs13" >
-                    <%--<div class="logo"><img src="${ctxStatic}/cdboo/images/logo.png"></div>--%>
-					<div class="logo"><h1>${fns:getConfig('productName')}</h1></div>
+                    <%--<div class="logo"><img src="${ctxStatic}/cdboo/images/bz.png"></div>--%>
+					<div class="logo"><h1><img src="${ctxStatic}/cdboo/images/bzindex.png">${fns:getConfig('productName')}</h1></div>
                     <div  class="anniu1"><a href="${ctx}/logout"><img src="${ctxStatic}/cdboo/images/anniu1.png"></a></div>
                     <div class=" clear"></div>
                 
@@ -222,7 +222,7 @@
 							<li><a href="${ctx}/sys/user/modifyPwd" target="mainFrame"><i class="icon-lock"></i>&nbsp;  修改密码</a></li>
 							<li><a href="${ctx}/oa/oaNotify/self" target="mainFrame"><i class="icon-bell"></i>&nbsp;  我的通知 <span id="notifyNum2" class="label label-info hide"></span></a></li>
 							<li style="display: none;">
-								<a href="${ctx}/taluser/talUser/list" target="mainFrame" onclick="javascript:addTab($(this), true, false);"><i class="icon-lock"></i>&nbsp; 首页</a>
+								<a href="${ctx}/taluser/talUser" target="mainFrame" onclick="javascript:addTab($(this), true, false);"><i class="icon-lock"></i>&nbsp; 首页1</a>
 							</li>
 						</ul>
 						</li>

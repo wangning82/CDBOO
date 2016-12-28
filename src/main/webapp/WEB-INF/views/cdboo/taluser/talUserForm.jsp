@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
-	<title>注册用户管理</title>
+	<title>home管理</title>
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -27,8 +27,8 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/taluser/talUser/">注册用户列表</a></li>
-		<li class="active"><a href="${ctx}/taluser/talUser/form?id=${talUser.id}">注册用户<shiro:hasPermission name="taluser:talUser:edit">${not empty talUser.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="taluser:talUser:edit">查看</shiro:lacksPermission></a></li>
+		<li><a href="${ctx}/taluser/talUser/">home列表</a></li>
+		<li class="active"><a href="${ctx}/taluser/talUser/form?id=${talUser.id}">home<shiro:hasPermission name="taluser:talUser:edit">${not empty talUser.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="taluser:talUser:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="talUser" action="${ctx}/taluser/talUser/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>

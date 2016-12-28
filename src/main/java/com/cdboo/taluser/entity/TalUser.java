@@ -10,9 +10,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.thinkgem.jeesite.common.persistence.DataEntity;
 
 /**
- * 终端用户注册后的管理功能Entity
+ * 首页功能Entity
  * @author wn
- * @version 2016-11-24
+ * @version 2016-12-28
  */
 public class TalUser extends DataEntity<TalUser> {
 	

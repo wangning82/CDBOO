@@ -5,28 +5,22 @@ package com.cdboo.taluser.service;
 
 import java.util.List;
 
-import com.cdboo.taluser.dao.TalUserDao;
-import com.cdboo.taluser.dao.TalUserDaoImplement;
-import com.cdboo.taluser.entity.TalUser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
+import com.cdboo.taluser.entity.TalUser;
+import com.cdboo.taluser.dao.TalUserDao;
 
 /**
- * 终端用户注册后的管理功能Service
+ * 首页功能Service
  * @author wn
- * @version 2016-11-24
+ * @version 2016-12-28
  */
 @Service
 @Transactional(readOnly = true)
 public class TalUserService extends CrudService<TalUserDao, TalUser> {
-
-	//初始化dao的接口类
-	private TalUserDao mUserDao = new TalUserDaoImplement();
-	//初始化不同结果的状态位
-	private static final int RESULT_NULL_USERNAME = 1,RESULT_WRONG_PASSWORD = 2;
 
 	public TalUser get(String id) {
 		return super.get(id);

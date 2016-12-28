@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
-	<title>注册用户管理</title>
+	<title>home管理</title>
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -18,8 +18,8 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/taluser/talUser/">注册用户列表</a></li>
-		<%--<shiro:hasPermission name="taluser:talUser:edit"><li><a href="${ctx}/taluser/talUser/form">注册用户添加</a></li></shiro:hasPermission>--%>
+		<li class="active"><a href="${ctx}/taluser/talUser/">home列表</a></li>
+		<shiro:hasPermission name="taluser:talUser:edit"><li><a href="${ctx}/taluser/talUser/form">home添加</a></li></shiro:hasPermission>
 	</ul>
 	<form:form id="searchForm" modelAttribute="talUser" action="${ctx}/taluser/talUser/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
@@ -37,29 +37,22 @@
 			<li><label>电话：</label>
 				<form:input path="phone" htmlEscape="false" maxlength="200" class="input-medium"/>
 			</li>
+			<li><label>用户头像：</label>
+				<form:input path="photo" htmlEscape="false" maxlength="1000" class="input-medium"/>
+			</li>
 			<li><label>最后登陆IP：</label>
 				<form:input path="loginIp" htmlEscape="false" maxlength="100" class="input-medium"/>
 			</li>
-			<li><label>最后登陆：</label>
+			<li><label>最后登陆时间：</label>
 				<input name="loginDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
 					value="<fmt:formatDate value="${talUser.loginDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
 					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
 			</li>
-            <li><label>最后登陆：</label>
-                <input name="loginDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-                       value="<fmt:formatDate value="${talUser.loginDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-                       onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
-            </li>
 			<li><label>创建时间：</label>
 				<input name="createDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
 					value="<fmt:formatDate value="${talUser.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
 					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
 			</li>
-            <li><label>创建时间：</label>
-                <input name="createDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-                       value="<fmt:formatDate value="${talUser.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-                       onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
-            </li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="clearfix"></li>
 		</ul>
@@ -72,6 +65,7 @@
 				<th>昵称</th>
 				<th>邮箱</th>
 				<th>电话</th>
+				<th>用户头像</th>
 				<th>最后登陆IP</th>
 				<th>最后登陆时间</th>
 				<th>创建时间</th>
@@ -94,6 +88,9 @@
 					${talUser.phone}
 				</td>
 				<td>
+					${talUser.photo}
+				</td>
+				<td>
 					${talUser.loginIp}
 				</td>
 				<td>
@@ -104,7 +101,7 @@
 				</td>
 				<shiro:hasPermission name="taluser:talUser:edit"><td>
     				<a href="${ctx}/taluser/talUser/form?id=${talUser.id}">修改</a>
-					<a href="${ctx}/taluser/talUser/delete?id=${talUser.id}" onclick="return confirmx('确认要删除该注册用户吗？', this.href)">删除</a>
+					<a href="${ctx}/taluser/talUser/delete?id=${talUser.id}" onclick="return confirmx('确认要删除该home吗？', this.href)">删除</a>
 				</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>

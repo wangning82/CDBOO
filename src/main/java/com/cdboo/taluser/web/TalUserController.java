@@ -6,8 +6,6 @@ package com.cdboo.taluser.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.cdboo.taluser.entity.TalUser;
-import com.cdboo.taluser.service.TalUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,11 +19,13 @@ import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.cdboo.taluser.entity.TalUser;
+import com.cdboo.taluser.service.TalUserService;
 
 /**
- * 终端用户注册后的管理功能Controller
+ * 首页功能Controller
  * @author wn
- * @version 2016-11-24
+ * @version 2016-12-28
  */
 @Controller
 @RequestMapping(value = "${adminPath}/taluser/talUser")
@@ -51,14 +51,14 @@ public class TalUserController extends BaseController {
 	public String list(TalUser talUser, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<TalUser> page = talUserService.findPage(new Page<TalUser>(request, response), talUser); 
 		model.addAttribute("page", page);
-		return "growtogether/taluser/talUserList";
+		return "cdboo/taluser/talUserList";
 	}
 
 	@RequiresPermissions("taluser:talUser:view")
 	@RequestMapping(value = "form")
 	public String form(TalUser talUser, Model model) {
 		model.addAttribute("talUser", talUser);
-		return "growtogether/taluser/talUserForm";
+		return "cdboo/taluser/talUserForm";
 	}
 
 	@RequiresPermissions("taluser:talUser:edit")
@@ -68,7 +68,7 @@ public class TalUserController extends BaseController {
 			return form(talUser, model);
 		}
 		talUserService.save(talUser);
-		addMessage(redirectAttributes, "保存注册用户成功");
+		addMessage(redirectAttributes, "保存home成功");
 		return "redirect:"+Global.getAdminPath()+"/taluser/talUser/?repage";
 	}
 	
@@ -76,7 +76,7 @@ public class TalUserController extends BaseController {
 	@RequestMapping(value = "delete")
 	public String delete(TalUser talUser, RedirectAttributes redirectAttributes) {
 		talUserService.delete(talUser);
-		addMessage(redirectAttributes, "删除注册用户成功");
+		addMessage(redirectAttributes, "删除home成功");
 		return "redirect:"+Global.getAdminPath()+"/taluser/talUser/?repage";
 	}
 
