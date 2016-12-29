@@ -40,6 +40,13 @@ public class CdbooChannel extends DataEntity<CdbooChannel> {
 	private Date beginCreateDate; // 开始 创建时间
 	private Date endCreateDate; // 结束 创建时间
 	private List<String> musicIds = Lists.newArrayList();
+	//子频道列表
+	private List<CdbooChannel> childChannelList = Lists.newArrayList();
+	
+	private List<String> idArray;
+	private List<String> inIdArray;
+	private String ids;
+	private String userId;
 	
 	public CdbooChannel() {
 		super();
@@ -255,5 +262,60 @@ public class CdbooChannel extends DataEntity<CdbooChannel> {
 	public void setMusicIds(List<String> musicIds) {
 		this.musicIds = musicIds;
 	}
+
+	public List<CdbooChannel> getChildChannelList() {
+		return childChannelList;
+	}
+
+	public void setChildChannelList(List<CdbooChannel> childChannelList) {
+		this.childChannelList = childChannelList;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 	
+	public String getIds() {
+		return ids;
+	}
+
+	public void setIds(String ids) {
+		if (StringUtils.isNotBlank(ids)) {
+			idArray = Lists.newArrayList();
+			String[] idsArray = StringUtils.split(ids, ",");
+			for (int i = 0; i < idsArray.length; i++) {
+				idArray.add("'"+idsArray[i]+"'");
+			}
+		}
+	}
+
+	public List<String> getIdArray() {
+		return idArray;
+	}
+
+	public void setIdArray(List<String> idArray) {
+		this.idArray = idArray;
+	}
+
+	public void setInIds(String ids) {
+		if (StringUtils.isNotBlank(ids)) {
+			inIdArray = Lists.newArrayList();
+			String[] idsArray = StringUtils.split(ids, ",");
+			for (int i = 0; i < idsArray.length; i++) {
+				inIdArray.add("'"+idsArray[i]+"'");
+			}
+		}
+	}
+	
+	public List<String> getInIdArray() {
+		return inIdArray;
+	}
+
+	public void setInIdArray(List<String> inIdArray) {
+		this.inIdArray = inIdArray;
+	}
 }

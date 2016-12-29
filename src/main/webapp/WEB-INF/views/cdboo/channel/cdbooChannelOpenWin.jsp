@@ -42,14 +42,42 @@
 				}
 			}
 		}
+		
+		function ChannelEntity(id,channelNo,channelName,photoPath,themeType,themeConcreteType,channelVersion,createDate){
+			this.id = id;
+			this.channelNo = channelNo;
+			this.channelName = channelName;
+			this.photoPath = photoPath;
+			this.themeType = themeType;
+			this.themeConcreteType = themeConcreteType;
+			this.channelVersion = channelVersion;
+			this.createDate = createDate;
+		}
+		
+		function getCheckData(){
+			var checkArray = new Array();
+			$('input[name="channelIds"]:checkbox:checked').each(function(){
+				var id = $(this).val();
+				var idName = $(this).attr('id');
+				var idNameArray = idName.split("_");
+				var rowIndex = idNameArray[1];
+				var channelNo = $('#channelNo_'+rowIndex).val();
+				var channelName = $('#channelName_'+rowIndex).val();
+				var photoPath = $('#photoPath_'+rowIndex).val();
+				var themeType = $('#themeType_'+rowIndex).val();
+				var themeConcreteType = $('#themeConcreteType_'+rowIndex).val();
+				var channelVersion = $('#channelVersion_'+rowIndex).val();
+				var createDate = $('#createDate_'+rowIndex).val();
+				
+				var channelEntity = new ChannelEntity(id,channelNo,channelName,photoPath,themeType,themeConcreteType,channelVersion,createDate);
+				checkArray.push(channelEntity);
+			});
+			return checkArray;
+		}
 	</script>
 </head>
 <body>
-	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/channel/cdbooChannel/">频道信息列表</a></li>
-		<shiro:hasPermission name="channel:cdbooChannel:edit"><li><a href="${ctx}/channel/cdbooChannel/form">频道信息添加</a></li></shiro:hasPermission>
-	</ul>
-	<form:form id="searchForm" modelAttribute="cdbooChannel" action="${ctx}/channel/cdbooChannel/" method="post" class="breadcrumb form-search">
+	<form:form id="searchForm" modelAttribute="cdbooChannel" action="${ctx}/channel/cdbooChannel/openChannelWin" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<input type="hidden" name="channelType" value="0"/>
@@ -133,6 +161,7 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
+				<th><input type="checkbox" onclick="changeCB(this.checked,'channelIds')" /></th>
 				<th>频道编号</th>
 				<th>频道名称</th>
 				<th>频道图片</th>
@@ -140,13 +169,26 @@
 				<th>风格类型明细</th>
 				<th>频道版本</th>
 				<th>创建时间</th>
-				<th>频道类型</th>
-				<shiro:hasPermission name="channel:cdbooChannel:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
 		<tbody>
 		<c:forEach items="${page.list}" var="cdbooChannel">
 			<tr>
+				<td><input type="checkbox" id="id_${status.index }" name="channelIds" value="${cdbooChannel.id }"/>
+					<input type="hidden" id="channelNo_${status.index }" value = "${cdbooChannel.channelNo}"/>
+					<input type="hidden" id="channelName_${status.index }" value = "${cdbooChannel.channelName}"/>
+					<input type="hidden" id="photoPath_${status.index }" value = "${cdbooChannel.photoPath}"/>
+					<input type="hidden" id="themeType_${status.index }" value = "${fns:getDictLabel(cdbooChannel.themeType, 'theme_type', '')}"/>
+					<c:if test="${cdbooChannel.themeType eq Constants.THEMETYPE_THEME }">
+						<input type="hidden" id="themeConcreteType_${status.index }" value = "${fns:getDictLabel(cdbooChannel.themeConcreteType,'season_type', '')}"/>
+					</c:if>
+					<c:if test="${cdbooChannel.themeType eq Constants.THEMETYPE_HOLIDAY }">
+						<input type="hidden" id="themeConcreteType_${status.index }" value = "${fns:getDictLabel(cdbooChannel.themeConcreteType,'holiday_type', '')}"/>
+					</c:if>
+					<input type="hidden" id="channelVersion_${status.index }" value = "${cdbooChannel.channelVersion}"/>
+					<fmt:formatDate value="${cdbooChannel.createDate}" pattern="yyyy-MM-dd HH:mm:ss" var="formatCreateDate"/>
+					<input type="hidden" id="createDate_${status.index }" value = "${formatCreateDate}"/>
+				</td>
 				<td><a href="${ctx}/channel/cdbooChannel/form?id=${cdbooChannel.id}">
 					${cdbooChannel.channelNo}
 				</a></td>
@@ -173,13 +215,6 @@
 				<td>
 					<fmt:formatDate value="${cdbooChannel.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
-				<td>
-					${fns:getDictLabel(cdbooChannel.channelType, 'channel_type', '')}
-				</td>
-				<shiro:hasPermission name="channel:cdbooChannel:edit"><td>
-    				<a href="${ctx}/channel/cdbooChannel/form?id=${cdbooChannel.id}">修改</a>
-					<a href="${ctx}/channel/cdbooChannel/delete?id=${cdbooChannel.id}" onclick="return confirmx('确认要删除该频道信息吗？', this.href)">删除</a>
-				</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>
 		</tbody>
