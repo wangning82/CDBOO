@@ -68,8 +68,7 @@
 							${cdbooUserChannel.channel.channelName}
 						</td>
 						<td>
-							<img alt="" src="${cdbooUserChannel.channel.photoPath}" height="100" width="100">
-							
+							<pic:preview path="${cdbooUserChannel.channel.photoPath}"></pic:preview>
 						</td>
 						<td>
 							${fns:getDictLabel(cdbooUserChannel.channel.themeType, 'theme_type', '')}
