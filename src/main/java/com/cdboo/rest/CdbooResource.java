@@ -82,9 +82,9 @@ public class CdbooResource {
             model.setUserName(_cdbooPlan.getUser().getName());
             model.setPhoto(_cdbooPlan.getUser().getPhoto());
 
-            planModel.setChannel(_cdbooPlan.getChannel());
-            planModel.setTimestep(_cdbooPlan.getTimestep());
-            planModel.setMusic(_cdbooPlan.getMusic());
+//            planModel.setChannel(_cdbooPlan.getChannel());
+//            planModel.setTimestep(_cdbooPlan.getTimestep());
+//            planModel.setMusic(_cdbooPlan.getMusic());
 
             planModelList.add(planModel);
         }

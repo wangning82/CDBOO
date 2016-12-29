@@ -5,11 +5,14 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * 用户rest实体
  * Created by mmzz on 2016/12/28.
  */
 public class RestModel implements Serializable {
 
-    private String userName;//用户姓名
+	private static final long serialVersionUID = 1L;
+	
+	private String userName;//用户姓名
     private String shopownerName;//店长姓名
 
     private Date businessHoursBegin;//营业时间开始
@@ -18,8 +21,13 @@ public class RestModel implements Serializable {
     private String address;//门店地址
     private String photo;//用户头像
 
+    private Date serviceTimeBegin;//用户服务时间开始时间，就是用户买了多久的会员就能用多久
+    private Date serviceTimeEnd;//用户服务时间结束时间
+    
     List<PlanModel> planModelList;
 
+    //插播计划 应该是个list
+    
     public String getUserName() {
         return userName;
     }
@@ -75,4 +83,21 @@ public class RestModel implements Serializable {
     public void setPlanModelList(List<PlanModel> planModelList) {
         this.planModelList = planModelList;
     }
+
+	public Date getServiceTimeBegin() {
+		return serviceTimeBegin;
+	}
+
+	public void setServiceTimeBegin(Date serviceTimeBegin) {
+		this.serviceTimeBegin = serviceTimeBegin;
+	}
+
+	public Date getServiceTimeEnd() {
+		return serviceTimeEnd;
+	}
+
+	public void setServiceTimeEnd(Date serviceTimeEnd) {
+		this.serviceTimeEnd = serviceTimeEnd;
+	}
+    
 }

@@ -12,7 +12,9 @@ import java.util.Date;
  */
 public class PlanModel implements Serializable {
 
-    private String planNo;		// 计划编号
+	private static final long serialVersionUID = 1L;
+	
+	private String planNo;		// 计划编号
     private String playName;		// 计划名称
     private String musicStyle;		// 风格
     private String week;		// 日期
@@ -20,9 +22,8 @@ public class PlanModel implements Serializable {
     private Date endDate;		// 结束日期
     private String status;		// 状态位显示
 
-    private Timestep timestep;
-    private CdbooChannel channel;
-    private CdbooMusic music;
+    private RestTimeStep timestep;
+    private RestChannel channel;
 
     public String getPlanNo() {
         return planNo;
@@ -80,27 +81,20 @@ public class PlanModel implements Serializable {
         this.status = status;
     }
 
-    public Timestep getTimestep() {
-        return timestep;
-    }
+	public RestTimeStep getTimestep() {
+		return timestep;
+	}
 
-    public void setTimestep(Timestep timestep) {
-        this.timestep = timestep;
-    }
+	public void setTimestep(RestTimeStep timestep) {
+		this.timestep = timestep;
+	}
 
-    public CdbooChannel getChannel() {
-        return channel;
-    }
+	public RestChannel getChannel() {
+		return channel;
+	}
 
-    public void setChannel(CdbooChannel channel) {
-        this.channel = channel;
-    }
+	public void setChannel(RestChannel channel) {
+		this.channel = channel;
+	}
 
-    public CdbooMusic getMusic() {
-        return music;
-    }
-
-    public void setMusic(CdbooMusic music) {
-        this.music = music;
-    }
 }
