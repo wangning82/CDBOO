@@ -1,9 +1,9 @@
 package com.cdboo.rest;
 
+import com.google.common.collect.Lists;
+
 import java.io.Serializable;
 import java.util.List;
-
-import jersey.repackaged.com.google.common.collect.Lists;
 
 /**
  * 用户频道信息rest实体
