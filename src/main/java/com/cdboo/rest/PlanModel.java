@@ -21,7 +21,7 @@ public class PlanModel implements Serializable {
     private Date startDate;		// 开始日期
     private Date endDate;		// 结束日期
     private String status;		// 状态位显示
-
+    private int cycleTimes;     //循环次数
     private RestTimeStep timestep;
     private RestChannel channel;
 
@@ -95,6 +95,14 @@ public class PlanModel implements Serializable {
 
 	public void setChannel(RestChannel channel) {
 		this.channel = channel;
+	}
+
+	public int getCycleTimes() {
+		return cycleTimes;
+	}
+
+	public void setCycleTimes(int cycleTimes) {
+		this.cycleTimes = cycleTimes;
 	}
 
 }
