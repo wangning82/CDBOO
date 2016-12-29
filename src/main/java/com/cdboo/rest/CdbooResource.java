@@ -71,21 +71,27 @@ public class CdbooResource {
 
         List<RestModel> modelList = new ArrayList<>();
 
+        RestModel model = new RestModel();
+        List<PlanModel> planModelList = new ArrayList<>();
+
         for (CdbooPlan _cdbooPlan : list) {
-            RestModel model = new RestModel();
-            BeanUtils.copyProperties(model, _cdbooPlan);
+            PlanModel planModel = new PlanModel();
+
+            BeanUtils.copyProperties(planModel, _cdbooPlan);
 
             model.setUserName(_cdbooPlan.getUser().getName());
             model.setPhoto(_cdbooPlan.getUser().getPhoto());
 
-            model.setChannel(_cdbooPlan.getChannel());
-            model.setTimestep(_cdbooPlan.getTimestep());
-            model.setMusic(_cdbooPlan.getMusic());
-            modelList.add(model);
+            planModel.setChannel(_cdbooPlan.getChannel());
+            planModel.setTimestep(_cdbooPlan.getTimestep());
+            planModel.setMusic(_cdbooPlan.getMusic());
+
+            planModelList.add(planModel);
         }
+        model.setPlanModelList(planModelList);
 
 //        return JSON.toJSONString(list);
-        return new JSONSerializer().deepSerialize(modelList);
+        return new JSONSerializer().deepSerialize(model);
     }
 
     /**
