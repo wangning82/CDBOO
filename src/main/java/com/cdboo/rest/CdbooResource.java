@@ -71,12 +71,16 @@ public class CdbooResource {
 
         List<RestModel> modelList = new ArrayList<>();
 
-        for (CdbooPlan cdbooPlan1 : list) {
+        for (CdbooPlan _cdbooPlan : list) {
             RestModel model = new RestModel();
-            BeanUtils.copyProperties(model, cdbooPlan1);
+            BeanUtils.copyProperties(model, _cdbooPlan);
 
-            model.setChannel(cdbooPlan1.getChannel());
-            model.setTimestep(cdbooPlan1.getTimestep());
+            model.setUserName(_cdbooPlan.getUser().getName());
+            model.setPhoto(_cdbooPlan.getUser().getPhoto());
+
+            model.setChannel(_cdbooPlan.getChannel());
+            model.setTimestep(_cdbooPlan.getTimestep());
+            model.setMusic(_cdbooPlan.getMusic());
             modelList.add(model);
         }
 

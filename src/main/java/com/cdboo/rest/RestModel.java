@@ -1,6 +1,7 @@
 package com.cdboo.rest;
 
 import com.cdboo.channel.entity.CdbooChannel;
+import com.cdboo.music.entity.CdbooMusic;
 import com.cdboo.timestep.entity.Timestep;
 import com.cdboo.timestep.service.TimestepService;
 import com.thinkgem.jeesite.modules.sys.entity.User;
@@ -21,8 +22,12 @@ public class RestModel {
     private Date endDate;		// 结束日期
     private String status;		// 状态位显示
 
-    Timestep timestep;
-    CdbooChannel channel;
+    private String userName;//用户姓名
+    private String photo;//用户头像
+
+    private Timestep timestep;
+    private CdbooChannel channel;
+    private CdbooMusic music;
 
     public String getPlanNo() {
         return planNo;
@@ -94,5 +99,29 @@ public class RestModel {
 
     public void setChannel(CdbooChannel channel) {
         this.channel = channel;
+    }
+
+    public CdbooMusic getMusic() {
+        return music;
+    }
+
+    public void setMusic(CdbooMusic music) {
+        this.music = music;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }
