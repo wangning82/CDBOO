@@ -8,10 +8,10 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cdboo.channel.dao.CdbooChannelDao;
+import com.cdboo.channel.entity.CdbooChannel;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
-import com.cdboo.channel.entity.CdbooChannel;
-import com.cdboo.channel.dao.CdbooChannelDao;
 
 /**
  * 频道管理Service
@@ -42,6 +42,13 @@ public class CdbooChannelService extends CrudService<CdbooChannelDao, CdbooChann
 	@Transactional(readOnly = false)
 	public void delete(CdbooChannel cdbooChannel) {
 		super.delete(cdbooChannel);
+	}
+	
+	public Page<CdbooChannel> findPageByUserId(Page<CdbooChannel> page, CdbooChannel cdbooChannel) {
+		cdbooChannel.setPage(page);
+		List<CdbooChannel> list = dao.findPageByUserId(cdbooChannel);
+		page.setList(list);
+		return page;
 	}
 	
 }

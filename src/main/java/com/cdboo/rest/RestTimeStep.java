@@ -13,7 +13,7 @@ public class RestTimeStep implements Serializable{
 	
 	private String timestepNo;		// 时段编号
 	private String timestepName;		// 时段名称
-	private String starttime;		// 开始时间
+	private String starttime;		// 开始时间 如果风格是插播，开始时间和结束时间理论上是一样的，取开始时间即可
 	private String endtime;		// 结束时间
 	public String getTimestepNo() {
 		return timestepNo;

@@ -28,9 +28,9 @@ public class RestChannel implements Serializable{
 	private String emotion; // 情绪
 	private String instrument; // 乐器
 	private String status; // 状态
-	private String channelType; // 频道类型
+	private String channelType; // 频道类型 子频道，组合频道和插播频道
 	
-	//如果是子频道，该集合有对应music的信息
+	//如果是子频道或者插播频道，该集合有对应music的信息
 	private List<RestMusic> musicList = Lists.newArrayList();
 	
 	//如果是组合频道，该集合有值
