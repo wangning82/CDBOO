@@ -84,9 +84,15 @@ public class CdbooUserChannelService extends CrudService<CdbooUserChannelDao, Cd
 		/*******************
 		 * 将原先库里对应用户，频道以及音乐的关联信息封装成map，key是音乐id，值为映射对象，准备下一步过滤操作 Start
 		 ********************/
+		List<CdbooUserChannel> delList = Lists.newArrayList();
 		Map<String, CdbooUserChannel> musicMap = new HashMap<>();
 		if (CollectionUtils.isNotEmpty(userChannelList)) {
 			for (CdbooUserChannel userChannel : userChannelList) {
+				CdbooMusic music = userChannel.getMusic();
+				if(music == null || StringUtils.isBlank(music.getId())){
+					delList.add(userChannel);
+					continue;
+				}
 				String musicId = userChannel.getMusic().getId();
 				musicMap.put(musicId, userChannel);
 			}
@@ -119,9 +125,8 @@ public class CdbooUserChannelService extends CrudService<CdbooUserChannelDao, Cd
 		/*******************
 		 * 过滤加移除后map中剩下的就是被前台移除的音乐，取出准备下一步数据库操作 Start
 		 ********************/
-		List<CdbooUserChannel> delList = null;
 		if (MapUtils.isNotEmpty(musicMap)) {
-			delList = Lists.newArrayList(musicMap.values());
+			delList.addAll(musicMap.values());
 		}
 		/*******************
 		 * 过滤加移除后map中剩下的就是被前台移除的音乐，取出准备下一步数据库操作 Start
@@ -200,6 +205,10 @@ public class CdbooUserChannelService extends CrudService<CdbooUserChannelDao, Cd
 		List<CdbooUserChannel> cdbooUserChannels = dao.findList(cdbooUserChannel);
 		if (CollectionUtils.isNotEmpty(cdbooUserChannels)) {
 			for (CdbooUserChannel queryChannel : cdbooUserChannels) {
+				CdbooMusic music = queryChannel.getMusic();
+				if(music == null || StringUtils.isBlank(music.getId())){
+					continue;
+				}
 				String id = queryChannel.getMusic().getId();
 				CdbooMusic cdbooMusic = cdbooMusicService.get(id);
 				cdbooMusicList.add(cdbooMusic);

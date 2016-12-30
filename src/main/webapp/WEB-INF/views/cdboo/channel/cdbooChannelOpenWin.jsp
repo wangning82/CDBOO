@@ -103,56 +103,6 @@
 			<li><label>频道版本：</label>
 				<form:input path="channelVersion" htmlEscape="false" maxlength="100" class="input-medium"/>
 			</li>
-			<li><label>音乐风格：</label>
-				<form:select path="musicStyle" class="input-medium">
-					<form:option value="" label="请选择"/>
-					<form:options items="${fns:getDictList('music_style')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
-			</li>
-			<li><label>场所：</label>
-				<form:select path="site" class="input-medium">
-					<form:option value="" label="请选择"/>
-					<form:options items="${fns:getDictList('site_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
-			</li>
-			<li><label>速度：</label>
-				<form:select path="speed" class="input-medium">
-					<form:option value="" label="请选择"/>
-					<form:options items="${fns:getDictList('speed_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
-			</li>
-			<li><label>人声：</label>
-				<form:select path="voice" class="input-medium">
-					<form:option value="" label="请选择"/>
-					<form:options items="${fns:getDictList('voice_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
-			</li>
-			<li><label>元素：</label>
-				<form:select path="element" class="input-medium">
-					<form:option value="" label="请选择"/>
-					<form:options items="${fns:getDictList('element_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
-			</li>
-			<li><label>情绪：</label>
-				<form:select path="emotion" class="input-medium">
-					<form:option value="" label="请选择"/>
-					<form:options items="${fns:getDictList('emotion_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
-			</li>
-			<li><label>乐器：</label>
-				<form:select path="instrument" class="input-medium">
-					<form:option value="" label="请选择"/>
-					<form:options items="${fns:getDictList('instrument_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
-			</li>
-			<li><label>创建时间：</label>
-				<input name="beginCreateDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-					value="<fmt:formatDate value="${cdbooChannel.beginCreateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/> - 
-				<input name="endCreateDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-					value="<fmt:formatDate value="${cdbooChannel.endCreateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
-			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="clearfix"></li>
 		</ul>

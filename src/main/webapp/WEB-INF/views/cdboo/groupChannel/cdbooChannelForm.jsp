@@ -49,54 +49,70 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/channel/cdbooChannel/">频道信息列表</a></li>
-		<li class="active"><a href="${ctx}/channel/cdbooChannel/form?id=${cdbooChannel.id}">频道信息<shiro:hasPermission name="channel:cdbooChannel:edit">${not empty cdbooChannel.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="channel:cdbooChannel:edit">查看</shiro:lacksPermission></a></li>
+		<li><a href="${ctx}/channel/groupChannel/">频道信息列表</a></li>
+		<li class="active"><a href="${ctx}/channel/groupChannel/form?id=${cdbooChannel.id}">频道信息<shiro:hasPermission name="channel:groupChannel:edit">${not empty cdbooChannel.id?'修改':'添加'}</shiro:hasPermission></a></li>
 	</ul><br/>
-	<form:form id="inputForm" modelAttribute="cdbooChannel" action="${ctx}/channel/cdbooChannel/save" method="post" class="form-horizontal">
-		<form:hidden path="id"/>
+	<form:form id="inputForm" modelAttribute="cdbooGroupChild" action="${ctx}/channel/groupChannel/save" method="post" class="form-horizontal">
+		<form:hidden path="groupChannelId.id"/>
 		<input type="hidden" id="channelType" name="channelType" value="${Constants.CHANNEL_TYPE_CHILD }">
 		<sys:message content="${message}"/>		
 		<div class="control-group">
+			<label class="control-label">用户：</label>
+			<div class="controls">
+				<!-- 如果是修改，则用户锁定，不能编辑 -->
+				<c:if test = "${not empty cdbooGroupChild.userId.id && not empty cdbooGroupChild.groupChannelId.id}">
+					<sys:treeselect disabled="disabled" id="user" name="user.id" value="${cdbooGroupChild.userId.id}" labelName="user.name" labelValue="${cdbooGroupChild.userId.name}"
+						title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true" notAllowSelectParent="true" />
+				</c:if>
+				<!-- 如果是新增，则用户不锁定，允许编辑 -->
+				<c:if test = "${empty cdbooGroupChild.userId.id && empty cdbooGroupChild.groupChannelId.id}">
+					<sys:treeselect id="user" name="user.id" value="${cdbooGroupChild.userId.id}" labelName="user.name" labelValue="${cdbooGroupChild.userId.name}"
+						title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true" notAllowSelectParent="true" />
+				</c:if>
+			</div>
+		</div>
+		<div class="control-group">
 			<label class="control-label">频道编号：</label>
 			<div class="controls">
-				<form:input path="channelNo" htmlEscape="false" maxlength="100" class="input-xlarge "/>
+				<form:input path="groupChannelId.channelNo" htmlEscape="false" maxlength="100" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">频道名称：</label>
 			<div class="controls">
-				<form:input path="channelName" htmlEscape="false" maxlength="200" class="input-xlarge "/>
+				<form:input path="groupChannelId.channelName" htmlEscape="false" maxlength="200" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">频道版本：</label>
 			<div class="controls">
-				<form:input path="channelVersion" htmlEscape="false" maxlength="100" class="input-xlarge "/>
+				<form:input path="groupChannelId.channelVersion" htmlEscape="false" maxlength="100" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">频道图片：</label>
 			<div class="controls">
-				<input type="hidden" id="photoPath" name="photoPath" value="${cdbooChannel.photoPath }" required>
+				<input type="hidden" id="photoPath" name="groupChannelId.photoPath" value="${cdbooChannel.photoPath }" required>
 				<sys:ckfinder input="photoPath" type="images"  uploadPath="/images" selectMultiple="false" maxWidth="100" maxHeight="100"/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">备注信息：</label>
 			<div class="controls">
-				<form:textarea path="remarks" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
+				<form:textarea path="groupChannelId.remarks" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
 			</div>
 		</div>
 		
 		<div class="control-group">
-			<label class="control-label">频道列表：</label>
+			<label class="control-label">子频道列表：</label>
 			<div class="controls">
-				<channel:channelListTag channelElementName="channelIds" channelList="${cdbooChannel.childChannelList }"></channel:channelListTag>
+				<channel:channelListTag channelElementName="channelIds" channelList="${cdbooGroupChild.childChannelList }" userElementId="userId"></channel:channelListTag>
 			</div>
 		</div>
 		
 		<div class="form-actions">
-			<shiro:hasPermission name="channel:cdbooChannel:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
+			<input id="assignButton" class="btn btn-primary" type="button" value="分配频道" onclick="openMappingWin()"/>
+			<shiro:hasPermission name="channel:groupChannel:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
 		</div>
 	</form:form>

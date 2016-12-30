@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.cdboo.channel.entity.CdbooChannel;
@@ -58,28 +59,39 @@ public class CdbooGroupChannelController extends BaseController {
 	
 	@RequiresPermissions("channel:groupChannel:view")
 	@RequestMapping(value = {"list", ""})
-	public String list(CdbooChannel cdbooChannel, HttpServletRequest request, HttpServletResponse response, Model model) {
-		Page<CdbooChannel> page = cdbooChannelService.findPage(new Page<CdbooChannel>(request, response), cdbooChannel); 
+	public String list(CdbooGroupChild cdbooGroupChild, HttpServletRequest request, HttpServletResponse response, Model model) {
+		Page<CdbooGroupChild> page = cdbooGroupChildService.findGroupList(new Page<CdbooGroupChild>(request,response),cdbooGroupChild);
 		model.addAttribute("page", page);
+		
+		User user = cdbooGroupChild.getUserId();
+		if(user!=null && StringUtils.isNotBlank(user.getId())){
+			List<CdbooChannel> channelList = cdbooGroupChildService.findGroupChannelListByUserid(cdbooGroupChild);
+			cdbooGroupChild.setChannelList(channelList);
+		}
+		
 		return "cdboo/groupChannel/cdbooChannelList";
 	}
 	
 	@RequiresPermissions("channel:groupChannel:view")
 	@RequestMapping(value = "form")
-	public String form(CdbooChannel cdbooChannel, Model model, HttpServletRequest request) {
-		model.addAttribute("cdbooChannel", cdbooChannel);
+	public String form(CdbooGroupChild cdbooGroupChild, Model model, HttpServletRequest request) {
+		model.addAttribute("cdbooGroupChild", cdbooGroupChild);
 
-		String id = cdbooChannel.getId();
-		if (StringUtils.isNotBlank(id)) {
-			CdbooGroupChild cdbooGroupChild = new CdbooGroupChild();
+		User userId = cdbooGroupChild.getUserId();
+		CdbooChannel groupChannelId = cdbooGroupChild.getGroupChannelId();
+		
+		
+		if(userId!=null && StringUtils.isNotBlank(userId.getId()) && groupChannelId!=null && StringUtils.isNotBlank(groupChannelId.getId())){
+			List<CdbooChannel> list = cdbooGroupChildService.findChildChannelListByConditions(cdbooGroupChild);
+			cdbooGroupChild.setChildChannelList(list);
+			
+			CdbooChannel cdbooChannel = cdbooChannelService.get(groupChannelId);
 			cdbooGroupChild.setGroupChannelId(cdbooChannel);
-			List<CdbooChannel> childChannelList = cdbooGroupChildService
-					.findCdbooChannelFromGroupChannel(cdbooGroupChild);
-			cdbooChannel.setChildChannelList(childChannelList);
-		} else {
+		}
+		else{
 			User user = UserUtils.getUser();
-			List<CdbooChannel> userChannelList = cdbooUserChannelService.getChannelListByUser(user);
-			cdbooChannel.setChildChannelList(userChannelList);
+			List<CdbooChannel> list = cdbooUserChannelService.getChannelListByUser(user);
+			cdbooGroupChild.setChildChannelList(list);
 		}
 
 		return "cdboo/groupChannel/cdbooChannelForm";
@@ -87,12 +99,23 @@ public class CdbooGroupChannelController extends BaseController {
 	
 	@RequiresPermissions("channel:groupChannel:edit")
 	@RequestMapping(value = "save")
-	public String save(CdbooChannel cdbooChannel, Model model, RedirectAttributes redirectAttributes, HttpServletRequest request) {
-		if (!beanValidator(model, cdbooChannel)){
-			return form(cdbooChannel, model,request);
+	public String save(CdbooGroupChild cdbooGroupChild, Model model, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+		if (!beanValidator(model, cdbooGroupChild)){
+			return form(cdbooGroupChild, model,request);
 		}
-		cdbooChannelService.save(cdbooChannel);
+		cdbooGroupChildService.save(cdbooGroupChild);
 		addMessage(redirectAttributes, "保存频道信息成功");
 		return "redirect:"+Global.getAdminPath()+"/channel/cdbooChannel/?repage";
+	}
+	
+	@RequestMapping(value = "getGroupChannelList")
+	@ResponseBody
+	public List<CdbooChannel> getGroupChannelList(@RequestParam(required=true) String userId){
+		CdbooGroupChild cdbooGroupChild = new CdbooGroupChild();
+		User user = new User(userId);
+		cdbooGroupChild.setUserId(user);
+		
+		List<CdbooChannel> channelList = cdbooGroupChildService.findGroupChannelListByUserid(cdbooGroupChild);
+		return channelList;
 	}
 }
