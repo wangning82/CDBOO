@@ -196,8 +196,6 @@
 					$(document).ready(function() {
 						var data = ${fns:toJson(planModel.planList)};
 
-
-						alert(data.length);
 						for (var i = 0; i < data.length; i++) {
 							addRow('#planList', planRowIdx, planTpl, data[i]);
 							planRowIdx = planRowIdx + 1;
