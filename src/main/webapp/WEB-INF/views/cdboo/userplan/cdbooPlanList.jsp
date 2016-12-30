@@ -79,7 +79,7 @@
 		<tbody>
 		<c:forEach items="${page.list}" var="cdbooPlan">
 			<tr>
-				<td><a href="${ctx}/userplan/cdbooPlan/form?user.id=${cdbooPlan.user.id}">
+				<td><a href="${ctx}/userplan/cdbooPlan/form?id=${cdbooPlan.id}">
 					${cdbooPlan.planNo}
 				</a></td>
 				<td>
@@ -116,7 +116,7 @@
 					${cdbooPlan.remarks}
 				</td>
 				<shiro:hasPermission name="userplan:cdbooPlan:edit"><td>
-    				<a href="${ctx}/userplan/cdbooPlan/form?user.id=${cdbooPlan.user.id}">修改</a>
+    				<a href="${ctx}/userplan/cdbooPlan/form?id=${cdbooPlan.id}">修改</a>
 					<a href="${ctx}/userplan/cdbooPlan/delete?id=${cdbooPlan.id}" onclick="return confirmx('确认要删除该用户计划吗？', this.href)">删除</a>
 				</td></shiro:hasPermission>
 			</tr>

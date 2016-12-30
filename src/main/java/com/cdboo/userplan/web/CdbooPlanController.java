@@ -85,9 +85,10 @@ public class CdbooPlanController extends BaseController {
 
 		PlanModel planModel = new PlanModel();
 
-		if (cdbooPlan.getUser() != null && org.apache.commons.lang3.StringUtils.isNotBlank(cdbooPlan.getUser().getId())) {
+		if (cdbooPlan != null && org.apache.commons.lang3.StringUtils.isNotBlank(cdbooPlan.getId())) {
 			List<CdbooPlan> list = cdbooPlanService.findList(cdbooPlan);
-			User user = systemService.getUser(cdbooPlan.getUser().getId());
+
+			User user = list.get(0).getUser();
 
 			planModel.setPlanList(list);
 			planModel.setUserId(user.getId());
