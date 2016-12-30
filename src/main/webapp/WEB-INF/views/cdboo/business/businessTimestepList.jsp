@@ -90,10 +90,10 @@
                     ${businessTimestep.channel.channelName}
             </td>
             <td>
-                    <fmt:formatDate value="${businessTimestep.timestep.starttime}" pattern="HH:mm:ss"/>
+                    ${businessTimestep.timestep.starttime}
             </td>
             <td>
-                    <fmt:formatDate value="${businessTimestep.timestep.endtime}" pattern="HH:mm:ss"/>
+                    ${businessTimestep.timestep.endtime}
             </td>
 
             <td>

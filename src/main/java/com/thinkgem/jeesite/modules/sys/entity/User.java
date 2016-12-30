@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
+import com.cdboo.business.entity.Business;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 
@@ -35,6 +36,8 @@ public class User extends DataEntity<User> {
 
 	private String password;// 密码
 	private String cdbooPassword;// 密码
+
+	private Business business;
 
 	private String no;		// 工号
 	private String name;	// 姓名
@@ -331,5 +334,13 @@ public class User extends DataEntity<User> {
 
 	public void setCdbooPassword(String cdbooPassword) {
 		this.cdbooPassword = cdbooPassword;
+	}
+
+	public Business getBusiness() {
+		return business;
+	}
+
+	public void setBusiness(Business business) {
+		this.business = business;
 	}
 }

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
+import com.cdboo.business.service.BusinessService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -49,7 +50,10 @@ public class UserController extends BaseController {
 
 	@Autowired
 	private SystemService systemService;
-	
+
+	@Autowired
+	private BusinessService businessService;
+
 	@ModelAttribute
 	public User get(@RequestParam(required=false) String id) {
 		if (StringUtils.isNotBlank(id)){
@@ -125,13 +129,23 @@ public class UserController extends BaseController {
 			}
 		}
 		user.setRoleList(roleList);
-		// 保存用户信息
-		systemService.saveUser(user);
+
+		//新增时机处理
+		if (StringUtils.isBlank(user.getId())) {
+			//处理用户行业
+			systemService.saveUser(user);
+			businessService.initUserBusiness(user);
+		} else {
+			// 保存用户信息
+			systemService.saveUser(user);
+		}
+
 		// 清除当前用户缓存
 		if (user.getLoginName().equals(UserUtils.getUser().getLoginName())){
 			UserUtils.clearCache();
 			//UserUtils.getCacheMap().clear();
 		}
+
 		addMessage(redirectAttributes, "保存用户'" + user.getLoginName() + "'成功");
 		return "redirect:" + adminPath + "/sys/user/list?repage";
 	}

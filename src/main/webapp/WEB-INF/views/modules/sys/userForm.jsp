@@ -61,6 +61,16 @@
 					title="部门" url="/sys/office/treeData?type=2" cssClass="required" notAllowSelectParent="true"/>
 			</div>
 		</div>
+
+		<div class="control-group">
+			<label class="control-label">归属行业:</label>
+			<div class="controls">
+				<sys:treeselect id="businessId" name="business.id" value="${business.id}" labelName="business.name"
+								labelValue="${business.name}"
+								title="行业" url="/business/business/treeData" cssClass="required" />
+			</div>
+		</div>
+
 		<div class="control-group">
 			<label class="control-label">工号:</label>
 			<div class="controls">
