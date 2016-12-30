@@ -51,7 +51,8 @@
 
 		d.id AS "channel.id",
 		d.channel_no AS "channel.channelNo",
-		d.channel_name AS "channel.channelName"
+		d.channel_name AS "channel.channelName",
+		d.theme_type AS "channel.themeType"
 	</sql>
 
 	<sql id="businessJoins">

@@ -130,12 +130,15 @@ public class BusinessService extends TreeService<BusinessDao, Business> {
 
 			CdbooUserTimestep userTimestep = new CdbooUserTimestep();
 			userTimestep.preInsert();
+			userTimestep.setName(timestep.getTimestepName());
 			userTimestep.setUser(user);
 			userTimestep.setStartTime(timestep.getStarttime());
 			userTimestep.setEndTime(timestep.getEndtime());
 
 			CdbooPlan plan = new CdbooPlan();
 			plan.preInsert();
+			plan.setUser(user);
+			plan.setMusicStyle(channel.getThemeType());
 			plan.setTimestep(timestep);
 			plan.setChannel(channel);
 			plan.setUserTimestepId(userTimestep.getId());
