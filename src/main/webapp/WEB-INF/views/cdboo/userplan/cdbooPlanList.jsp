@@ -67,10 +67,11 @@
 				<th>用户时段</th>
 				<th>用户频道</th>
 				<th>风格</th>
-				<th>日期</th>
-				<th>开始日期</th>
-				<th>结束日期</th>
+				<%--<th>日期</th>--%>
+				<%--<th>开始日期</th>--%>
+				<%--<th>结束日期</th>--%>
 				<th>更新时间</th>
+				<th>次数</th>
 				<th>备注信息</th>
 				<shiro:hasPermission name="userplan:cdbooPlan:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
@@ -94,19 +95,22 @@
 					${cdbooPlan.channel.channelName}
 				</td>
 				<td>
-					${fns:getDictLabel(cdbooPlan.musicStyle, 'music_style', '')}
+					${fns:getDictLabel(cdbooPlan.musicStyle, 'theme_type', '')}
 				</td>
-				<td>
-					${fns:getDictLabel(cdbooPlan.week, 'week', '')}
-				</td>
-				<td>
-					<fmt:formatDate value="${cdbooPlan.startDate}" pattern="yyyy-MM-dd"/>
-				</td>
-				<td>
-					<fmt:formatDate value="${cdbooPlan.endDate}" pattern="yyyy-MM-dd"/>
-				</td>
+				<%--<td>--%>
+					<%--${fns:getDictLabel(cdbooPlan.week, 'week', '')}--%>
+				<%--</td>--%>
+				<%--<td>--%>
+					<%--<fmt:formatDate value="${cdbooPlan.startDate}" pattern="yyyy-MM-dd"/>--%>
+				<%--</td>--%>
+				<%--<td>--%>
+					<%--<fmt:formatDate value="${cdbooPlan.endDate}" pattern="yyyy-MM-dd"/>--%>
+				<%--</td>--%>
 				<td>
 					<fmt:formatDate value="${cdbooPlan.updateDate}" pattern="yyyy-MM-dd"/>
+				</td>
+				<td>
+						${cdbooPlan.rate}
 				</td>
 				<td>
 					${cdbooPlan.remarks}

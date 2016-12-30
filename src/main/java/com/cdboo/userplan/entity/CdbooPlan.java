@@ -31,6 +31,7 @@ public class CdbooPlan extends DataEntity<CdbooPlan> {
 	private Date startDate;		// 开始日期
 	private Date endDate;		// 结束日期
 	private String status;		// 状态位显示
+	private String rate;//次数
 
 	private Timestep timestep;
 	private CdbooChannel channel;
@@ -155,5 +156,13 @@ public class CdbooPlan extends DataEntity<CdbooPlan> {
 
 	public void setMusic(CdbooMusic music) {
 		this.music = music;
+	}
+
+	public String getRate() {
+		return rate;
+	}
+
+	public void setRate(String rate) {
+		this.rate = rate;
 	}
 }

@@ -20,6 +20,7 @@
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
 		a.status AS "status",
+		a.rate AS "rate",
 		u4.name AS "user.name",
 
 		b.name AS "timestep.timestepName",
@@ -137,7 +138,8 @@
 			update_date,
 			remarks,
 			del_flag,
-			status
+			status,
+			rate
 		) VALUES (
 			#{id},
 			#{planNo},
@@ -155,7 +157,8 @@
 			#{updateDate},
 			#{remarks},
 			#{delFlag},
-			#{status}
+			#{status},
+			#{rate}
 		)
 	</insert>
 	
@@ -173,7 +176,8 @@
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
 			remarks = #{remarks},
-			status = #{status}
+			status = #{status},
+			rate = #{rate}
 		WHERE id = #{id}
 	</update>
 	

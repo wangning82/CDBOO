@@ -32,6 +32,7 @@
 			$(list+idx).find("select").each(function(){
 				$(this).val($(this).attr("data-value"));
 			});
+
 			$(list+idx).find("input[type='checkbox'], input[type='radio']").each(function(){
 				var ss = $(this).attr("data-value").split(',');
 				for (var i=0; i<ss.length; i++){
@@ -40,6 +41,16 @@
 					}
 				}
 			});
+
+			var styleValue = $("#planList" + idx + "_musicStyle").val();
+			if (styleValue == "1" || styleValue == "3") {
+				$("#dateSpan_" + idx).removeAttr('style');
+				$("#checkboxSpan_" + idx).attr('style', 'display : none');
+			} else {
+				$("#dateSpan_" + idx).attr('style', 'display : none');
+				$("#checkboxSpan_" + idx).removeAttr('style');
+			}
+
 		}
 		function delRow(obj, prefix){
 			var id = $(prefix+"_id");
@@ -54,6 +65,18 @@
 				delFlag.val("0");
 				$(obj).html("&times;").attr("title", "删除");
 				$(obj).parent().parent().removeClass("error");
+			}
+		}
+
+		function themeChanged(id) {
+			var style = $("#planList" + id + "_musicStyle").val();
+
+			if (style == '1' || style == '3') {
+				$("#dateSpan_" + id).removeAttr('style');
+				$("#checkboxSpan_" + id).attr('style', 'display : none');
+			} else {
+				$("#dateSpan_" + id).attr('style', 'display : none');
+				$("#checkboxSpan_" + id).removeAttr('style');
 			}
 		}
 
@@ -87,9 +110,8 @@
 						<th>时段</th>
 						<th>频道</th>
 						<th>风格</th>
-						<th>星期</th>
-						<th>开始日期</th>
-						<th>结束日期</th>
+						<th>日期区间</th>
+						<th>次数</th>
 						<th>备注</th>
 						<shiro:hasPermission name="userplan:cdbooPlan:edit"><th width="10">&nbsp;</th></shiro:hasPermission>
 					</tr>
@@ -133,32 +155,31 @@
 							</td>
 							
                             <td>
-                                <select id="planList{{idx}}_musicStyle" name="planList[{{idx}}].musicStyle" data-value="{{row.musicStyle}}" class="input-small ">
+                                <select id="planList{{idx}}_musicStyle" name="planList[{{idx}}].musicStyle" data-value="{{row.musicStyle}}" class="input-small " onchange="javascript:themeChanged({{idx}});">
                                     <option value="">请选择</option>
-                                    <c:forEach items="${fns:getDictList('music_style')}" var="style">
+                                    <c:forEach items="${fns:getDictList('theme_type')}" var="style">
 										<option value="${style.value}">${style.label}</option>
 									</c:forEach>
                                 </select>
 							</td>
 
-                            <td>
-
-                            	<select id="planList{{idx}}_week" name="planList[{{idx}}].week" data-value="{{row.week}}" class="input-small ">
-                                    <option value="">请选择</option>
-                                    <c:forEach items="${fns:getDictList('week')}" var="style">
-										<option value="${style.value}">${style.label}</option>
+                            <td nowrap="nowrap">
+                            	<span id="checkboxSpan_{{idx}}" style="display : none">
+									<c:forEach items="${fns:getDictList('week')}" var="style">
+										<input type="checkbox" name="planList[{{idx}}].week" value="${style.value}" data-value="{{row.week}}" />${style.label}
 									</c:forEach>
-                                </select>
+								</span>
+								<span id="dateSpan_{{idx}}" style="display : none">
+									<input id="planList{{idx}}_startDate" name="planList[{{idx}}].startDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
+										value="{{row.startDate}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
+									<input id="planList{{idx}}_endDate" name="planList[{{idx}}].endDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
+										value="{{row.endDate}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
+								</span>
+
 							</td>
 
-                            <td>
-								<input id="planList{{idx}}_startDate" name="planList[{{idx}}].startDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
-									value="{{row.startDate}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
-							</td>
-
-                            <td>
-								<input id="planList{{idx}}_endDate" name="planList[{{idx}}].endDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
-									value="{{row.endDate}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
+							<td>
+								<input id="planList{{idx}}_rate" name="planList[{{idx}}].rate" type="text" value="{{row.rate}}" maxlength="255" class="input-small "/>
 							</td>
 
 							<td>
@@ -174,6 +195,9 @@
 					var planRowIdx = 0, planTpl = $("#planTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
 					$(document).ready(function() {
 						var data = ${fns:toJson(planModel.planList)};
+
+
+						alert(data.length);
 						for (var i = 0; i < data.length; i++) {
 							addRow('#planList', planRowIdx, planTpl, data[i]);
 							planRowIdx = planRowIdx + 1;
