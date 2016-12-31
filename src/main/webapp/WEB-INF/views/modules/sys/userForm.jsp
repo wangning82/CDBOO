@@ -62,15 +62,21 @@
 			</div>
 		</div>
 
-		<div class="control-group">
-			<label class="control-label">归属行业:</label>
-			<div class="controls">
-				<sys:treeselect id="businessId" name="business.id" value="${business.id}" labelName="business.name"
-								labelValue="${business.name}"
-								title="行业" url="/business/business/treeData" cssClass="required" />
-			</div>
-		</div>
 
+			<div class="control-group">
+				<label class="control-label">归属行业:</label>
+					<div class="controls">
+						<c:if test="${user.id == null}">
+							<sys:treeselect id="businessId" name="business.id" value="${business.id}" labelName="business.name"
+											labelValue="${business.name}"
+											title="行业" url="/business/business/treeData" cssClass="required" />
+						</c:if>
+
+						<c:if test="${user.id != ''}">
+							${user.business.name}
+						</c:if>
+					</div>
+			</div>
 		<div class="control-group">
 			<label class="control-label">工号:</label>
 			<div class="controls">
