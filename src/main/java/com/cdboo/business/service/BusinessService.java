@@ -9,6 +9,8 @@ import com.cdboo.business.entity.BusinessTimestep;
 import com.cdboo.business.model.BusinessTimestepModel;
 import com.cdboo.channel.dao.CdbooChannelDao;
 import com.cdboo.channel.entity.CdbooChannel;
+import com.cdboo.childchannel.dao.CdbooGroupChildDao;
+import com.cdboo.childchannel.entity.CdbooGroupChild;
 import com.cdboo.timestep.dao.TimestepDao;
 import com.cdboo.timestep.entity.Timestep;
 import com.cdboo.userchannel.dao.CdbooUserChannelDao;
@@ -50,6 +52,9 @@ public class BusinessService extends TreeService<BusinessDao, Business> {
 
 	@Autowired
 	private CdbooUserTimestepDao cdbooUserTimestepDao;
+
+	@Autowired
+	private CdbooGroupChildDao cdbooGroupChildDao;
 
 	public Business get(String id) {
 		return super.get(id);
@@ -122,6 +127,19 @@ public class BusinessService extends TreeService<BusinessDao, Business> {
 		for (BusinessTimestep _businessTimestep : list) {
 			CdbooChannel channel = _businessTimestep.getChannel();
 			Timestep timestep = _businessTimestep.getTimestep();
+
+			//TODO 判断频道是否组合
+			//0 , 简单频道 1, 组合频道 2, 插播频道
+//			if (StringUtils.equals(channel.getChannelType(), "1")) {
+//				CdbooGroupChild groupChild = new CdbooGroupChild();
+//				groupChild.preInsert();
+//
+//				groupChild.setUserId(user);
+//				groupChild.setGroupChannelId(channel);
+//				groupChild.setChildChannelId(channel);
+//
+//				cdbooGroupChildDao.insert(groupChild);
+//			}
 
 			CdbooUserChannel userChannel = new CdbooUserChannel();
 			userChannel.preInsert();
