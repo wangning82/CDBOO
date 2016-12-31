@@ -3,16 +3,14 @@
  */
 package com.cdboo.childchannel.entity;
 
-import com.cdboo.channel.entity.CdbooChannel;
-import com.cdboo.common.Constants;
-import com.google.common.collect.Lists;
-
 import java.util.List;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.cdboo.channel.entity.CdbooChannel;
+import com.cdboo.common.Constants;
+import com.google.common.collect.Lists;
 import com.thinkgem.jeesite.common.persistence.DataEntity;
-import com.thinkgem.jeesite.modules.sys.entity.User;
 
 /**
  * 组合频道子表Entity
@@ -29,7 +27,6 @@ public class CdbooGroupChild extends DataEntity<CdbooGroupChild> {
 	//组合频道
 	public static final String CHANNEL_TYPE_GROUP = Constants.CHANNEL_TYPE_GROUP;
 	
-	private User userId;						//用户
 	private CdbooChannel groupChannelId;		// 组合频道
 	private CdbooChannel childChannelId;		// 子频道
 	private String status;		// 状态位显示
@@ -47,9 +44,8 @@ public class CdbooGroupChild extends DataEntity<CdbooGroupChild> {
 		super(id);
 	}
 
-	public CdbooGroupChild(User userId, CdbooChannel groupChannelId, CdbooChannel childChannelId) {
+	public CdbooGroupChild(CdbooChannel groupChannelId, CdbooChannel childChannelId) {
 		super();
-		this.userId = userId;
 		this.groupChannelId = groupChannelId;
 		this.childChannelId = childChannelId;
 	}
@@ -77,14 +73,6 @@ public class CdbooGroupChild extends DataEntity<CdbooGroupChild> {
 
 	public void setStatus(String status) {
 		this.status = status;
-	}
-
-	public User getUserId() {
-		return userId;
-	}
-
-	public void setUserId(User userId) {
-		this.userId = userId;
 	}
 
 	public Integer getChildChannelSize() {

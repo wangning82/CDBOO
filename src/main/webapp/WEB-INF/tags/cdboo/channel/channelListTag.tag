@@ -3,6 +3,7 @@
 <%@ attribute name="channelList" type="java.util.List" required="true" description="频道集合"%>
 <%@ attribute name="channelElementName" type="java.lang.String" required="true" description="频道隐藏域id名称"%>
 <%@ attribute name="userElementId" type="java.lang.String" required="false" description="查询对应用户id所关联的频道,不传查询所有"%>
+<%@ attribute name="channelType" type="java.lang.String" required="false" description="指定频道类型"%>
 <script type="text/javascript">
 	function deleteRow(obj){
 		$(obj).parent().parent().remove();
@@ -26,7 +27,7 @@
 			userId = $('#'+elementId).val();
 		}
 		
-		top.$.jBox.open("iframe:${ctx}/channel/cdbooChannel/openChannelWin?userId="+userId+"&ids="+ids, "分配频道",$(top.document).width()-240,$(top.document).height()-400,{
+		top.$.jBox.open("iframe:${ctx}/channel/cdbooChannel/openChannelWin?userId="+userId+"&ids="+ids+"&channelType=${channelType}", "分配频道",$(top.document).width()-240,$(top.document).height()-400,{
 			buttons:{"确定分配":"ok", "关闭":true}, bottomText:"通过查询条件选择频道，选择后窗口不会关闭，可以连续选择。",submit:function(v, h, f){
 				var checkArray = h.find("iframe")[0].contentWindow.getCheckData();
 				if (v=="ok"){
@@ -34,6 +35,7 @@
 						var tpl = $("#channelTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
 						for (var i = 0; i < checkArray.length; i++) {
 							var entity = checkArray[i];
+							alert(checkArray[i].id)
 							if(checkChannelIsExists(entity.id)){
 								continue;
 							}
@@ -85,7 +87,7 @@
 		<c:forEach items="${channelList}" var="cdbooChannel" varStatus="status">
 			<tr>
 				<td>
-					${cdbooChannel.channelNo}
+					${cdbooChannel.channelNo}<input type="hidden" name = '${channelElementName }' value="${cdbooChannel.id }">
 				</td>
 				<td>
 					${cdbooChannel.channelName}
@@ -118,7 +120,7 @@
 
 <script type="text/template" id="channelTpl">//<!--
 		<tr>
-			<td>{{row.channelNo}}<input type="hidden" name = 'musicIds' value="{{row.id}}"></td>
+			<td>{{row.channelNo}}<input type="hidden" name = 'channelIds' value="{{row.id}}"></td>
 			<td>{{row.channelName}}</td>
 			<td>{{row.photoPath}}</td>
 			<td>{{row.themeType}}</td>

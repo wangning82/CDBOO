@@ -5,11 +5,13 @@ package com.cdboo.childchannel.service;
 
 import java.util.List;
 import java.util.Map;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.cdboo.channel.entity.CdbooChannel;
 import com.cdboo.channel.service.CdbooChannelService;
 import com.cdboo.childchannel.dao.CdbooGroupChildDao;
@@ -18,8 +20,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
-import com.thinkgem.jeesite.modules.sys.entity.User;
-import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 
 /**
  * @author yubin
@@ -45,27 +45,12 @@ public class CdbooGroupChildService extends CrudService<CdbooGroupChildDao, Cdbo
 		if (CollectionUtils.isNotEmpty(list)) {
 			for (CdbooGroupChild cdbooGroupChild2 : list) {
 				CdbooChannel groupChannelId = cdbooGroupChild2.getGroupChannelId();
-				User userId = cdbooGroupChild2.getUserId();
-
 				String id = groupChannelId.getId();
 				CdbooChannel cdbooChannel = cdbooChannelService.get(id);
 				cdbooGroupChild2.setGroupChannelId(cdbooChannel);
-
-				User user = UserUtils.get(userId.getId());
-				cdbooGroupChild2.setUserId(user);
 			}
 		}
 		return page;
-	}
-	
-	/**
-	 * 根据用户id获取组合频道列表
-	 * @param cdbooGroupChild
-	 * @return
-	 */
-	public List<CdbooChannel> findGroupChannelListByUserid(CdbooGroupChild cdbooGroupChild) {
-		List<CdbooGroupChild> list = dao.findGroupListByUserid(cdbooGroupChild);
-		return convertGroupChannelToChannel(list);
 	}
 	
 	/**
@@ -82,8 +67,8 @@ public class CdbooGroupChildService extends CrudService<CdbooGroupChildDao, Cdbo
 		List<CdbooChannel> channelList = Lists.newArrayList();
 		if (CollectionUtils.isNotEmpty(list)) {
 			for (CdbooGroupChild cdbooGroupChild2 : list) {
-				CdbooChannel groupChannelId = cdbooGroupChild2.getGroupChannelId();
-				String id = groupChannelId.getId();
+				CdbooChannel childChannel = cdbooGroupChild2.getChildChannelId();
+				String id = childChannel.getId();
 				CdbooChannel cdbooChannel = cdbooChannelService.get(id);
 				channelList.add(cdbooChannel);
 			}
@@ -99,7 +84,10 @@ public class CdbooGroupChildService extends CrudService<CdbooGroupChildDao, Cdbo
 
 		List<String> channelIds = cdbooGroupChild.getChannelIds();
 
-		List<CdbooGroupChild> list = dao.findGroupListByUserid(cdbooGroupChild);
+		CdbooGroupChild cdbooGroupChild2 = new CdbooGroupChild();
+		cdbooGroupChild2.setGroupChannelId(groupChannel);
+		
+		List<CdbooGroupChild> list = dao.findList(cdbooGroupChild2);
 		Map<String, CdbooGroupChild> map = Maps.newHashMap();
 		if (CollectionUtils.isNotEmpty(list)) {
 			for (CdbooGroupChild querObj : list) {
@@ -109,12 +97,11 @@ public class CdbooGroupChildService extends CrudService<CdbooGroupChildDao, Cdbo
 
 		List<CdbooGroupChild> saveList = Lists.newArrayList();
 		if (CollectionUtils.isNotEmpty(channelIds)) {
-			User user = cdbooGroupChild.getUserId();
 			for (String channelId : channelIds) {
 				CdbooGroupChild child = null;
 				if ((child = map.remove(channelId)) == null) {
 					CdbooChannel cdbooChannel = cdbooChannelService.get(channelId);
-					child = new CdbooGroupChild(user, groupChannel, cdbooChannel);
+					child = new CdbooGroupChild(groupChannel, cdbooChannel);
 					saveList.add(child);
 				}
 			}

@@ -6,7 +6,6 @@
 		a.id AS "id",
 		a.group_channel_id AS "groupChannelId.id",
 		a.child_channel_id AS "childChannelId.id",
-		a.user_id AS "userId.id",
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
 		a.update_by AS "updateBy.id",
@@ -47,8 +46,7 @@
 	
 	<sql id="groupListByUseridColumns">
 		count(a.child_channel_id) AS "childChannelSize",
-		a.group_channel_id AS "groupChannelId.id",
-		a.user_id AS "userId.id"
+		a.group_channel_id AS "groupChannelId.id"
 	</sql>
 	
 	<select id="findGroupList" resultType="CdbooGroupChild">
@@ -57,28 +55,11 @@
 		From cdboo_group_child a
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
-			<if test="userId != null and userId != '' and userId.id != null and userId.id != ''">
-				AND a.user_id = #{userId.id}
-			</if>
 			<if test="groupChannelId != null and groupChannelId != '' and groupChannelId.id != null and groupChannelId.id != ''">
 				AND a.group_channel_id = #{groupChannelId.id}
 			</if>
 			<if test="childChannelId != null and childChannelId != '' and childChannelId.id != null and childChannelId.id != ''">
 				AND a.child_channel_id = #{childChannelId.id}
-			</if>
-		</where>
-		GROUP BY a.group_channel_id,a.user_id
-	</select>
-	
-	<select id="findGroupListByUserid" resultType="CdbooGroupChild">
-		SELECT 
-			count(a.group_channel_id) AS "childChannelSize",
-			a.group_channel_id AS "groupChannelId.id"
-		From cdboo_group_child a
-		<where>
-			a.del_flag = #{DEL_FLAG_NORMAL}
-			<if test="userId != null and userId != '' and userId.id != null and userId.id != ''">
-				AND a.user_id = #{userId.id}
 			</if>
 		</where>
 		GROUP BY a.group_channel_id

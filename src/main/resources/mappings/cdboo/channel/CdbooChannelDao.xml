@@ -119,14 +119,45 @@
 		</choose>
 	</select>
 	
+	<sql id="cdbooChannelGroupColumns">
+		c.id AS "id",
+		c.channel_no AS "channelNo",
+		c.channel_name AS "channelName",
+		c.photo_path AS "photoPath",
+		c.theme_type AS "themeType",
+		c.theme_concrete_type AS "themeConcreteType",
+		c.channel_version AS "channelVersion",
+		c.music_style AS "musicStyle",
+		c.site AS "site",
+		c.speed AS "speed",
+		c.voice AS "voice",
+		c.element AS "element",
+		c.emotion AS "emotion",
+		c.instrument AS "instrument",
+		c.create_by AS "createBy.id",
+		c.create_date AS "createDate",
+		c.update_by AS "updateBy.id",
+		c.update_date AS "updateDate",
+		c.remarks AS "remarks",
+		c.del_flag AS "delFlag",
+		c.status AS "status",
+		c.channel_type AS "channelType"
+	</sql>
+	
 	<select id="findPageByUserId" resultType="CdbooChannel">
 		SELECT 
-			<include refid="cdbooChannelColumns"/>
+			<include refid="cdbooChannelGroupColumns"/> 
+		FROM (
+		SELECT 
+			a.id AS "id",b.user_id AS "userId"
 		FROM cdboo_child_channel a,cdboo_user_channel b
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			AND b.del_flag = #{DEL_FLAG_NORMAL}
 			AND a.id = b.channel_id
+			<if test="userId != null and userId != ''">
+				AND b.user_id = #{userId} 
+			</if>
 			<if test="channelNo != null and channelNo != ''">
 				AND a.channel_no LIKE 
 				<if test="dbName == 'oracle'">'%'||#{channelNo}||'%'</if>
@@ -203,14 +234,8 @@
  				</foreach>  
 			</if>
 		</where>
-		<choose>
-			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
-				ORDER BY ${page.orderBy}
-			</when>
-			<otherwise>
-				ORDER BY a.create_date DESC
-			</otherwise>
-		</choose>
+		group by a.id,b.user_id
+		) d,cdboo_child_channel c where d.id = c.id
 	</select>
 	
 	<select id="findAllList" resultType="CdbooChannel">

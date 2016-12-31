@@ -16,30 +16,6 @@
         	return false;
         }
 		
-		function userTreeselectCallBack(v, h, f){
-			var userId = $('#userId').val();
-			$.ajax({
-		        type: "post",
-		        async: false,
-		        url: "getGroupChannelList",
-		        data: {
-		        	userId: userId
-		        },
-		        dataType: "json",
-		        success: function (data) {
-		        	$('#groupId').empty();
-					$('#groupId').append('<option value="" selected>请选择</option>');
-					
-			       	var dataArray = eval(data);
-			       	for(var i = 0;i<dataArray.length;i++){
-			       		var channelId = dataArray[i].id;
-			       		var channelName = dataArray[i].channelName;
-			       		$('#groupId').append('<option value="'+channelId+'">'+channelName+'</option>');
-			       	}
-		        }
-		    });
-		}	
-		
 	</script>
 </head>
 <body>
@@ -52,10 +28,6 @@
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<input type="hidden" name="channelType" value="1"/>
 		<ul class="ul-form">
-			<li><label>用户名称：</label>
-				<sys:treeselect id="user" name="userId.id" value="${cdbooGroupChild.userId.id}" labelName="user.name" labelValue="${cdbooGroupChild.userId.name}"
-					title="用户" url="/sys/office/treeData?type=3" cssClass="input-small" allowClear="true" notAllowSelectParent="true"/>
-			</li>
 			<li><label>组合频道：</label>
 				<form:select id="groupId" path="groupChannelId.id" class="input-medium">
 					<form:option value="" label="请选择"/>
@@ -82,7 +54,7 @@
 		<tbody>
 		<c:forEach items="${page.list}" var="groupChannel">
 			<tr>
-				<td><a href="${ctx}/channel/groupChannel/form?userId.id=${groupChannel.userId.id}&groupChannelId.id=${groupChannel.groupChannelId.id}">
+				<td><a href="${ctx}/channel/groupChannel/form?groupChannelId.id=${groupChannel.groupChannelId.id}">
 					${groupChannel.groupChannelId.channelNo}
 				</a></td>
 				<td>
@@ -101,8 +73,8 @@
 					<fmt:formatDate value="${groupChannel.groupChannelId.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<shiro:hasPermission name="channel:groupChannel:edit"><td>
-    				<a href="${ctx}/channel/groupChannel/form?userId.id=${groupChannel.userId.id}&groupChannelId.id=${groupChannel.groupChannelId.id}">修改</a>
-					<a href="${ctx}/channel/groupChannel/delete?userId.id=${groupChannel.userId.id}&groupChannelId.id=${groupChannel.groupChannelId.id}" onclick="return confirmx('确认要删除该频道信息吗？', this.href)">删除</a>
+    				<a href="${ctx}/channel/groupChannel/form?groupChannelId.id=${groupChannel.groupChannelId.id}">修改</a>
+					<a href="${ctx}/channel/groupChannel/delete?groupChannelId.id=${groupChannel.groupChannelId.id}" onclick="return confirmx('确认要删除该频道信息吗？', this.href)">删除</a>
 				</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>

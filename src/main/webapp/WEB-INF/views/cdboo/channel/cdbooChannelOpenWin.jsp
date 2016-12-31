@@ -58,6 +58,7 @@
 			var checkArray = new Array();
 			$('input[name="channelIds"]:checkbox:checked').each(function(){
 				var id = $(this).val();
+				alert(id)
 				var idName = $(this).attr('id');
 				var idNameArray = idName.split("_");
 				var rowIndex = idNameArray[1];
@@ -122,7 +123,7 @@
 			</tr>
 		</thead>
 		<tbody>
-		<c:forEach items="${page.list}" var="cdbooChannel">
+		<c:forEach items="${page.list}" var="cdbooChannel" varStatus="status">
 			<tr>
 				<td><input type="checkbox" id="id_${status.index }" name="channelIds" value="${cdbooChannel.id }"/>
 					<input type="hidden" id="channelNo_${status.index }" value = "${cdbooChannel.channelNo}"/>
@@ -139,9 +140,9 @@
 					<fmt:formatDate value="${cdbooChannel.createDate}" pattern="yyyy-MM-dd HH:mm:ss" var="formatCreateDate"/>
 					<input type="hidden" id="createDate_${status.index }" value = "${formatCreateDate}"/>
 				</td>
-				<td><a href="${ctx}/channel/cdbooChannel/form?id=${cdbooChannel.id}">
+				<td>
 					${cdbooChannel.channelNo}
-				</a></td>
+				</td>
 				<td>
 					${cdbooChannel.channelName}
 				</td>
