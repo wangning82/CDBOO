@@ -78,6 +78,19 @@ public class CdbooGroupChildService extends CrudService<CdbooGroupChildDao, Cdbo
 	}
 	
 	@Transactional(readOnly=false)
+	public void delete(CdbooGroupChild cdbooGroupChild) {
+		CdbooChannel groupChannel = cdbooGroupChild.getGroupChannelId();
+		cdbooChannelService.delete(groupChannel);
+		
+		List<CdbooGroupChild> list = super.findList(cdbooGroupChild);
+		if(CollectionUtils.isNotEmpty(list)){
+			for (CdbooGroupChild removeObj : list) {
+				dao.remove(removeObj);
+			}
+		}
+	}
+	
+	@Transactional(readOnly=false)
 	public void save(CdbooGroupChild cdbooGroupChild) {
 		CdbooChannel groupChannel = cdbooGroupChild.getGroupChannelId();
 		cdbooChannelService.save(groupChannel);

@@ -100,6 +100,14 @@ public class CdbooGroupChannelController extends BaseController {
 		return "redirect:"+Global.getAdminPath()+"/channel/groupChannel/?repage";
 	}
 	
+	@RequiresPermissions("channel:groupChannel:edit")
+	@RequestMapping(value = "delete")
+	public String delete(CdbooGroupChild cdbooGroupChild, Model model, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+		cdbooGroupChildService.delete(cdbooGroupChild);
+		addMessage(redirectAttributes, "删除频道信息成功");
+		return "redirect:"+Global.getAdminPath()+"/channel/groupChannel/?repage";
+	}
+	
 	@RequestMapping(value = "getGroupChannelList")
 	@ResponseBody
 	public List<CdbooChannel> getGroupChannelList(@RequestParam(required = true) String groupChildId) {
