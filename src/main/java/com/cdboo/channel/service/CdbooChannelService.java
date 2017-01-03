@@ -30,6 +30,18 @@ public class CdbooChannelService extends CrudService<CdbooChannelDao, CdbooChann
 		return super.findList(cdbooChannel);
 	}
 	
+	public List<CdbooChannel> findGroupChannelList(){
+		CdbooChannel cdbooChannel = new CdbooChannel();
+		cdbooChannel.setChannelType(com.cdboo.common.Constants.CHANNEL_TYPE_GROUP);
+		return super.findList(cdbooChannel);
+	}
+	
+	public List<CdbooChannel> findChildChannelList(){
+		CdbooChannel cdbooChannel = new CdbooChannel();
+		cdbooChannel.setChannelType(com.cdboo.common.Constants.CHANNEL_TYPE_CHILD);
+		return super.findList(cdbooChannel);
+	}
+	
 	public Page<CdbooChannel> findPage(Page<CdbooChannel> page, CdbooChannel cdbooChannel) {
 		return super.findPage(page, cdbooChannel);
 	}
