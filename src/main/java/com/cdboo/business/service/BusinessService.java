@@ -130,16 +130,17 @@ public class BusinessService extends TreeService<BusinessDao, Business> {
 
 			//TODO 判断频道是否组合
 			//0 , 简单频道 1, 组合频道 2, 插播频道
-//			if (StringUtils.equals(channel.getChannelType(), "1")) {
-//				CdbooGroupChild groupChild = new CdbooGroupChild();
-//				groupChild.preInsert();
-//
-//				groupChild.setUserId(user);
-//				groupChild.setGroupChannelId(channel);
-//				groupChild.setChildChannelId(channel);
-//
-//				cdbooGroupChildDao.insert(groupChild);
-//			}
+			if (StringUtils.equals(channel.getChannelType(), "1")) {
+				CdbooGroupChild groupChild = new CdbooGroupChild();
+				groupChild.preInsert();
+
+
+				groupChild.setGroupChannelId(channel);
+				groupChild.setChildChannelId(channel);
+//				groupChild.setChildChannelSize();
+
+				cdbooGroupChildDao.insert(groupChild);
+			}
 
 			CdbooUserChannel userChannel = new CdbooUserChannel();
 			userChannel.preInsert();

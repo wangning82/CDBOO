@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdboo.usergroup.dao.CdbooUserGroupDao">
+
+    <sql id="cdbooUserGroupColumns">
+        a.id AS "id",
+        a.user_id AS "user.id",
+        a.group_channel_id AS "cdbooChannel.id",
+
+        a.create_by AS "createBy.id",
+        a.create_date AS "createDate",
+        a.update_by AS "updateBy.id",
+        a.update_date AS "updateDate",
+        a.remarks AS "remarks",
+        a.del_flag AS "delFlag"
+
+    </sql>
+
+    <sql id="cdbooUserGroupJoins">
+    </sql>
+
+    <select id="get" resultType="CdbooUserGroup">
+        SELECT
+        <include refid="cdbooUserGroupColumns"/>
+        FROM cdboo_user_group_channel a
+        <include refid="cdbooUserGroupJoins"/>
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="findList" resultType="CdbooUserGroup">
+        SELECT
+        <include refid="cdbooUserGroupColumns"/>
+        FROM cdboo_user_group_channel a
+        <include refid="cdbooUserGroupJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            <if test="user != null and user.id != null and user.id != ''">
+                AND a.user_id = #{user.id}
+            </if>
+            <if test="channel != null and channel.id != null and channel.id != ''">
+                AND a.group_channel_id = #{cdbooChannel.id}
+            </if>
+
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.create_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="findGroupByList" resultType="CdbooUserGroup">
+        SELECT
+        a.user_id AS "user.id", a.group_channel_id AS "cdbooChannel.id"
+        FROM cdboo_user_group_channel a
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            <if test="user != null and user.id != null and user.id != ''">
+                AND a.user_id = #{user.id}
+            </if>
+            <if test="channel != null and channel.id != null and channel.id != ''">
+                AND a.group_channel_id = #{cdbooChannel.id}
+            </if>
+
+        </where>
+        group by a.user_id,a.group_channel_id
+    </select>
+
+    <select id="findChannelByUser" resultType="CdbooUserGroup">
+        SELECT a.group_channel_id AS "cdbooChannel.id"
+        FROM cdboo_user_group_channel a
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            <if test="user != null and user.id != null and user.id != ''">
+                AND a.user_id = #{user.id}
+            </if>
+        </where>
+        group by a.group_channel_id
+    </select>
+
+    <select id="findAllList" resultType="CdbooUserGroup">
+        SELECT
+        <include refid="cdbooUserGroupColumns"/>
+        FROM cdboo_user_group_channel a
+        <include refid="cdbooUserGroupJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.create_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insert">
+        INSERT INTO cdboo_user_group_channel(
+        id,
+        user_id,
+        group_channel_id,
+
+        create_by,
+        create_date,
+        update_by,
+        update_date,
+        remarks,
+        del_flag
+        ) VALUES (
+        #{id},
+        #{user.id},
+        #{cdbooChannel.id},
+
+        #{createBy.id},
+        #{createDate},
+        #{updateBy.id},
+        #{updateDate},
+        #{remarks},
+        #{delFlag}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE cdboo_user_group_channel SET
+        user_id = #{user.id},
+        group_channel_id = #{cdbooChannel.id},
+
+        update_by = #{updateBy.id},
+        update_date = #{updateDate},
+        remarks = #{remarks}
+        WHERE id = #{id}
+    </update>
+
+    <update id="delete">
+        UPDATE cdboo_user_group_channel SET
+        del_flag = #{DEL_FLAG_DELETE}
+        WHERE id = #{id}
+    </update>
+
+    <update id="remove">
+        DELETE FROM cdboo_user_group_channel WHERE id = #{id}
+    </update>
+
+</mapper>
