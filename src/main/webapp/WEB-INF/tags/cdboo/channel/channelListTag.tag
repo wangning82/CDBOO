@@ -35,16 +35,15 @@
 						var tpl = $("#channelTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
 						for (var i = 0; i < checkArray.length; i++) {
 							var entity = checkArray[i];
-							alert(checkArray[i].id)
 							if(checkChannelIsExists(entity.id)){
 								continue;
 							}
 							//alert(entity.id+":"+entity.musicName+":"+entity.actor+":"+entity.special+":"+entity.musicOwner+":"+entity.volume)
 							$('#tb').append(Mustache.render(tpl, {row: entity}));
 						}
-						showTip('追加频道成功，请继续选择歌曲','success');
+						showTip('追加频道成功，请继续选择频道','success');
 					} catch (e) {
-						showTip('追加频道失败，请重新选择歌曲','error');
+						showTip('追加频道失败，请重新选择频道','error');
 					}
 					
 			    	return false;

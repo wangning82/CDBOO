@@ -33,6 +33,12 @@
 		<include refid="cdbooGroupChildJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="groupChannelId != null and groupChannelId != '' and groupChannelId.id != null and groupChannelId.id != ''">
+				AND a.group_channel_id = #{groupChannelId.id}
+			</if>
+			<if test="childChannelId != null and childChannelId != '' and childChannelId.id != null and childChannelId.id != ''">
+				AND a.child_channel_id = #{childChannelId.id}
+			</if>
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">

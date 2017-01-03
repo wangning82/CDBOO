@@ -77,7 +77,7 @@
 		<div class="control-group">
 			<label class="control-label">频道图片：</label>
 			<div class="controls">
-				<input type="hidden" id="photoPath" name="groupChannelId.photoPath" value="${cdbooChannel.photoPath }" required>
+				<input type="hidden" id="photoPath" name="groupChannelId.photoPath" value="${cdbooGroupChild.groupChannelId.photoPath }" required>
 				<sys:ckfinder input="photoPath" type="images"  uploadPath="/images" selectMultiple="false" maxWidth="100" maxHeight="100"/>
 			</div>
 		</div>

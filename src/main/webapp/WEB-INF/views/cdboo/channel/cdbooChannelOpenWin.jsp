@@ -58,7 +58,6 @@
 			var checkArray = new Array();
 			$('input[name="channelIds"]:checkbox:checked').each(function(){
 				var id = $(this).val();
-				alert(id)
 				var idName = $(this).attr('id');
 				var idNameArray = idName.split("_");
 				var rowIndex = idNameArray[1];
