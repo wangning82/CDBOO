@@ -6,6 +6,8 @@ package com.cdboo.usergroup.web;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -79,7 +81,6 @@ public class CdbooUserGroupChannelController extends BaseController {
 	@RequiresPermissions("channel:groupChannel:user:view")
 	@RequestMapping(value = "form")
 	public String form(CdbooUserGroup userGroup, Model model, HttpServletRequest request) {
-		model.addAttribute("userGroup", userGroup);
 
 		CdbooChannel channel = userGroup.getCdbooChannel();
 		User user = userGroup.getUser();
@@ -87,10 +88,14 @@ public class CdbooUserGroupChannelController extends BaseController {
 		if (channel != null && StringUtils.isNotBlank(channel.getId())&&user != null && StringUtils.isNotBlank(user.getId())) {
 			
 			/**************** 查询用户的组合频道 Start ******************/
-			CdbooUserGroup queryGroup = new CdbooUserGroup();
-			queryGroup.setUser(user);
-			List<CdbooUserGroup> groupList = cdbooUserGroupService.findList(queryGroup);
-			userGroup.setChannelList(cdbooUserGroupService.convertUserGroupToChannel(groupList));
+			List<CdbooUserGroup> groupList = cdbooUserGroupService.findList(userGroup);
+			if(CollectionUtils.isNotEmpty(groupList)){
+				CdbooUserGroup cdbooUserGroup = groupList.get(0);
+				model.addAttribute("userGroup", cdbooUserGroup);
+			}
+			else{
+				model.addAttribute("userGroup", userGroup);
+			}
 			/**************** 查询用户的组合频道 End ******************/
 			
 			/**************** 查询组合频道下子频道列表 Start ******************/
@@ -101,6 +106,7 @@ public class CdbooUserGroupChannelController extends BaseController {
 			/**************** 查询组合频道下子频道列表 End ******************/
 		}
 		else{
+			model.addAttribute("userGroup", userGroup);
 			List<CdbooChannel> groupChannelList = cdbooChannelService.findGroupChannelList();
 			userGroup.setChannelList(groupChannelList);
 		}
@@ -144,4 +150,6 @@ public class CdbooUserGroupChannelController extends BaseController {
 		addMessage(redirectAttributes, "删除频道信息成功");
 		return "redirect:" + Global.getAdminPath() + "/channel/groupChannel/user/?repage";
 	}
+	
+	
 }

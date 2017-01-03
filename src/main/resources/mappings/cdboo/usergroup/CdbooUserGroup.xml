@@ -6,7 +6,6 @@
         a.id AS "id",
         a.user_id AS "user.id",
         a.group_channel_id AS "cdbooChannel.id",
-
         a.create_by AS "createBy.id",
         a.create_date AS "createDate",
         a.update_by AS "updateBy.id",
@@ -37,7 +36,7 @@
             <if test="user != null and user.id != null and user.id != ''">
                 AND a.user_id = #{user.id}
             </if>
-            <if test="channel != null and channel.id != null and channel.id != ''">
+            <if test="cdbooChannel != null and cdbooChannel.id != null and cdbooChannel.id != ''">
                 AND a.group_channel_id = #{cdbooChannel.id}
             </if>
 
@@ -61,7 +60,7 @@
             <if test="user != null and user.id != null and user.id != ''">
                 AND a.user_id = #{user.id}
             </if>
-            <if test="channel != null and channel.id != null and channel.id != ''">
+            <if test="cdbooChannel != null and cdbooChannel.id != null and cdbooChannel.id != ''">
                 AND a.group_channel_id = #{cdbooChannel.id}
             </if>
 
@@ -104,7 +103,6 @@
         id,
         user_id,
         group_channel_id,
-
         create_by,
         create_date,
         update_by,
@@ -115,7 +113,6 @@
         #{id},
         #{user.id},
         #{cdbooChannel.id},
-
         #{createBy.id},
         #{createDate},
         #{updateBy.id},
@@ -129,7 +126,6 @@
         UPDATE cdboo_user_group_channel SET
         user_id = #{user.id},
         group_channel_id = #{cdbooChannel.id},
-
         update_by = #{updateBy.id},
         update_date = #{updateDate},
         remarks = #{remarks}

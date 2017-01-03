@@ -15,10 +15,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.cdboo.channel.entity.CdbooChannel;
 import com.cdboo.channel.service.CdbooChannelService;
+import com.cdboo.childchannel.entity.CdbooGroupChild;
+import com.cdboo.childchannel.service.CdbooGroupChildService;
 import com.cdboo.common.Constants;
 import com.google.common.collect.Lists;
 import com.thinkgem.jeesite.common.config.Global;
@@ -39,6 +42,9 @@ public class CdbooChannelController extends BaseController {
 
 	@Autowired
 	private CdbooChannelService cdbooChannelService;
+	
+	@Autowired
+	private CdbooGroupChildService cdbooGroupChildService;
 	
 	@ModelAttribute
 	public CdbooChannel get(@RequestParam(required=false) String id) {
@@ -153,5 +159,21 @@ public class CdbooChannelController extends BaseController {
 		}
 		model.addAttribute("page", page);
 		return "cdboo/channel/cdbooChannelOpenWin";
+	}
+	
+	@RequestMapping(value = {"getGroupChannelInfo"})
+	@ResponseBody
+	public CdbooChannel getGroupChannelInfo(@RequestParam(required = true) String groupChannelId){
+		CdbooChannel cdbooChannel = cdbooChannelService.get(groupChannelId);
+		if(cdbooChannel!=null){
+			String channelType = cdbooChannel.getChannelType();
+			if(StringUtils.equals(Constants.CHANNEL_TYPE_GROUP, channelType)){
+				CdbooGroupChild cdbooGroupChild = new CdbooGroupChild();
+				cdbooGroupChild.setGroupChannelId(cdbooChannel);
+				List<CdbooChannel> childChannelList = cdbooGroupChildService.findChildChannelListByConditions(cdbooGroupChild);
+				cdbooChannel.setChildChannelList(childChannelList);
+			}
+		}
+		return cdbooChannel;
 	}
 }
