@@ -15,6 +15,8 @@ import com.cdboo.timestep.dao.TimestepDao;
 import com.cdboo.timestep.entity.Timestep;
 import com.cdboo.userchannel.dao.CdbooUserChannelDao;
 import com.cdboo.userchannel.entity.CdbooUserChannel;
+import com.cdboo.usergroup.entity.CdbooUserGroup;
+import com.cdboo.usergroup.service.CdbooUserGroupService;
 import com.cdboo.userplan.dao.CdbooPlanDao;
 import com.cdboo.userplan.entity.CdbooPlan;
 import com.cdboo.usertimestep.dao.CdbooUserTimestepDao;
@@ -55,6 +57,8 @@ public class BusinessService extends TreeService<BusinessDao, Business> {
 
 	@Autowired
 	private CdbooGroupChildDao cdbooGroupChildDao;
+
+	private CdbooUserGroupService cdbooUserGroupService;
 
 	public Business get(String id) {
 		return super.get(id);
@@ -128,24 +132,36 @@ public class BusinessService extends TreeService<BusinessDao, Business> {
 			CdbooChannel channel = _businessTimestep.getChannel();
 			Timestep timestep = _businessTimestep.getTimestep();
 
-			//TODO 判断频道是否组合
-			//0 , 简单频道 1, 组合频道 2, 插播频道
-			if (StringUtils.equals(channel.getChannelType(), "1")) {
-				CdbooGroupChild groupChild = new CdbooGroupChild();
-				groupChild.preInsert();
-
-
-				groupChild.setGroupChannelId(channel);
-				groupChild.setChildChannelId(channel);
-//				groupChild.setChildChannelSize();
-
-				cdbooGroupChildDao.insert(groupChild);
-			}
 
 			CdbooUserChannel userChannel = new CdbooUserChannel();
-			userChannel.preInsert();
-			userChannel.setUser(user);
-			userChannel.setChannel(channel);
+
+			//0 , 简单频道 1, 组合频道 2, 插播频道
+			if (StringUtils.equals(channel.getChannelType(), "1")) {
+
+				CdbooUserGroup cdbooUserGroup = new CdbooUserGroup();
+				cdbooUserGroup.setUser(user);
+				cdbooUserGroup.setCdbooChannel(channel);
+				cdbooUserGroupService.save(cdbooUserGroup);
+
+				CdbooGroupChild cdbooGroupChild = new CdbooGroupChild();
+				cdbooGroupChild.setGroupChannelId(channel);
+				List<CdbooGroupChild> cdbooGroupChildList = cdbooGroupChildDao.findGroupList(cdbooGroupChild);
+
+				for (CdbooGroupChild _cdbooGroupChild : cdbooGroupChildList) {
+					CdbooUserChannel cdbooUserChannel = new CdbooUserChannel();
+					cdbooUserChannel.setUser(user);
+					cdbooUserChannel.setChannel(_cdbooGroupChild.getChildChannelId());
+					cdbooUserChannel.preInsert();
+
+					cdbooUserChannelDao.insert(cdbooUserChannel);
+				}
+
+
+			} else {
+				userChannel.preInsert();
+				userChannel.setUser(user);
+				userChannel.setChannel(channel);
+			}
 
 			CdbooUserTimestep userTimestep = new CdbooUserTimestep();
 			userTimestep.preInsert();
