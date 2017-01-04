@@ -1,8 +1,12 @@
 package com.cdboo.rest;
 
 import com.cdboo.common.Constants;
+import com.cdboo.music.entity.CdbooMusic;
+import com.cdboo.userchannel.entity.CdbooUserChannel;
+import com.cdboo.userchannel.service.CdbooUserChannelService;
 import com.cdboo.userplan.entity.CdbooPlan;
 import com.cdboo.userplan.service.CdbooPlanService;
+import com.google.common.collect.Lists;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.sys.entity.User;
 import com.thinkgem.jeesite.modules.sys.service.SystemService;
@@ -32,6 +36,8 @@ public class CdbooResource {
     @Autowired
     private CdbooPlanService planService;
 
+    @Autowired
+    private CdbooUserChannelService cdbooUserChannelService;
 
     /**
      * 用户登录
@@ -74,9 +80,38 @@ public class CdbooResource {
         for (CdbooPlan _cdbooPlan : list) {
             PlanModel planModel = new PlanModel();
             BeanUtils.copyProperties(planModel, _cdbooPlan);
+
+            RestTimeStep restTimeStep = new RestTimeStep();
+            restTimeStep.setStarttime(_cdbooPlan.getTimestep().getStarttime());
+            restTimeStep.setEndtime(_cdbooPlan.getTimestep().getEndtime());
+            restTimeStep.setTimestepNo(_cdbooPlan.getTimestep().getTimestepNo());
+            restTimeStep.setTimestepName(_cdbooPlan.getTimestep().getTimestepName());
+            planModel.setTimestep(restTimeStep);
+
+            RestChannel restChannel = new RestChannel();
+            BeanUtils.copyProperties(restChannel, _cdbooPlan.getChannel());
+
+            CdbooUserChannel  cdbooUserChannel = new CdbooUserChannel();
+            cdbooUserChannel.setUser(_cdbooPlan.getUser());
+            cdbooUserChannel.setChannel(_cdbooPlan.getChannel());
+            List<CdbooUserChannel> userChannels = cdbooUserChannelService.findList(cdbooUserChannel);
+
+            List<RestMusic> musicList = Lists.newArrayList();
+            for (CdbooUserChannel channel : userChannels) {
+                RestMusic restMusic = new RestMusic();
+                CdbooMusic cdbooMusic = channel.getMusic();
+
+                BeanUtils.copyProperties(restMusic, cdbooMusic);
+
+                musicList.add(restMusic);
+            }
+            restChannel.setMusicList(musicList);
+
+            planModel.setChannel(restChannel);
+            planModelList.add(planModel);
+
             model.setUserName(_cdbooPlan.getUser().getName());
             model.setPhoto(_cdbooPlan.getUser().getPhoto());
-            planModelList.add(planModel);
         }
         model.setPlanModelList(planModelList);
         return model;
