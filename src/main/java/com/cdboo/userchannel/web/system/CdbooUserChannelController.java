@@ -114,7 +114,7 @@ public class CdbooUserChannelController extends BaseController {
 		if (!beanValidator(model, cdbooUserChannel)) {
 			return form(cdbooUserChannel, model);
 		}
-		cdbooUserChannelService.save(cdbooUserChannel);
+		cdbooUserChannelService.saveUserChannel(cdbooUserChannel);
 		addMessage(redirectAttributes, "保存用户频道成功");
 		return "redirect:" + Global.getAdminPath() + "/userchannel/cdbooUserChannel/?repage";
 	}

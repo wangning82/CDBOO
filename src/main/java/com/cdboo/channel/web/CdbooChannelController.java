@@ -8,6 +8,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -61,6 +62,7 @@ public class CdbooChannelController extends BaseController {
 	@RequiresPermissions("channel:cdbooChannel:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(CdbooChannel cdbooChannel, HttpServletRequest request, HttpServletResponse response, Model model) {
+		cdbooChannel.setChannelType(Constants.CHANNEL_TYPE_CHILD);
 		Page<CdbooChannel> page = cdbooChannelService.findPage(new Page<CdbooChannel>(request, response), cdbooChannel); 
 		model.addAttribute("page", page);
 		
@@ -171,6 +173,19 @@ public class CdbooChannelController extends BaseController {
 				CdbooGroupChild cdbooGroupChild = new CdbooGroupChild();
 				cdbooGroupChild.setGroupChannelId(cdbooChannel);
 				List<CdbooChannel> childChannelList = cdbooGroupChildService.findChildChannelListByConditions(cdbooGroupChild);
+				if(CollectionUtils.isNotEmpty(childChannelList)){
+					for (CdbooChannel cdbooChannel2 : childChannelList) {
+						String theme = cdbooChannel2.getThemeType();
+						String themeConcreteType = cdbooChannel2.getThemeConcreteType();
+						cdbooChannel2.setThemeType(DictUtils.getDictLabel(theme, "theme_type", ""));
+						if(StringUtils.equals(Constants.THEMETYPE_THEME, theme)){
+							cdbooChannel2.setThemeConcreteType(DictUtils.getDictLabel(themeConcreteType, "season_type", ""));
+						}
+						if(StringUtils.equals(Constants.THEMETYPE_HOLIDAY, theme)){
+							cdbooChannel2.setThemeConcreteType(DictUtils.getDictLabel(themeConcreteType, "holiday_type", ""));
+						}
+					}
+				}
 				cdbooChannel.setChildChannelList(childChannelList);
 			}
 		}

@@ -29,6 +29,7 @@ import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.common.web.BaseController;
 
 /**
+ * 组合频道管理
  * @author yubin
  *
  */

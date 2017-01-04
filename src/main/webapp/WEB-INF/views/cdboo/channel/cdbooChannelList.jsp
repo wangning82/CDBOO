@@ -52,7 +52,7 @@
 	<form:form id="searchForm" modelAttribute="cdbooChannel" action="${ctx}/channel/cdbooChannel/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
-		<input type="hidden" name="channelType" value="0"/>
+		<input type="hidden" name="channelType" value="${Constants.CHANNEL_TYPE_CHILD }"/>
 		<ul class="ul-form">
 			<li><label>频道编号：</label>
 				<form:input path="channelNo" htmlEscape="false" maxlength="100" class="input-medium"/>
@@ -140,7 +140,6 @@
 				<th>风格类型明细</th>
 				<th>频道版本</th>
 				<th>创建时间</th>
-				<th>频道类型</th>
 				<shiro:hasPermission name="channel:cdbooChannel:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
@@ -172,9 +171,6 @@
 				</td>
 				<td>
 					<fmt:formatDate value="${cdbooChannel.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
-				</td>
-				<td>
-					${fns:getDictLabel(cdbooChannel.channelType, 'channel_type', '')}
 				</td>
 				<shiro:hasPermission name="channel:cdbooChannel:edit"><td>
     				<a href="${ctx}/channel/cdbooChannel/form?id=${cdbooChannel.id}">修改</a>

@@ -20,7 +20,6 @@ import com.cdboo.channel.service.CdbooChannelService;
 import com.cdboo.music.entity.CdbooMusic;
 import com.cdboo.userchannel.entity.CdbooUserChannel;
 import com.cdboo.userchannel.service.CdbooUserChannelService;
-import com.cdboo.usermusic.service.CdbooOwnerMusicService;
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.utils.StringUtils;
@@ -38,9 +37,6 @@ public class UserChannelController extends BaseController {
 	@Autowired
 	private CdbooChannelService cdbooChannelService;
 
-	@Autowired
-	private CdbooOwnerMusicService cdbooOwnerMusicService;
-	
 	@ModelAttribute
 	public CdbooUserChannel get(@RequestParam(required = false) String id) {
 		CdbooUserChannel entity = null;
@@ -120,7 +116,7 @@ public class UserChannelController extends BaseController {
 		if (!beanValidator(model, cdbooUserChannel)) {
 			return form(cdbooUserChannel, model);
 		}
-		cdbooUserChannelService.save(cdbooUserChannel);
+		cdbooUserChannelService.saveUserChannel(cdbooUserChannel);
 		addMessage(redirectAttributes, "保存频道成功");
 		return "redirect:" + Global.getAdminPath() + "/userchannel/userChannel/?repage";
 	}

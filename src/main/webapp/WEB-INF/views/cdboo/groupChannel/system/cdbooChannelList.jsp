@@ -26,7 +26,7 @@
 	<form:form id="searchForm" modelAttribute="cdbooGroupChild" action="${ctx}/channel/groupChannel/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
-		<input type="hidden" name="channelType" value="1"/>
+		<input type="hidden" name="channelType" value="${Constants.CHANNEL_TYPE_GROUP }"/>
 		<ul class="ul-form">
 			<li><label>组合频道：</label>
 				<form:select id="groupId" path="groupChannelId.id" class="input-medium">

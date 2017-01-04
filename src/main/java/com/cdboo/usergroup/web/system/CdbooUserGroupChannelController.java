@@ -1,12 +1,11 @@
 /**
  * 
  */
-package com.cdboo.usergroup.web;
+package com.cdboo.usergroup.web.system;
 
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import com.cdboo.channel.entity.CdbooChannel;
 import com.cdboo.channel.service.CdbooChannelService;
 import com.cdboo.childchannel.entity.CdbooGroupChild;
@@ -29,6 +27,7 @@ import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.modules.sys.entity.User;
+import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 
 /**
  * @author yubin
@@ -86,6 +85,13 @@ public class CdbooUserGroupChannelController extends BaseController {
 		User user = userGroup.getUser();
 		
 		if (channel != null && StringUtils.isNotBlank(channel.getId())&&user != null && StringUtils.isNotBlank(user.getId())) {
+			String id = user.getId();
+			user = UserUtils.get(id);
+			userGroup.setUser(user);
+			
+			String channelId = channel.getId();
+			channel = cdbooChannelService.get(channelId);
+			userGroup.setCdbooChannel(channel);
 			
 			/**************** 查询用户的组合频道 Start ******************/
 			List<CdbooUserGroup> groupList = cdbooUserGroupService.findList(userGroup);
@@ -126,11 +132,8 @@ public class CdbooUserGroupChannelController extends BaseController {
 	@RequestMapping(value = "save")
 	public String save(CdbooUserGroup cdbooUserGroup, Model model, RedirectAttributes redirectAttributes,
 			HttpServletRequest request) {
-		if (!beanValidator(model, cdbooUserGroup)) {
-			return form(cdbooUserGroup, model, request);
-		}
-		cdbooUserGroupService.save(cdbooUserGroup);
-		addMessage(redirectAttributes, "保存频道信息成功");
+		cdbooUserGroupService.saveUserGroup(cdbooUserGroup);
+		addMessage(redirectAttributes, "保存用户组合频道信息成功");
 		return "redirect:" + Global.getAdminPath() + "/channel/groupChannel/user/?repage";
 	}
 
@@ -146,8 +149,8 @@ public class CdbooUserGroupChannelController extends BaseController {
 	@RequestMapping(value = "delete")
 	public String delete(CdbooUserGroup cdbooUserGroup, Model model, RedirectAttributes redirectAttributes,
 			HttpServletRequest request) {
-		cdbooUserGroupService.delete(cdbooUserGroup);
-		addMessage(redirectAttributes, "删除频道信息成功");
+		cdbooUserGroupService.deleteUserGroup(cdbooUserGroup);
+		addMessage(redirectAttributes, "删除用户组合频道信息成功");
 		return "redirect:" + Global.getAdminPath() + "/channel/groupChannel/user/?repage";
 	}
 	

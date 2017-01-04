@@ -56,7 +56,7 @@ public class CdbooUserChannelService extends CrudService<CdbooUserChannelDao, Cd
 	}
 
 	@Transactional(readOnly = false)
-	public void save(CdbooUserChannel cdbooUserChannel) {
+	public void saveUserChannel(CdbooUserChannel cdbooUserChannel) {
 
 		/******************* 把音乐id集合转成音乐对象集合 Start ********************/
 		List<String> musicIdList = cdbooUserChannel.getMusicIds();
@@ -151,6 +151,11 @@ public class CdbooUserChannelService extends CrudService<CdbooUserChannelDao, Cd
 		for (CdbooUserChannel delUserChannel : cdbooUserChannels) {
 			dao.remove(delUserChannel);
 		}
+	}
+	
+	@Transactional(readOnly = false)
+	public void remove(CdbooUserChannel cdbooUserChannel) {
+		dao.remove(cdbooUserChannel);
 	}
 
 	/**

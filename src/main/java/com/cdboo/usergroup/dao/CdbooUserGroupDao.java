@@ -1,6 +1,5 @@
 package com.cdboo.usergroup.dao;
 
-import com.cdboo.userchannel.entity.CdbooUserChannel;
 import com.cdboo.usergroup.entity.CdbooUserGroup;
 import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
@@ -10,6 +9,6 @@ import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
  */
 @MyBatisDao
 public interface CdbooUserGroupDao extends CrudDao<CdbooUserGroup> {
-
+	public void remove(CdbooUserGroup cdbooUserGroup);
 
 }
