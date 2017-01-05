@@ -24,6 +24,8 @@
 			});
 		});
 
+		var timestepData;
+		var channelData;
 		function addRow(list, idx, tpl, row){
 			$(list).append(Mustache.render(tpl, {
 				idx: idx, delBtn: true, row: row
@@ -31,6 +33,19 @@
 
 			$(list+idx).find("select").each(function(){
 				$(this).val($(this).attr("data-value"));
+
+				if ($(this).attr('id') == 'planList' + idx + '_userTimestepId') {
+					for (var i = 0; i < timestepData.length; i++) {
+						$(this).append("<option value='" + timestepData[i].id + "'>" + timestepData[i].name + "</option>");
+					}
+				}
+
+				if ($(this).attr('id') == 'planList' + idx + '_userChannelId') {
+					for (var i = 0; i < channelData.length; i++) {
+						$(this).append("<option value='" + channelData[i].id + "'>" + channelData[i].channelName + "</option>");
+					}
+				}
+
 			});
 
 			$(list+idx).find("input[type='checkbox'], input[type='radio']").each(function(){
@@ -80,6 +95,38 @@
 			}
 		}
 
+		function userTreeselectCallBack(v, h, f) {
+			var userId = $('#userId').val();
+
+			$.ajax({
+				type: "POST",
+				async: false,
+				url: "${ctx}/usertimestep/userTimestep/getTimesteps",
+				data: {
+					userId: userId
+				},
+				dataType: "json",
+				success: function (data) {
+					timestepData = data;
+					$('#planList').empty();
+
+					$.ajax({
+						type: "POST",
+						async: false,
+						url: "${ctx}/userchannel/userChannel/getChannelList",
+						data: {
+							userId: userId
+						},
+						dataType: "json",
+						success: function (data) {
+							channelData = data;
+						}
+					});
+
+				}
+			});
+
+		}
 	</script>
 </head>
 <body>
@@ -112,6 +159,7 @@
 						<th>风格</th>
 						<th>日期区间</th>
 						<th>次数</th>
+						<th>业态</th>
 						<th>备注</th>
 						<shiro:hasPermission name="userplan:cdbooPlan:edit"><th width="10">&nbsp;</th></shiro:hasPermission>
 					</tr>
@@ -139,18 +187,12 @@
 							<td>
 								<select id="planList{{idx}}_userTimestepId" name="planList[{{idx}}].userTimestepId" data-value="{{row.userTimestepId}}" class="input-small ">
 									<option value="">请选择</option>
-									<c:forEach items="${timestepList}" var="timestep">
-										<option value="${timestep.id}">${timestep.timestepName}</option>
-									</c:forEach>
 								</select>
 							</td>
 
                             <td>
 								<select id="planList{{idx}}_userChannelId" name="planList[{{idx}}].userChannelId" data-value="{{row.userChannelId}}" class="input-small ">
 									<option value="">请选择</option>
-									<c:forEach items="${channelList}" var="channel">
-										<option value="${channel.id}">${channel.channelName}</option>
-									</c:forEach>
 								</select>
 							</td>
 							
@@ -179,7 +221,11 @@
 							</td>
 
 							<td>
-								<input id="planList{{idx}}_rate" name="planList[{{idx}}].rate" type="text" value="{{row.rate}}" maxlength="255" class="input-small "/>
+								<input id="planList{{idx}}_rate" name="planList[{{idx}}].rate" type="text" value="{{row.rate}}" maxlength="255" class="input-small " />
+							</td>
+
+							<td>
+								<input id="planList{{idx}}_condition" name="planList[{{idx}}].condition" type="text" value="{{row.condition}}" maxlength="255" class="input-small " />
 							</td>
 
 							<td>

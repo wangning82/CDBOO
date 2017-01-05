@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.cdboo.usertimestep.entity.CdbooUserTimestep;
@@ -88,5 +89,18 @@ public class UserTimestepController extends BaseController {
 		addMessage(redirectAttributes, "保存用户时段成功");
 		return "redirect:"+Global.getAdminPath()+"/usertimestep/userTimestep/?repage";
 	}
+
+	@RequiresPermissions("usertimestep:userTimestep:view")
+	@RequestMapping(value = "getTimesteps")
+	@ResponseBody
+	public List<CdbooUserTimestep> getTimesteps(String userId, Model model) {
+		CdbooUserTimestep cdbooUserTimestep = new CdbooUserTimestep();
+		User user = new User();
+		user.setId(userId);
+		cdbooUserTimestep.setUser(user);
+		List<CdbooUserTimestep> list = cdbooUserTimestepService.findList(cdbooUserTimestep);
+		return list;
+	}
+
 	
 }
