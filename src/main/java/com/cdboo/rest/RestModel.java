@@ -13,7 +13,7 @@ public class RestModel implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private String userName;//用户姓名
-    private String shopownerName;//店长姓名
+    private String shopOwnerName;//店长姓名
 
     private Date businessHoursBegin;//营业时间开始
     private Date businessHoursEnd;//营业时间结束
@@ -36,12 +36,12 @@ public class RestModel implements Serializable {
         this.userName = userName;
     }
 
-    public String getShopownerName() {
-        return shopownerName;
+    public String getShopOwnerName() {
+        return shopOwnerName;
     }
 
-    public void setShopownerName(String shopownerName) {
-        this.shopownerName = shopownerName;
+    public void setShopOwnerName(String shopOwnerName) {
+        this.shopOwnerName = shopOwnerName;
     }
 
     public Date getBusinessHoursBegin() {
