@@ -27,6 +27,7 @@
 		function changeThemeConcreteType(selectVal){
 			var theme = '${Constants.THEMETYPE_THEME }';
 			var holiday = '${Constants.THEMETYPE_HOLIDAY }';
+			var style = '${Constants.THEMETYPE_STYLE }';
 			
 			$('#themeConcreteType').empty();
 			$('#themeConcreteType').append('<option value="">请选择</option>');
@@ -38,7 +39,9 @@
 			if(selectVal == holiday){
 				dictList = ${fns:toJson(fns:getDictList('holiday_type'))};
 			}
-			
+			if(selectVal == style){
+				dictList = ${fns:toJson(fns:getDictList('style_type'))};
+			}
 			if(dictList && dictList.length>0){
 				for(var i = 0; i <dictList.length;i++){
 					$('#themeConcreteType').append('<option value="'+dictList[i].value+'">'+dictList[i].label+'</option>');
