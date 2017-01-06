@@ -14,6 +14,7 @@ public class RestMusic implements Serializable{
 	private String musicNo;		// 音乐编号
 	private String musicOwner;		// 音乐拥有者类型
 	private String musicName;		// 音乐名称
+	private String duration;    // 音乐时长
 	private String actor;		// 艺人
 	private String special;		// 专辑
 	private String volume;		// 音量
@@ -67,5 +68,12 @@ public class RestMusic implements Serializable{
 	public void setPath(String path) {
 		this.path = path;
 	}
-	
+
+	public String getDuration() {
+		return duration;
+	}
+
+	public void setDuration(String duration) {
+		this.duration = duration;
+	}
 }
