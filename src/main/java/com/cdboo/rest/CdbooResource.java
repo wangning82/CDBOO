@@ -14,6 +14,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -45,9 +46,9 @@ public class CdbooResource {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value="check-user", method= RequestMethod.POST, headers="Content-Type=application/json")
+    @RequestMapping(value="check-user/{userName}/{password}", method= RequestMethod.GET)
     @ResponseBody
-    public String checkUser(@FormParam("userName")String userName, @FormParam("password") String password) throws Exception {
+    public String checkUser(@PathVariable("userName")String userName, @PathVariable("password") String password) throws Exception {
 
         User user = systemService.getUserByLoginName(userName);
         if (user == null) {
@@ -65,9 +66,9 @@ public class CdbooResource {
      * @return
      * @throws Exception
      */
-    @RequestMapping(value="get-data", method= RequestMethod.POST, headers="Content-Type=application/json")
+    @RequestMapping(value="get-data/{userName}", method= RequestMethod.GET)
     @ResponseBody
-    public RestModel getData(@FormParam("userName")String userName) throws Exception {
+    public RestModel getData(@PathVariable("userName")String userName) throws Exception {
         User user = new User();
         user.setName(userName);
         CdbooPlan cdbooPlan = new CdbooPlan();
