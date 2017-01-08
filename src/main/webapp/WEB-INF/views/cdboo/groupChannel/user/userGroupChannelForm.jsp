@@ -57,12 +57,7 @@
 									${fns:getDictLabel(cdbooChannel.themeType, 'theme_type', '')}
 								</td>
 								<td>
-									<c:if test="${cdbooChannel.themeType eq Constants.THEMETYPE_THEME }">
-										${fns:getDictLabel(cdbooChannel.themeConcreteType,'season_type', '')}
-									</c:if>
-									<c:if test="${cdbooChannel.themeType eq Constants.THEMETYPE_HOLIDAY }">
-										${fns:getDictLabel(cdbooChannel.themeConcreteType,'holiday_type', '')}
-									</c:if>
+									<theme:themeDetail themeConcreteType="${cdbooChannel.themeConcreteType }" themeType="${cdbooChannel.themeType }"></theme:themeDetail>
 								</td>
 								<td>
 									${cdbooChannel.channelVersion}

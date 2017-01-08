@@ -135,6 +135,9 @@
 					<c:if test="${cdbooChannel.themeType eq Constants.THEMETYPE_HOLIDAY }">
 						<input type="hidden" id="themeConcreteType_${status.index }" value = "${fns:getDictLabel(cdbooChannel.themeConcreteType,'holiday_type', '')}"/>
 					</c:if>
+					<c:if test="${cdbooChannel.themeType eq Constants.THEMETYPE_STYLE }">
+						<input type="hidden" id="themeConcreteType_${status.index }" value = "${fns:getDictLabel(cdbooChannel.themeConcreteType,'style_type', '')}"/>
+					</c:if>
 					<input type="hidden" id="channelVersion_${status.index }" value = "${cdbooChannel.channelVersion}"/>
 					<fmt:formatDate value="${cdbooChannel.createDate}" pattern="yyyy-MM-dd HH:mm:ss" var="formatCreateDate"/>
 					<input type="hidden" id="createDate_${status.index }" value = "${formatCreateDate}"/>
@@ -152,12 +155,7 @@
 					${fns:getDictLabel(cdbooChannel.themeType, 'theme_type', '')}
 				</td>
 				<td>
-					<c:if test="${cdbooChannel.themeType eq Constants.THEMETYPE_THEME }">
-						${fns:getDictLabel(cdbooChannel.themeConcreteType,'season_type', '')}
-					</c:if>
-					<c:if test="${cdbooChannel.themeType eq Constants.THEMETYPE_HOLIDAY }">
-						${fns:getDictLabel(cdbooChannel.themeConcreteType,'holiday_type', '')}
-					</c:if>
+					<theme:themeDetail themeConcreteType="${cdbooChannel.themeConcreteType }" themeType="${cdbooChannel.themeType }"></theme:themeDetail>
 				</td>
 				<td>
 					${cdbooChannel.channelVersion}

@@ -39,22 +39,31 @@
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			<if test="musicNo != null and musicNo != ''">
-				AND a.music_no = #{musicNo}
+				AND a.music_no LIKE
+				<if test="dbName == 'oracle'">'%'||#{musicNo}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{musicNo}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{musicNo},'%')</if>
 			</if>
 			<if test="musicOwner != null and musicOwner != ''">
 				AND a.music_owner = #{musicOwner}
 			</if>
 			<if test="musicName != null and musicName != ''">
-				AND a.music_name = #{musicName}
+				AND a.music_name LIKE 
+				<if test="dbName == 'oracle'">'%'||#{musicName}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{musicName}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{musicName},'%')</if>
 			</if>
 			<if test="actor != null and actor != ''">
-				AND a.actor = #{actor}
+				AND a.actor LIKE 
+				<if test="dbName == 'oracle'">'%'||#{actor}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{actor}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{actor},'%')</if>
 			</if>
 			<if test="special != null and special != ''">
-				AND a.special = #{special}
-			</if>
-			<if test="createDate != null and createDate != ''">
-				AND a.create_date = #{createDate}
+				AND a.special LIKE 
+				<if test="dbName == 'oracle'">'%'||#{special}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{special}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{special},'%')</if>
 			</if>
 			<if test="idArray != null">
 				AND a.id not in
@@ -67,6 +76,9 @@
 				<foreach item="item" index="index" collection="inIdArray" open="(" separator="," close=")">  
   					${item}  
  				</foreach>  
+			</if>
+			<if test="beginCreateDate != null and endCreateDate != null and beginCreateDate != '' and endCreateDate != ''">
+				AND a.create_date BETWEEN #{beginCreateDate} AND #{endCreateDate}
 			</if>
 		</where>
 		<choose>
@@ -88,22 +100,34 @@
 			AND b.music_id = a.id
 			AND b.user_id = #{userId}
 			<if test="musicNo != null and musicNo != ''">
-				AND a.music_no = #{musicNo}
+				AND a.music_no LIKE
+				<if test="dbName == 'oracle'">'%'||#{musicNo}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{musicNo}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{musicNo},'%')</if>
 			</if>
 			<if test="musicOwner != null and musicOwner != ''">
 				AND a.music_owner = #{musicOwner}
 			</if>
 			<if test="musicName != null and musicName != ''">
-				AND a.music_name = #{musicName}
+				AND a.music_name LIKE 
+				<if test="dbName == 'oracle'">'%'||#{musicName}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{musicName}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{musicName},'%')</if>
 			</if>
 			<if test="actor != null and actor != ''">
-				AND a.actor = #{actor}
+				AND a.actor LIKE 
+				<if test="dbName == 'oracle'">'%'||#{actor}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{actor}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{actor},'%')</if>
 			</if>
 			<if test="special != null and special != ''">
-				AND a.special = #{special}
+				AND a.special LIKE 
+				<if test="dbName == 'oracle'">'%'||#{special}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{special}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{special},'%')</if>
 			</if>
-			<if test="createDate != null and createDate != ''">
-				AND a.create_date = #{createDate}
+			<if test="beginCreateDate != null and endCreateDate != null and beginCreateDate != '' and endCreateDate != ''">
+				AND a.create_date BETWEEN #{beginCreateDate} AND #{endCreateDate}
 			</if>
 			<if test="idArray != null">
 				AND a.id not in

@@ -11,6 +11,7 @@
 <%@ taglib prefix="music" tagdir="/WEB-INF/tags/cdboo/music" %>
 <%@ taglib prefix="pic" tagdir="/WEB-INF/tags/cdboo/pic" %>
 <%@ taglib prefix="channel" tagdir="/WEB-INF/tags/cdboo/channel" %>
+<%@ taglib prefix="theme" tagdir="/WEB-INF/tags/cdboo/theme" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}${fns:getAdminPath()}"/>
 <c:set var="ctxc" value="${pageContext.request.contextPath}${fns:getClientPath()}"/>
 <c:set var="ctxStatic" value="${pageContext.request.contextPath}/static"/>

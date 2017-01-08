@@ -3,6 +3,7 @@
  */
 package com.cdboo.music.entity;
 
+import java.util.Date;
 import java.util.List;
 import org.hibernate.validator.constraints.Length;
 import com.google.common.collect.Lists;
@@ -28,8 +29,9 @@ public class CdbooMusic extends DataEntity<CdbooMusic> {
 	private String ids;
 	private List<String> idArray;
 	private List<String> inIdArray;
-	
 	private String userId;
+	private Date beginCreateDate; // 开始 创建时间
+	private Date endCreateDate; // 结束 创建时间
 	
 	public CdbooMusic() {
 		super();
@@ -157,6 +159,22 @@ public class CdbooMusic extends DataEntity<CdbooMusic> {
 
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+
+	public Date getBeginCreateDate() {
+		return beginCreateDate;
+	}
+
+	public void setBeginCreateDate(Date beginCreateDate) {
+		this.beginCreateDate = beginCreateDate;
+	}
+
+	public Date getEndCreateDate() {
+		return endCreateDate;
+	}
+
+	public void setEndCreateDate(Date endCreateDate) {
+		this.endCreateDate = endCreateDate;
 	}
 	
 }

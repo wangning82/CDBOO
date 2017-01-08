@@ -6,7 +6,6 @@
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			changeThemeConcreteType('${cdbooChannel.themeType}','${cdbooChannel.themeConcreteType}');
 		});
 		
 		function page(n,s){
@@ -16,7 +15,7 @@
         	return false;
         }
 		
-		function changeThemeConcreteType(selectVal,selectedVal){
+		function changeThemeConcreteType(selectVal){
 			var theme = '${Constants.THEMETYPE_THEME }';
 			var holiday = '${Constants.THEMETYPE_HOLIDAY }';
 			var style = '${Constants.THEMETYPE_STYLE }';
@@ -159,12 +158,7 @@
 					${fns:getDictLabel(cdbooChannel.themeType, 'theme_type', '')}
 				</td>
 				<td>
-					<c:if test="${cdbooChannel.themeType eq Constants.THEMETYPE_THEME }">
-						${fns:getDictLabel(cdbooChannel.themeConcreteType,'season_type', '')}
-					</c:if>
-					<c:if test="${cdbooChannel.themeType eq Constants.THEMETYPE_HOLIDAY }">
-						${fns:getDictLabel(cdbooChannel.themeConcreteType,'holiday_type', '')}
-					</c:if>
+					<theme:themeDetail themeConcreteType="${cdbooChannel.themeConcreteType }" themeType="${cdbooChannel.themeType }"></theme:themeDetail>
 				</td>
 				<td>
 					${cdbooChannel.channelVersion}

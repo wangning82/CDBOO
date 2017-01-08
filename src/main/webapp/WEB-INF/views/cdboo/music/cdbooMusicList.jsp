@@ -63,9 +63,12 @@
 				</form:select>
 			</li>
 			<li><label>创建时间：</label>
-				<input name="createDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-					value="<fmt:formatDate value="${cdbooMusic.createDate}" pattern="yyyy-MM-dd"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
+				<input name="beginCreateDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
+					value="<fmt:formatDate value="${cdbooMusic.beginCreateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
+					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/> - 
+				<input name="endCreateDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
+					value="<fmt:formatDate value="${cdbooMusic.endCreateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
+					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="btns"><input id="btnImport" class="btn btn-primary" type="button" value="导入"/></li></li>
@@ -76,18 +79,22 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
+				<th>音乐编号</th>
 				<th>音乐名称</th>
 				<th>艺人</th>
 				<th>专辑</th>
 				<th>音乐类型</th>
 				<th>音量</th>
-				<th>删除标志</th>
+				<th>创建时间</th>
 				<shiro:hasPermission name="music:cdbooMusic:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
 		<tbody>
 		<c:forEach items="${page.list}" var="cdbooMusic" varStatus="status">
 			<tr>
+				<td>
+					${cdbooMusic.musicNo}
+				</td>
 				<td>
 					<a href="${ctx}/music/cdbooMusic/form?id=${cdbooMusic.id}">${cdbooMusic.musicName}</a><br/>
 					<span id="music${status.index }" class="mp3" >${cdbooMusic.path }</span>
@@ -102,10 +109,10 @@
 					${fns:getDictLabel(cdbooMusic.musicOwner, 'owner_type', '')}
 				</td>
 				<td>
-					${cdbooMusic.volume}
+					${cdbooMusic.volume}%
 				</td>
 				<td>
-					${fns:getDictLabel(cdbooMusic.delFlag, 'del_flag', '')}
+					<fmt:formatDate value="${cdbooMusic.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<shiro:hasPermission name="music:cdbooMusic:edit"><td>
     				<a href="${ctx}/music/cdbooMusic/form?id=${cdbooMusic.id}">修改</a>

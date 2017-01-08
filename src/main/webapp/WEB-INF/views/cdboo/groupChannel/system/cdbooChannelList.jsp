@@ -6,7 +6,6 @@
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			changeThemeConcreteType('${cdbooChannel.themeType}','${cdbooChannel.themeConcreteType}');
 		});
 		
 		function page(n,s){
