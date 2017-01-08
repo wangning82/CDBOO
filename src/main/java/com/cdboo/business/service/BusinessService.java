@@ -78,7 +78,7 @@ public class BusinessService extends TreeService<BusinessDao, Business> {
 	
 	@Transactional(readOnly = false)
 	public void delete(Business business) {
-		super.delete(business);
+		businessDao.delete(business);
 	}
 
 	public Page<BusinessTimestep> findTimestepByBusinessTimestep(Page<BusinessTimestep> page, BusinessTimestep businessTimestep) {
