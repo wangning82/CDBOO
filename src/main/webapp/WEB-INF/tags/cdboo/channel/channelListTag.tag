@@ -1,4 +1,4 @@
-<%@ tag language="java" pageEncoding="UTF-8"%>
+<%@ tag language="java" pageEncoding="UTF-8" import="com.cdboo.common.Constants"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <%@ attribute name="channelList" type="java.util.List" required="true" description="频道集合"%>
 <%@ attribute name="channelElementName" type="java.lang.String" required="true" description="频道隐藏域id名称"%>
@@ -92,7 +92,7 @@
 					${cdbooChannel.channelName}
 				</td>
 				<td>
-					<pic:preview path="${cdbooChannel.photoPath}" ></pic:preview>
+					<pic:preview path="${cdbooChannel.photoPath}"></pic:preview>
 				</td>
 				<td>
 					${fns:getDictLabel(cdbooChannel.themeType, 'theme_type', '')}
@@ -103,6 +103,9 @@
 					</c:if>
 					<c:if test="${cdbooChannel.themeType eq Constants.THEMETYPE_HOLIDAY }">
 						${fns:getDictLabel(cdbooChannel.themeConcreteType,'holiday_type', '')}
+					</c:if>
+					<c:if test="${cdbooChannel.themeType eq Constants.THEMETYPE_STYLE }">
+						${fns:getDictLabel(cdbooChannel.themeConcreteType,'style_type', '')}
 					</c:if>
 				</td>
 				<td>
@@ -121,7 +124,7 @@
 		<tr>
 			<td>{{row.channelNo}}<input type="hidden" name = 'channelIds' value="{{row.id}}"></td>
 			<td>{{row.channelName}}</td>
-			<td>{{row.photoPath}}</td>
+			<td><img src="{{row.photoPath}}" width="${Constants.IMG_WIDTH}" height="${Constants.IMG_HEIGHT}" onclick="disPic('{{row.photoPath}}')"/></td>
 			<td>{{row.themeType}}</td>
 			<td>{{row.themeConcreteType}}</td>
 			<td>{{row.channelVersion}}</td>

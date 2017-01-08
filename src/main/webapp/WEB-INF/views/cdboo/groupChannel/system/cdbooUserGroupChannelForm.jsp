@@ -115,12 +115,7 @@
 									${fns:getDictLabel(cdbooChannel.themeType, 'theme_type', '')}
 								</td>
 								<td>
-									<c:if test="${cdbooChannel.themeType eq Constants.THEMETYPE_THEME }">
-										${fns:getDictLabel(cdbooChannel.themeConcreteType,'season_type', '')}
-									</c:if>
-									<c:if test="${cdbooChannel.themeType eq Constants.THEMETYPE_HOLIDAY }">
-										${fns:getDictLabel(cdbooChannel.themeConcreteType,'holiday_type', '')}
-									</c:if>
+									<theme:themeDetail themeConcreteType="${cdbooChannel.themeConcreteType }" themeType="${cdbooChannel.themeType }"></theme:themeDetail>
 								</td>
 								<td>
 									${cdbooChannel.channelVersion}
@@ -147,7 +142,7 @@
 		<tr>
 			<td>{{row.channelNo}}<input type="hidden" name = 'channelIds' value="{{row.id}}"></td>
 			<td>{{row.channelName}}</td>
-			<td><img src="{{row.photoPath}}" width="200" height="200" onclick="disPic('{{row.photoPath}}')"/></td>
+			<td><img src="{{row.photoPath}}" width="${Constants.IMG_WIDTH}" height="${Constants.IMG_HEIGHT}" onclick="disPic('{{row.photoPath}}')"/></td>
 			<td>{{row.themeType}}</td>
 			<td>{{row.themeConcreteType}}</td>
 			<td>{{row.channelVersion}}</td>

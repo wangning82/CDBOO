@@ -1,5 +1,5 @@
 <!-- 图片预览标签，传path就能预览 -->
-<%@ tag language="java" pageEncoding="UTF-8"%>
+<%@ tag language="java" pageEncoding="UTF-8" import="com.cdboo.common.Constants"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <%@ attribute name="path" type="java.lang.String" required="true" description="图片路径"%>
 <%@ attribute name="picwidth" type="java.lang.Integer" required="false" description="弹出窗口宽度"%>
@@ -11,4 +11,4 @@
 	}
 </script>
 
-<img src="${path}" width="${empty picwidth ? 200 : picwidth }" height="${empty picheight ? 200 : picheight }" onclick="disPic('${path}')"/>
+<img src="${path}" width="${empty picwidth ? Constants.IMG_WIDTH : picwidth }" height="${empty picheight ? Constants.IMG_HEIGHT : picheight }" onclick="disPic('${path}')"/>
