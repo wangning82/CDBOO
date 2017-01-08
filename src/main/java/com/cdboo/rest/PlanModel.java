@@ -18,10 +18,10 @@ public class PlanModel implements Serializable {
     private String playName;		// 计划名称
     private String musicStyle;		// 风格，优先级是 插播--节日--主题--风格
     private String week;		// 日期
-    private Date startDate;		// 开始日期
-    private Date endDate;		// 结束日期
+    private String startDate;		// 开始日期
+    private String endDate;		// 结束日期
     private String status;		// 状态位显示
-    private int cycleTimes;     //循环次数 如果风格是插播，取该处字段值
+    private String cycleTimes;     //循环次数 如果风格是插播，取该处字段值
     private String condition;//业态
 
     private RestTimeStep timestep;
@@ -59,19 +59,19 @@ public class PlanModel implements Serializable {
         this.week = week;
     }
 
-    public Date getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 
@@ -99,13 +99,13 @@ public class PlanModel implements Serializable {
 		this.channel = channel;
 	}
 
-	public int getCycleTimes() {
-		return cycleTimes;
-	}
+    public String getCycleTimes() {
+        return cycleTimes;
+    }
 
-	public void setCycleTimes(int cycleTimes) {
-		this.cycleTimes = cycleTimes;
-	}
+    public void setCycleTimes(String cycleTimes) {
+        this.cycleTimes = cycleTimes;
+    }
 
     public String getCondition() {
         return condition;

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.ws.rs.FormParam;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,17 +81,30 @@ public class CdbooResource {
 
         for (CdbooPlan _cdbooPlan : list) {
             PlanModel planModel = new PlanModel();
-            BeanUtils.copyProperties(planModel, _cdbooPlan);
+//            BeanUtils.copyProperties(planModel, _cdbooPlan);
+            planModel.setPlanNo(_cdbooPlan.getPlanNo());
+            planModel.setPlayName(_cdbooPlan.getPlayName());
+            planModel.setMusicStyle(_cdbooPlan.getMusicStyle());
+            planModel.setWeek(_cdbooPlan.getWeek());
+            planModel.setStartDate(_cdbooPlan.getStartDate() != null ? new SimpleDateFormat("yyyy-MM-dd").format(_cdbooPlan.getStartDate()) : null);
+            planModel.setEndDate(_cdbooPlan.getEndDate() != null ? new SimpleDateFormat("yyyy-MM-dd").format(_cdbooPlan.getEndDate()) : null);
+            planModel.setStatus(_cdbooPlan.getStatus());
+            planModel.setCycleTimes(_cdbooPlan.getRate());
+            planModel.setCondition(_cdbooPlan.getCondition());
 
             RestTimeStep restTimeStep = new RestTimeStep();
-            restTimeStep.setStarttime(_cdbooPlan.getTimestep().getStarttime());
-            restTimeStep.setEndtime(_cdbooPlan.getTimestep().getEndtime());
-            restTimeStep.setTimestepNo(_cdbooPlan.getTimestep().getTimestepNo());
-            restTimeStep.setTimestepName(_cdbooPlan.getTimestep().getTimestepName());
+            if (_cdbooPlan.getTimestep() != null) {
+                restTimeStep.setStarttime(_cdbooPlan.getTimestep().getStarttime());
+                restTimeStep.setEndtime(_cdbooPlan.getTimestep().getEndtime());
+                restTimeStep.setTimestepNo(_cdbooPlan.getTimestep().getTimestepNo());
+                restTimeStep.setTimestepName(_cdbooPlan.getTimestep().getTimestepName());
+            }
             planModel.setTimestep(restTimeStep);
 
             RestChannel restChannel = new RestChannel();
-            BeanUtils.copyProperties(restChannel, _cdbooPlan.getChannel());
+            if (_cdbooPlan.getChannel() != null) {
+                BeanUtils.copyProperties(restChannel, _cdbooPlan.getChannel());
+            }
 
             CdbooUserChannel  cdbooUserChannel = new CdbooUserChannel();
             cdbooUserChannel.setUser(_cdbooPlan.getUser());
