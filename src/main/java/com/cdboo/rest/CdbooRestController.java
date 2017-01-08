@@ -30,7 +30,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/cdboo-service")
-public class CdbooResource {
+public class CdbooRestController {
 
     @Autowired
     private SystemService systemService;
