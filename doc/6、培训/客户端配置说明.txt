@@ -1,0 +1,2 @@
+1.cdboo.zip为客户端软件，解压附件cdboo.exe为免安装的运行程序.
+2.客户端默认读取的音频文件路径为：E:/CloudMusic，将附件CloudMusic.zip解压到E盘根路径下即可。
