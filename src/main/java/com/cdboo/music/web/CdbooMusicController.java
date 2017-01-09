@@ -21,7 +21,9 @@ import com.cdboo.music.entity.CdbooMusic;
 import com.cdboo.music.service.CdbooMusicService;
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.common.utils.DateUtils;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.common.utils.excel.ExportExcel;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.common.web.Servlets;
 import com.thinkgem.jeesite.modules.sys.utils.LogUtils;
@@ -116,5 +118,27 @@ public class CdbooMusicController extends BaseController {
 		}
 		return "redirect:" + Global.getAdminPath() + "/music/cdbooMusic/?repage";
 	}
+	
+	/**
+	 * 导出曲库数据
+	 * @param user
+	 * @param request
+	 * @param response
+	 * @param redirectAttributes
+	 * @return
+	 */
+	@RequiresPermissions("music:cdbooMusic:edit")
+    @RequestMapping(value = "export", method=RequestMethod.POST)
+    public String exportFile(CdbooMusic cdbooMusic, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
+		try {
+            String fileName = "曲库数据"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx";
+            Page<CdbooMusic> page = cdbooMusicService.findPage(new Page<CdbooMusic>(request, response,-1), cdbooMusic); 
+    		new ExportExcel("曲库数据", CdbooMusic.class).setDataList(page.getList()).write(response, fileName).dispose();
+    		return null;
+		} catch (Exception e) {
+			addMessage(redirectAttributes, "导出曲库失败！失败信息："+e.getMessage());
+		}
+		return "redirect:" + Global.getAdminPath() + "/music/cdbooMusic/?repage";
+    }
 
 }
