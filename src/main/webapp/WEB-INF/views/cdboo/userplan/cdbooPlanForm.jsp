@@ -83,16 +83,31 @@
 			}
 		}
 
-		function themeChanged(id) {
-			var style = $("#planList" + id + "_musicStyle").val();
+		function themeChanged(idx) {
+			var style = $("#planList" + idx + "_musicStyle").val();
 
 			if (style == '1' || style == '3') {
-				$("#dateSpan_" + id).removeAttr('style');
-				$("#checkboxSpan_" + id).attr('style', 'display : none');
+				$("#dateSpan_" + idx).removeAttr('style');
+				$("#checkboxSpan_" + idx).attr('style', 'display : none');
 			} else {
-				$("#dateSpan_" + id).attr('style', 'display : none');
-				$("#checkboxSpan_" + id).removeAttr('style');
+				$("#dateSpan_" + idx).attr('style', 'display : none');
+				$("#checkboxSpan_" + idx).removeAttr('style');
 			}
+
+			if (style == '3') {
+				$('#intervalTimeTH').removeAttr('style');
+				$('#intervalTimeTD_' + idx).removeAttr('style');
+
+				$('#conditionTH').attr('style', 'display : none');//隐藏业态
+				$('#conditionTD_' + idx).attr('style', 'display : none');//隐藏业态
+			} else {
+				$('#intervalTimeTH').attr('style', 'display : none');
+				$('#intervalTimeTD_' + idx).attr('style', 'display : none');
+
+				$('#conditionTH').removeAttr('style');//显示业态
+				$('#conditionTD_' + idx).removeAttr('style');//显示业态
+			}
+
 		}
 
 		function userTreeselectCallBack(v, h, f) {
@@ -159,7 +174,8 @@
 						<th>风格</th>
 						<th>日期区间</th>
 						<th>次数</th>
-						<th>业态</th>
+						<th id="intervalTimeTH" style="display : none">间隔时间</th>
+						<th id="conditionTH">业态</th>
 						<th>备注</th>
 						<shiro:hasPermission name="userplan:cdbooPlan:edit"><th width="10">&nbsp;</th></shiro:hasPermission>
 					</tr>
@@ -224,7 +240,12 @@
 								<input id="planList{{idx}}_rate" name="planList[{{idx}}].rate" type="text" value="{{row.rate}}" maxlength="255" class="input-small " />
 							</td>
 
-							<td>
+							<td id="intervalTimeTD_{{idx}}" style="display : none">
+								<input id="planList{{idx}}_intervalTime" name="planList[{{idx}}].intervalTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
+										value="{{row.intervalTime}}" onclick="WdatePicker({dateFmt:'HH:mm:ss',isShowClear:false});"/>
+							</td>
+
+							<td id="conditionTD_{{idx}}">
 								<input id="planList{{idx}}_condition" name="planList[{{idx}}].condition" type="text" value="{{row.condition}}" maxlength="255" class="input-small " />
 							</td>
 

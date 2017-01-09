@@ -72,6 +72,7 @@
 				<%--<th>结束日期</th>--%>
 				<th>更新时间</th>
 				<th>次数</th>
+				<th>间隔时间</th>
 				<th>业态</th>
 				<th>备注信息</th>
 				<shiro:hasPermission name="userplan:cdbooPlan:edit"><th>操作</th></shiro:hasPermission>
@@ -115,6 +116,9 @@
 				</td>
 				<td>
 						${cdbooPlan.condition}
+				</td>
+				<td>
+						${cdbooPlan.intervalTime}
 				</td>
 				<td>
 					${cdbooPlan.remarks}
