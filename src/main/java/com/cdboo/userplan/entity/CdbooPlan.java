@@ -33,7 +33,7 @@ public class CdbooPlan extends DataEntity<CdbooPlan> {
 	private String status;		// 状态位显示
 	private String rate;//次数
 	private String intervalTime;//间隔时间
-	private String condition;//业态
+	private String scene; // 场景业态
 
 	private Timestep timestep;
 	private CdbooChannel channel;
@@ -168,12 +168,12 @@ public class CdbooPlan extends DataEntity<CdbooPlan> {
 		this.rate = rate;
 	}
 
-	public String getCondition() {
-		return condition;
+	public String getScene() {
+		return scene;
 	}
 
-	public void setCondition(String condition) {
-		this.condition = condition;
+	public void setScene(String scene) {
+		this.scene = scene;
 	}
 
 	public String getIntervalTime() {
