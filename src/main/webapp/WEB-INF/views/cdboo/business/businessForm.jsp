@@ -64,10 +64,10 @@
 				<form:textarea path="remarks" htmlEscape="false" rows="4" maxlength="1000" class="input-xxlarge "/>
 			</div>
 		</div>
-		<div class="control-group">
+		<div class="control-group" style="display: none;">
 			<label class="control-label">状态位显示：</label>
 			<div class="controls">
-				<form:input path="status" htmlEscape="false" maxlength="1" class="input-xlarge "/>
+				<%--<form:input path="status" htmlEscape="false" maxlength="1" class="input-xlarge " />--%>
 			</div>
 		</div>
 		<div class="form-actions">
