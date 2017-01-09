@@ -24,15 +24,14 @@
 			});
 		});
 
-		var timestepData;
-		var channelData;
+		var timestepData = '';
+		var channelData = '';
 		function addRow(list, idx, tpl, row){
 			$(list).append(Mustache.render(tpl, {
 				idx: idx, delBtn: true, row: row
 			}));
 
 			$(list+idx).find("select").each(function(){
-				$(this).val($(this).attr("data-value"));
 
 				if ($(this).attr('id') == 'planList' + idx + '_userTimestepId') {
 					for (var i = 0; i < timestepData.length; i++) {
@@ -46,6 +45,7 @@
 					}
 				}
 
+				$(this).val($(this).attr("data-value"));
 			});
 
 			$(list+idx).find("input[type='checkbox'], input[type='radio']").each(function(){
@@ -203,12 +203,18 @@
 							<td>
 								<select id="planList{{idx}}_userTimestepId" name="planList[{{idx}}].userTimestepId" data-value="{{row.userTimestepId}}" class="input-small ">
 									<option value="">请选择</option>
+									<c:forEach items="${planModel.cdbooUserTimestepList}" var="cdbooUserTimestep">
+										<option value="${cdbooUserTimestep.id}">${cdbooUserTimestep.name}</option>
+									</c:forEach>
 								</select>
 							</td>
 
                             <td>
 								<select id="planList{{idx}}_userChannelId" name="planList[{{idx}}].userChannelId" data-value="{{row.userChannelId}}" class="input-small ">
 									<option value="">请选择</option>
+									<c:forEach items="${planModel.cdbooChannelList}" var="cdbooChannel">
+										<option value="${cdbooChannel.id}">${cdbooChannel.channelName}</option>
+									</c:forEach>
 								</select>
 							</td>
 							
