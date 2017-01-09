@@ -55,7 +55,7 @@ public class CdbooPlan extends DataEntity<CdbooPlan> {
 	public void setPlanNo(String planNo) {
 		this.planNo = planNo;
 	}
-	
+
 	@Length(min=0, max=100, message="计划名称长度必须介于 0 和 100 之间")
 	public String getPlayName() {
 		return playName;
@@ -64,7 +64,7 @@ public class CdbooPlan extends DataEntity<CdbooPlan> {
 	public void setPlayName(String playName) {
 		this.playName = playName;
 	}
-	
+
 	public User getUser() {
 		return user;
 	}
@@ -72,7 +72,7 @@ public class CdbooPlan extends DataEntity<CdbooPlan> {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
+
 	@Length(min=0, max=64, message="用户时段id长度必须介于 0 和 64 之间")
 	public String getUserTimestepId() {
 		return userTimestepId;
@@ -81,7 +81,7 @@ public class CdbooPlan extends DataEntity<CdbooPlan> {
 	public void setUserTimestepId(String userTimestepId) {
 		this.userTimestepId = userTimestepId;
 	}
-	
+
 	@Length(min=0, max=64, message="用户频道id长度必须介于 0 和 64 之间")
 	public String getUserChannelId() {
 		return userChannelId;
@@ -90,7 +90,7 @@ public class CdbooPlan extends DataEntity<CdbooPlan> {
 	public void setUserChannelId(String userChannelId) {
 		this.userChannelId = userChannelId;
 	}
-	
+
 	@Length(min=0, max=255, message="风格长度必须介于 0 和 255 之间")
 	public String getMusicStyle() {
 		return musicStyle;
@@ -99,7 +99,7 @@ public class CdbooPlan extends DataEntity<CdbooPlan> {
 	public void setMusicStyle(String musicStyle) {
 		this.musicStyle = musicStyle;
 	}
-	
+
 	@Length(min=0, max=255, message="日期长度必须介于 0 和 255 之间")
 	public String getWeek() {
 		return week;
@@ -108,7 +108,7 @@ public class CdbooPlan extends DataEntity<CdbooPlan> {
 	public void setWeek(String week) {
 		this.week = week;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	public Date getStartDate() {
 		return startDate;
@@ -117,7 +117,7 @@ public class CdbooPlan extends DataEntity<CdbooPlan> {
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	public Date getEndDate() {
 		return endDate;
@@ -126,7 +126,7 @@ public class CdbooPlan extends DataEntity<CdbooPlan> {
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
-	
+
 	@Length(min=0, max=1, message="状态位显示长度必须介于 0 和 1 之间")
 	public String getStatus() {
 		return status;

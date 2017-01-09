@@ -90,7 +90,7 @@ public class CdbooRestController {
             planModel.setEndDate(_cdbooPlan.getEndDate() != null ? new SimpleDateFormat("yyyy-MM-dd").format(_cdbooPlan.getEndDate()) : null);
             planModel.setStatus(_cdbooPlan.getStatus());
             planModel.setCycleTimes(_cdbooPlan.getRate());
-            planModel.setCondition(_cdbooPlan.getCondition());
+            planModel.setScene(_cdbooPlan.getCondition());
 
             RestTimeStep restTimeStep = new RestTimeStep();
             if (_cdbooPlan.getTimestep() != null) {

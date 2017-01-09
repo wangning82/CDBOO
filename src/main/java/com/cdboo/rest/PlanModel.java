@@ -22,7 +22,7 @@ public class PlanModel implements Serializable {
     private String endDate;		// 结束日期
     private String status;		// 状态位显示
     private String cycleTimes;     //循环次数 如果风格是插播，取该处字段值
-    private String condition;//业态
+    private String scene;//业态
 
     private RestTimeStep timestep;
     private RestChannel channel;
@@ -107,11 +107,11 @@ public class PlanModel implements Serializable {
         this.cycleTimes = cycleTimes;
     }
 
-    public String getCondition() {
-        return condition;
+    public String getScene() {
+        return scene;
     }
 
-    public void setCondition(String condition) {
-        this.condition = condition;
+    public void setScene(String scene) {
+        this.scene = scene;
     }
 }
