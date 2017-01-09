@@ -8,6 +8,9 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.cdboo.userchannel.service.CdbooUserChannelService;
+import com.cdboo.usertimestep.entity.CdbooUserTimestep;
+import com.cdboo.usertimestep.service.CdbooUserTimestepService;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +55,12 @@ public class CdbooPlanController extends BaseController {
 
 	@Autowired
 	private SystemService systemService;
+
+	@Autowired
+	private CdbooUserTimestepService cdbooUserTimestepService;
+
+	@Autowired
+	private CdbooUserChannelService cdbooUserChannelService;
 
 	@ModelAttribute
 	public CdbooPlan get(@RequestParam(required=false) String id) {
@@ -109,17 +118,26 @@ public class CdbooPlanController extends BaseController {
 
 			User user = list.get(0).getUser();
 
+			CdbooUserTimestep cdbooUserTimestep = new CdbooUserTimestep();
+			cdbooUserTimestep.setUser(user);
+			List<CdbooUserTimestep> cdbooUserTimestepList = cdbooUserTimestepService.findList(cdbooUserTimestep);
+
+			List<CdbooChannel> cdbooChannelList = cdbooUserChannelService.getChannelListByUser(user);
+
+			planModel.setCdbooUserTimestepList(cdbooUserTimestepList);
+			planModel.setCdbooChannelList(cdbooChannelList);
+
 			planModel.setPlanList(list);
 			planModel.setUserId(user.getId());
 			planModel.setUserName(user.getName());
 		}
 
 		//所有时段
-		List<Timestep> timestepList = timestepService.findList(new Timestep());
-		List<CdbooChannel> channelList = channelService.findList(new CdbooChannel());
-
-		model.addAttribute("channelList", channelList);
-		model.addAttribute("timestepList", timestepList);
+//		List<Timestep> timestepList = timestepService.findList(new Timestep());
+//		List<CdbooChannel> channelList = channelService.findList(new CdbooChannel());
+//
+//		model.addAttribute("channelList", channelList);
+//		model.addAttribute("timestepList", timestepList);
 		model.addAttribute("planModel", planModel);
 		return "cdboo/userplan/cdbooPlanForm";
 	}
