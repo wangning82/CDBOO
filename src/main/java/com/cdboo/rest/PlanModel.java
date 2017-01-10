@@ -1,11 +1,6 @@
 package com.cdboo.rest;
 
-import com.cdboo.channel.entity.CdbooChannel;
-import com.cdboo.music.entity.CdbooMusic;
-import com.cdboo.timestep.entity.Timestep;
-
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * Created by mmzz on 2016/12/29.

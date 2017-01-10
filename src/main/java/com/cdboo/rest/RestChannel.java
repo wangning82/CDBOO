@@ -29,6 +29,7 @@ public class RestChannel implements Serializable{
 	private String instrument; // 乐器
 	private String status; // 状态
 	private String channelType; // 频道类型 子频道，组合频道和插播频道
+	private String remarks; // 频道简介
 	
 	//如果是子频道或者插播频道，该集合有对应music的信息
 	private List<RestMusic> musicList = Lists.newArrayList();
@@ -137,5 +138,13 @@ public class RestChannel implements Serializable{
 	}
 	public void setChildChannelList(List<RestChannel> childChannelList) {
 		this.childChannelList = childChannelList;
+	}
+
+	public String getRemarks() {
+		return remarks;
+	}
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
 	}
 }
