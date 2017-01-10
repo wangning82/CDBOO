@@ -9,6 +9,7 @@ import org.hibernate.validator.constraints.Length;
 import com.google.common.collect.Lists;
 import com.thinkgem.jeesite.common.persistence.DataEntity;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.common.utils.excel.annotation.ExcelField;
 
 /**
  * 曲库管理Entity
@@ -42,6 +43,7 @@ public class CdbooMusic extends DataEntity<CdbooMusic> {
 	}
 
 	@Length(min=0, max=100, message="音乐编号长度必须介于 0 和 100 之间")
+	@ExcelField(title="音乐编号",type=1,align=2, sort=10)
 	public String getMusicNo() {
 		return musicNo;
 	}
@@ -60,6 +62,7 @@ public class CdbooMusic extends DataEntity<CdbooMusic> {
 	}
 	
 	@Length(min=0, max=100, message="音乐名称长度必须介于 0 和 100 之间")
+	@ExcelField(title="音乐名称",type=1,align=2, sort=20)
 	public String getMusicName() {
 		return musicName;
 	}
@@ -69,6 +72,7 @@ public class CdbooMusic extends DataEntity<CdbooMusic> {
 	}
 	
 	@Length(min=0, max=100, message="艺人长度必须介于 0 和 100 之间")
+	@ExcelField(title="艺人",type=1,align=2, sort=30)
 	public String getActor() {
 		return actor;
 	}
@@ -78,6 +82,7 @@ public class CdbooMusic extends DataEntity<CdbooMusic> {
 	}
 	
 	@Length(min=0, max=100, message="专辑长度必须介于 0 和 100 之间")
+	@ExcelField(title="专辑",type=1,align=2, sort=40)
 	public String getSpecial() {
 		return special;
 	}
@@ -89,6 +94,17 @@ public class CdbooMusic extends DataEntity<CdbooMusic> {
 	@Length(min=0, max=10, message="音量长度必须介于 0 和 10 之间")
 	public String getVolume() {
 		return volume;
+	}
+
+	@ExcelField(title="音量",type=1,align=2, sort=50)
+	public String getFormatVolume(){
+		return StringUtils.isNotBlank(this.volume)?this.volume+"%":"";
+	}
+	
+	@Override
+	@ExcelField(title="创建时间",type=1,align=2, sort=50)
+	public Date getCreateDate() {
+		return super.getCreateDate();
 	}
 
 	public void setVolume(String volume) {

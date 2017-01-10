@@ -18,6 +18,16 @@
 				$.jBox($("#importBox").html(), {title:"导入数据", buttons:{"关闭":true}, 
 					bottomText:"导入文件不能超过500M，仅允许导入“zip”格式文件！"});
 			});
+			
+			$("#btnExport").click(function(){
+				top.$.jBox.confirm("确认要导出曲库数据吗？","系统提示",function(v,h,f){
+					if(v=="ok"){
+						$("#searchForm").attr("action","${ctx}/music/cdbooMusic/export");
+						$("#searchForm").submit();
+					}
+				},{buttonsFocus:1});
+				top.$('.jbox-body .jbox-icon').css('top','55px');
+			});
 	    });
 	
 		function page(n,s){
@@ -71,7 +81,8 @@
 					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
-			<li class="btns"><input id="btnImport" class="btn btn-primary" type="button" value="导入"/></li></li>
+			<li class="btns"><input id="btnImport" class="btn btn-primary" type="button" value="导入"/></li>
+			<li class="btns"><input id="btnExport" class="btn btn-primary" type="button" value="导出"/></li>
 			<li class="clearfix"></li>
 		</ul>
 	</form:form>
