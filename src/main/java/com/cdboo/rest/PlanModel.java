@@ -1,11 +1,6 @@
 package com.cdboo.rest;
 
-import com.cdboo.channel.entity.CdbooChannel;
-import com.cdboo.music.entity.CdbooMusic;
-import com.cdboo.timestep.entity.Timestep;
-
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * Created by mmzz on 2016/12/29.
@@ -24,6 +19,7 @@ public class PlanModel implements Serializable {
     private String cycleTimes;     //循环次数 如果风格是插播，取该处字段值
     private String intervalTime; //间隔时间
     private String scene;//业态
+    private String sceneImg;//业态图片
 
     private RestTimeStep timestep;
     private RestChannel channel;
@@ -122,5 +118,13 @@ public class PlanModel implements Serializable {
 
     public void setIntervalTime(String intervalTime) {
         this.intervalTime = intervalTime;
+    }
+
+    public String getSceneImg() {
+        return sceneImg;
+    }
+
+    public void setSceneImg(String sceneImg) {
+        this.sceneImg = sceneImg;
     }
 }

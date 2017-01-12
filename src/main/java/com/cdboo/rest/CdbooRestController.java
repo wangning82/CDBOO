@@ -1,6 +1,7 @@
 package com.cdboo.rest;
 
 import com.cdboo.common.Constants;
+import com.cdboo.music.dao.CdbooMusicDao;
 import com.cdboo.music.entity.CdbooMusic;
 import com.cdboo.userchannel.entity.CdbooUserChannel;
 import com.cdboo.userchannel.service.CdbooUserChannelService;
@@ -40,6 +41,9 @@ public class CdbooRestController {
 
     @Autowired
     private CdbooUserChannelService cdbooUserChannelService;
+
+    @Autowired
+    private CdbooMusicDao cdbooMusicDao;
 
     /**
      * 用户登录
@@ -92,6 +96,7 @@ public class CdbooRestController {
             planModel.setCycleTimes(_cdbooPlan.getRate());
             planModel.setIntervalTime(_cdbooPlan.getIntervalTime());
             planModel.setScene(_cdbooPlan.getCondition());
+            planModel.setSceneImg(_cdbooPlan.getConditionImg());
 
             RestTimeStep restTimeStep = new RestTimeStep();
             if (_cdbooPlan.getTimestep() != null) {
@@ -115,7 +120,8 @@ public class CdbooRestController {
             List<RestMusic> musicList = Lists.newArrayList();
             for (CdbooUserChannel channel : userChannels) {
                 RestMusic restMusic = new RestMusic();
-                CdbooMusic cdbooMusic = channel.getMusic();
+
+                CdbooMusic cdbooMusic = cdbooMusicDao.get(channel.getMusic());
 
                 BeanUtils.copyProperties(restMusic, cdbooMusic);
 

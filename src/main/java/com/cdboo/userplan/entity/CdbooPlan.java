@@ -34,6 +34,7 @@ public class CdbooPlan extends DataEntity<CdbooPlan> {
 	private String rate;//次数
 	private String intervalTime;//间隔时间
 	private String condition;//业态
+	private String conditionImg;//业态图片
 
 	private Timestep timestep;
 	private CdbooChannel channel;
@@ -182,5 +183,13 @@ public class CdbooPlan extends DataEntity<CdbooPlan> {
 
 	public void setIntervalTime(String intervalTime) {
 		this.intervalTime = intervalTime;
+	}
+
+	public String getConditionImg() {
+		return conditionImg;
+	}
+
+	public void setConditionImg(String conditionImg) {
+		this.conditionImg = conditionImg;
 	}
 }

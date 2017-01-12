@@ -99,13 +99,17 @@
 				$('#intervalTimeTD_' + idx).removeAttr('style');
 
 				$('#conditionTH').attr('style', 'display : none');//隐藏业态
+				$('#conditionImgTH').attr('style', 'display : none');//隐藏业态
 				$('#conditionTD_' + idx).attr('style', 'display : none');//隐藏业态
+				$('#conditionImgTD_' + idx).attr('style', 'display : none');//隐藏业态
 			} else {
 				$('#intervalTimeTH').attr('style', 'display : none');
 				$('#intervalTimeTD_' + idx).attr('style', 'display : none');
 
 				$('#conditionTH').removeAttr('style');//显示业态
+				$('#conditionImgTH').removeAttr('style');//显示业态
 				$('#conditionTD_' + idx).removeAttr('style');//显示业态
+				$('#conditionImgTD_' + idx).removeAttr('style');//显示业态
 			}
 
 		}
@@ -176,6 +180,7 @@
 						<th>次数</th>
 						<th id="intervalTimeTH" style="display : none">间隔时间</th>
 						<th id="conditionTH">业态</th>
+						<th id="conditionImgTH">业态图片</th>
 						<th>备注</th>
 						<shiro:hasPermission name="userplan:cdbooPlan:edit"><th width="10">&nbsp;</th></shiro:hasPermission>
 					</tr>
@@ -253,6 +258,11 @@
 
 							<td id="conditionTD_{{idx}}">
 								<input id="planList{{idx}}_condition" name="planList[{{idx}}].condition" type="text" value="{{row.condition}}" maxlength="255" class="input-small " />
+							</td>
+
+							<td id="conditionImgTD_{{idx}}">
+								<input id="planList{{idx}}_conditionImg" name="planList[{{idx}}].conditionImg" type="hidden" value="{{row.conditionImg}}" maxlength="255"/>
+								<sys:ckfinder input="planList{{idx}}_conditionImg" type="files" uploadPath="/plan/condition" selectMultiple="true" />
 							</td>
 
 							<td>

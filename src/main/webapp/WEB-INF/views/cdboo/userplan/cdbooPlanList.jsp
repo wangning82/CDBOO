@@ -115,10 +115,10 @@
 						${cdbooPlan.rate}
 				</td>
 				<td>
-						${cdbooPlan.condition}
+						${cdbooPlan.intervalTime}
 				</td>
 				<td>
-						${cdbooPlan.intervalTime}
+						${cdbooPlan.condition}
 				</td>
 				<td>
 					${cdbooPlan.remarks}
