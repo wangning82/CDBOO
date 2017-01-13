@@ -34,6 +34,13 @@
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>
 		<div class="control-group">
+			<label class="control-label">图片:</label>
+			<div class="controls">
+				<form:hidden id="nameImage" path="photo" htmlEscape="false" maxlength="255" class="input-xlarge"/>
+				<sys:ckfinder input="nameImage" type="images" uploadPath="/office/photo" selectMultiple="false" maxWidth="100" maxHeight="100"/>
+			</div>
+		</div>
+		<div class="control-group">
 			<label class="control-label">上级机构:</label>
 			<div class="controls">
                 <sys:treeselect id="office" name="parent.id" value="${office.parent.id}" labelName="parent.name" labelValue="${office.parent.name}"

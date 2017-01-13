@@ -27,6 +27,7 @@
 		a.useable AS useable,
 		a.primary_person AS "primaryPerson.id",
 		a.deputy_person AS "deputyPerson.id",
+		a.photo AS "photo",
 		p.name AS "parent.name",
 		ar.name AS "area.name",
 		ar.parent_ids AS "area.parentIds",
@@ -55,9 +56,48 @@
 		FROM sys_office a
 		<include refid="officeJoins"/>
 		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="type != null and type != ''">
+				AND a.type = #{type}
+		</if>
 		<!-- 数据范围过滤 -->
 		${sqlMap.dsf}
 		OR a.id = #{currentUser.office.id}
+		ORDER BY a.code
+	</select>
+	
+	<select id="findListByCondition" resultType="Office">
+		SELECT
+			a.id,
+			a.parent_id AS "parent.id",
+			a.parent_ids,
+			a.area_id AS "area.id",
+			a.code,
+			a.name,
+			a.sort,
+			a.type,
+			a.grade,
+			a.address, 
+			a.zip_code, 
+			a.master, 
+			a.phone, 
+			a.fax, 
+			a.email, 
+			a.remarks,
+			a.create_by AS "createBy.id",	
+			a.create_date,
+			a.update_by AS "updateBy.id",
+			a.update_date,
+			a.del_flag,
+			a.useable AS useable,
+			a.primary_person AS "primaryPerson.id",
+			a.deputy_person AS "deputyPerson.id",
+			a.photo AS "photo"
+		FROM sys_office a
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="type != null and type != ''">
+			AND a.type = #{type}
+		</if>
+		<!-- 数据范围过滤 -->
 		ORDER BY a.code
 	</select>
 			
@@ -104,7 +144,8 @@
 			a.del_flag,
 			a.useable AS useable,
 			a.primary_person AS "primaryPerson.id",
-			a.deputy_person AS "deputyPerson.id"
+			a.deputy_person AS "deputyPerson.id",
+			a.photo AS "photo"
 		FROM sys_office a left join sys_user b on a.id = b.office_id
 		WHERE a.useable = #{USER_ABLE_YES} and a.del_flag = #{DEL_FLAG_NORMAL} and b.del_flag = #{DEL_FLAG_NORMAL} and b.user_type = #{USER_TYPE_NORMAL}
 		ORDER BY a.code
@@ -135,7 +176,8 @@
 			del_flag,
 			useable,
 			primary_person,
-			deputy_person
+			deputy_person,
+			photo
 		) VALUES (
 			#{id}, 
 			#{parent.id}, 
@@ -160,7 +202,8 @@
 			#{delFlag},
 			#{useable},
 			#{primaryPerson.id},
-			#{deputyPerson.id}
+			#{deputyPerson.id},
+			#{photo}
 		)
 	</insert>
 	
@@ -184,7 +227,8 @@
 			remarks = #{remarks},
 			useable=#{useable},
 			primary_person=#{primaryPerson.id},
-			deputy_person=#{deputyPerson.id}
+			deputy_person=#{deputyPerson.id},
+			photo = #{photo}
 		WHERE id = #{id}
 	</update>
 	

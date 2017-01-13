@@ -17,4 +17,5 @@ import com.thinkgem.jeesite.modules.sys.entity.Office;
 @MyBatisDao
 public interface OfficeDao extends TreeDao<Office> {
 	public List<Office> findOfficeForNormalUser(Office office);
+	public List<Office> findListByCondition(Office office);
 }

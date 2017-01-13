@@ -48,25 +48,24 @@ public class CdbooPlanService extends CrudService<CdbooPlanDao, CdbooPlan> {
 		user.setId(planModel.getUserId());
 
 		for (CdbooPlan cdbooPlan : planModel.getPlanList()) {
-			if (cdbooPlan.getId() == null){
-				continue;
-			}
-
-			cdbooPlan.setUser(user);
-			if (CdbooPlan.DEL_FLAG_NORMAL.equals(cdbooPlan.getDelFlag())){
-				if (org.apache.commons.lang3.StringUtils.isBlank(cdbooPlan.getId())) {
-					cdbooPlan.preInsert();
-					cdbooPlanDao.insert(cdbooPlan);
-				} else {
-					cdbooPlan.preUpdate();
-					cdbooPlanDao.update(cdbooPlan);
-				}
-			} else {
-				cdbooPlanDao.update(cdbooPlan);
-			}
-
+			super.save(cdbooPlan);
+//			if (cdbooPlan.getId() == null){
+//				continue;
+//			}
+//
+//			cdbooPlan.setUser(user);
+//			if (CdbooPlan.DEL_FLAG_NORMAL.equals(cdbooPlan.getDelFlag())){
+//				if (org.apache.commons.lang3.StringUtils.isBlank(cdbooPlan.getId())) {
+//					cdbooPlan.preInsert();
+//					cdbooPlanDao.insert(cdbooPlan);
+//				} else {
+//					cdbooPlan.preUpdate();
+//					cdbooPlanDao.update(cdbooPlan);
+//				}
+//			} else {
+//				cdbooPlanDao.update(cdbooPlan);
+//			}
 		}
-
 	}
 	
 	@Transactional(readOnly = false)

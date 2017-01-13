@@ -22,7 +22,6 @@
 		a.status AS "status",
 		a.rate AS "rate",
 		a.condition AS "condition",
-		a.condition_img AS "conditionImg",
 		a.interval_time AS "intervalTime",
 		u4.name AS "user.name",
 
@@ -144,7 +143,6 @@
 			status,
 			rate,
 			condition,
-			condition_img,
 			interval_time
 		) VALUES (
 			#{id},
@@ -166,7 +164,6 @@
 			#{status},
 			#{rate},
 			#{condition},
-			#{conditionImg},
 			#{intervalTime}
 		)
 	</insert>
@@ -188,7 +185,6 @@
 			status = #{status},
 			rate = #{rate},
 			condition = #{condition},
-			condition_img = #{conditionImg},
 			interval_time = #{intervalTime}
 		WHERE id = #{id}
 	</update>

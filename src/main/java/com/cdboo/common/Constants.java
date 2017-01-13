@@ -71,4 +71,8 @@ public class Constants {
 	
 	public static final String IMG_WIDTH = "100";
 	public static final String IMG_HEIGHT = "100";
+	
+	//机构类型-业态
+	public static final String OFFICE_TYPE_CONDITION = "5";
+	
 }

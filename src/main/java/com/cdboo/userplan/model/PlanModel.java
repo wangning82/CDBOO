@@ -4,6 +4,7 @@ import com.cdboo.channel.entity.CdbooChannel;
 import com.cdboo.userplan.entity.CdbooPlan;
 import com.cdboo.usertimestep.entity.CdbooUserTimestep;
 import com.google.common.collect.Lists;
+import com.thinkgem.jeesite.modules.sys.entity.Office;
 
 import java.util.List;
 
@@ -19,7 +20,8 @@ public class PlanModel {
 
     List<CdbooUserTimestep> cdbooUserTimestepList = Lists.newArrayList();
     List<CdbooChannel> cdbooChannelList = Lists.newArrayList();
-
+    List<Office> cdbooConditionList = Lists.newArrayList();
+    
     public String getUserId() {
         return userId;
     }
@@ -59,4 +61,13 @@ public class PlanModel {
     public void setCdbooChannelList(List<CdbooChannel> cdbooChannelList) {
         this.cdbooChannelList = cdbooChannelList;
     }
+
+	public List<Office> getCdbooConditionList() {
+		return cdbooConditionList;
+	}
+
+	public void setCdbooConditionList(List<Office> cdbooConditionList) {
+		this.cdbooConditionList = cdbooConditionList;
+	}
+    
 }

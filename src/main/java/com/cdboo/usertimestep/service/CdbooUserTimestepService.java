@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
+import com.thinkgem.jeesite.modules.sys.entity.User;
 import com.cdboo.usertimestep.entity.CdbooUserTimestep;
 import com.cdboo.usertimestep.dao.CdbooUserTimestepDao;
 
@@ -44,4 +45,14 @@ public class CdbooUserTimestepService extends CrudService<CdbooUserTimestepDao, 
 		super.delete(cdbooUserTimestep);
 	}
 	
+	/**
+	 * 根据用户获取时段信息
+	 * @param userId
+	 * @return
+	 */
+	public List<CdbooUserTimestep> findTimeStepByUser(User user){
+		CdbooUserTimestep cdbooUserTimestep = new CdbooUserTimestep();
+		cdbooUserTimestep.setUser(user);
+		return super.findList(cdbooUserTimestep);
+	}
 }

@@ -38,6 +38,7 @@ public class Office extends TreeEntity<Office> {
 	private User primaryPerson;//主负责人
 	private User deputyPerson;//副负责人
 	private List<String> childDeptList;//快速添加子部门
+	private String photo;
 	
 	public static final String USER_TYPE_NORMAL = "3";
 	public static final String USER_ABLE_YES = Global.YES;
@@ -215,6 +216,14 @@ public class Office extends TreeEntity<Office> {
 //		return parent != null && parent.getId() != null ? parent.getId() : "0";
 //	}
 	
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
+	}
+
 	@Override
 	public String toString() {
 		return name;

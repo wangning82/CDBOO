@@ -26,6 +26,7 @@
 
 		var timestepData = '';
 		var channelData = '';
+		var conditionData = '';
 		function addRow(list, idx, tpl, row){
 			$(list).append(Mustache.render(tpl, {
 				idx: idx, delBtn: true, row: row
@@ -42,6 +43,12 @@
 				if ($(this).attr('id') == 'planList' + idx + '_userChannelId') {
 					for (var i = 0; i < channelData.length; i++) {
 						$(this).append("<option value='" + channelData[i].id + "'>" + channelData[i].channelName + "</option>");
+					}
+				}
+				
+				if ($(this).attr('id') == 'planList' + idx + '_condition') {
+					for (var i = 0; i < conditionData.length; i++) {
+						$(this).append("<option value='" + conditionData[i].id + "'>" + conditionData[i].name + "</option>");
 					}
 				}
 
@@ -120,31 +127,18 @@
 			$.ajax({
 				type: "POST",
 				async: false,
-				url: "${ctx}/usertimestep/userTimestep/getTimesteps",
+				url: "${ctx}/userplan/cdbooPlan/getUserInfo",
 				data: {
 					userId: userId
 				},
 				dataType: "json",
 				success: function (data) {
-					timestepData = data;
 					$('#planList').empty();
-
-					$.ajax({
-						type: "POST",
-						async: false,
-						url: "${ctx}/userchannel/userChannel/getChannelList",
-						data: {
-							userId: userId
-						},
-						dataType: "json",
-						success: function (data) {
-							channelData = data;
-						}
-					});
-
+					timestepData = data.timeStepList;
+					channelData = data.channelList;
+					conditionData = data.officeList;
 				}
 			});
-
 		}
 	</script>
 </head>
@@ -155,12 +149,17 @@
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="planModel" action="${ctx}/userplan/cdbooPlan/save" method="post" class="form-horizontal">
 		<sys:message content="${message}"/>
-
 		<div class="control-group">
 			<label class="control-label">用户：</label>
 			<div class="controls">
-				<sys:treeselect id="user" name="userId" value="${cdbooPlan.user.id}" labelName="" labelValue="${planModel.userName}"
+				<c:if test="${not empty cdbooPlan.id}">
+					${planModel.userName}
+					<input type="hidden" id="userId" name="userId" value="${cdbooPlan.user.id }">
+				</c:if>
+				<c:if test="${empty cdbooPlan.id}">
+					<sys:treeselect id="user" name="userId" value="${cdbooPlan.user.id}" labelName="" labelValue="${planModel.userName}"
 								title="用户" url="/sys/office/treeData?type=3" cssClass="input-small" allowClear="true" notAllowSelectParent="true"/>
+				</c:if>
 			</div>
 		</div>
 
@@ -180,7 +179,6 @@
 						<th>次数</th>
 						<th id="intervalTimeTH" style="display : none">间隔时间</th>
 						<th id="conditionTH">业态</th>
-						<th id="conditionImgTH">业态图片</th>
 						<th>备注</th>
 						<shiro:hasPermission name="userplan:cdbooPlan:edit"><th width="10">&nbsp;</th></shiro:hasPermission>
 					</tr>
@@ -188,7 +186,7 @@
 					<tbody id="planList">
 					</tbody>
 					<shiro:hasPermission name="userplan:cdbooPlan:edit"><tfoot>
-					<tr><td colspan="16"><a href="javascript:" onclick="addRow('#planList', planRowIdx, planTpl);planRowIdx = planRowIdx + 1;" class="btn">新增</a></td></tr>
+					<tr><td colspan="12"><a href="javascript:" onclick="addRow('#planList', planRowIdx, planTpl);planRowIdx = planRowIdx + 1;" class="btn">新增</a></td></tr>
 					</tfoot></shiro:hasPermission>
 				</table>
 				<script type="text/template" id="planTpl">//<!--
@@ -257,12 +255,12 @@
 							</td>
 
 							<td id="conditionTD_{{idx}}">
-								<input id="planList{{idx}}_condition" name="planList[{{idx}}].condition" type="text" value="{{row.condition}}" maxlength="255" class="input-small " />
-							</td>
-
-							<td id="conditionImgTD_{{idx}}">
-								<input id="planList{{idx}}_conditionImg" name="planList[{{idx}}].conditionImg" type="hidden" value="{{row.conditionImg}}" maxlength="255"/>
-								<sys:ckfinder input="planList{{idx}}_conditionImg" type="files" uploadPath="/plan/condition" selectMultiple="true" />
+								<select id="planList{{idx}}_condition" name="planList[{{idx}}].condition" data-value="{{row.condition}}" class="input-small ">
+                                    <option value="">请选择</option>
+									<c:forEach items="${planModel.cdbooConditionList}" var="condition">
+										<option value="${condition.id}">${condition.name}</option>
+									</c:forEach>
+                                </select>
 							</td>
 
 							<td>

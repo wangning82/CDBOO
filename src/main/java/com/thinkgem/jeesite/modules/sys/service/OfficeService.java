@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cdboo.common.Constants;
 import com.thinkgem.jeesite.common.service.TreeService;
 import com.thinkgem.jeesite.modules.sys.dao.OfficeDao;
 import com.thinkgem.jeesite.modules.sys.entity.Office;
@@ -58,5 +59,17 @@ public class OfficeService extends TreeService<OfficeDao, Office> {
 	
 	public List<Office> findOfficeForNormalUser(Office office){
 		return dao.findOfficeForNormalUser(office);
+	}
+	
+	/**
+	 * 为业态写的查询方法
+	 * @param parantOffice
+	 * @return
+	 */
+	public List<Office> findOfficeListByParentForCondition(Office parantOffice){
+		Office office = new Office();
+		office.setParent(parantOffice);
+		office.setType(Constants.OFFICE_TYPE_CONDITION);
+		return dao.findListByCondition(office);
 	}
 }
