@@ -58,7 +58,7 @@ public class CdbooRestController {
         User user = systemService.getUserByLoginName(userName);
         if (user == null) {
             return Constants.USER_NOT_EXIST;
-        } else if (StringUtils.equals(user.getCdbooPassword(), md5Hex(password))) {
+        } else if (StringUtils.equals(user.getCdbooPassword(), systemService.entryptPassword(password))) {
             return Constants.USER_PASSWORD_CORRECT;
         } else {
             return Constants.USER_PASSWORD_NOT_CORRECT;
@@ -138,15 +138,5 @@ public class CdbooRestController {
         model.setPlanModelList(planModelList);
         return model;
     }
-
-    /**
-     * md5
-     * */
-    public static String md5Hex(String data) {
-        return DigestUtils.md5Hex(data);
-    }
-
-
-
 
 }
