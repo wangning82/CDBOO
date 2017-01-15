@@ -1,5 +1,17 @@
 package com.cdboo.rest;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.cdboo.common.Constants;
 import com.cdboo.music.dao.CdbooMusicDao;
 import com.cdboo.music.entity.CdbooMusic;
@@ -9,21 +21,10 @@ import com.cdboo.userplan.entity.CdbooPlan;
 import com.cdboo.userplan.service.CdbooPlanService;
 import com.google.common.collect.Lists;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.modules.sys.entity.Office;
 import com.thinkgem.jeesite.modules.sys.entity.User;
+import com.thinkgem.jeesite.modules.sys.service.OfficeService;
 import com.thinkgem.jeesite.modules.sys.service.SystemService;
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.ws.rs.FormParam;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by mmzz on 2016/12/22.
@@ -45,6 +46,9 @@ public class CdbooRestController {
     @Autowired
     private CdbooMusicDao cdbooMusicDao;
 
+    @Autowired
+    private OfficeService officeService;
+    
     /**
      * 用户登录
      * @param userName
@@ -80,29 +84,36 @@ public class CdbooRestController {
         cdbooPlan.setUser(user);
         List<CdbooPlan> list = planService.findList(cdbooPlan);
 
+        User userObj = systemService.getUserByLoginName(userName);
+        
         RestModel model = new RestModel();
+        model.setUserName(userObj.getName());
+        model.setPhoneNumber(userObj.getPhone());
+        model.setAddress(userObj.getRemarks());
+        model.setPhoto(userObj.getPhoto());
+        
         List<PlanModel> planModelList = new ArrayList<>();
 
         for (CdbooPlan _cdbooPlan : list) {
             PlanModel planModel = new PlanModel();
-//            BeanUtils.copyProperties(planModel, _cdbooPlan);
             planModel.setPlanNo(_cdbooPlan.getPlanNo());
             planModel.setPlayName(_cdbooPlan.getPlayName());
             planModel.setMusicStyle(_cdbooPlan.getMusicStyle());
             planModel.setWeek(_cdbooPlan.getWeek());
             planModel.setStartDate(_cdbooPlan.getStartDate() != null ? new SimpleDateFormat("yyyy-MM-dd").format(_cdbooPlan.getStartDate()) : null);
             planModel.setEndDate(_cdbooPlan.getEndDate() != null ? new SimpleDateFormat("yyyy-MM-dd").format(_cdbooPlan.getEndDate()) : null);
-            planModel.setStatus(_cdbooPlan.getStatus());
             planModel.setCycleTimes(_cdbooPlan.getRate());
             planModel.setIntervalTime(_cdbooPlan.getIntervalTime());
             planModel.setScene(_cdbooPlan.getOperationType());
-//            planModel.setSceneImg(_cdbooPlan.getConditionImg());
-
+            String operationType = _cdbooPlan.getOperationType();
+            Office office = officeService.get(operationType);
+            String photo = office.getPhoto();
+            planModel.setSceneImg(photo);
+            
             RestTimeStep restTimeStep = new RestTimeStep();
             if (_cdbooPlan.getTimestep() != null) {
                 restTimeStep.setStarttime(_cdbooPlan.getTimestep().getStarttime());
                 restTimeStep.setEndtime(_cdbooPlan.getTimestep().getEndtime());
-                restTimeStep.setTimestepNo(_cdbooPlan.getTimestep().getTimestepNo());
                 restTimeStep.setTimestepName(_cdbooPlan.getTimestep().getTimestepName());
             }
             planModel.setTimestep(restTimeStep);
@@ -121,7 +132,7 @@ public class CdbooRestController {
             for (CdbooUserChannel channel : userChannels) {
                 RestMusic restMusic = new RestMusic();
 
-                CdbooMusic cdbooMusic = cdbooMusicDao.get(channel.getMusic());
+                CdbooMusic cdbooMusic = cdbooMusicDao.get(channel.getMusic().getId());
 
                 BeanUtils.copyProperties(restMusic, cdbooMusic);
 
@@ -132,8 +143,6 @@ public class CdbooRestController {
             planModel.setChannel(restChannel);
             planModelList.add(planModel);
 
-            model.setUserName(_cdbooPlan.getUser().getName());
-            model.setPhoto(_cdbooPlan.getUser().getPhoto());
         }
         model.setPlanModelList(planModelList);
         return model;
