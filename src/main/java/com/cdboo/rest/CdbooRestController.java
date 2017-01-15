@@ -62,7 +62,7 @@ public class CdbooRestController {
         User user = systemService.getUserByLoginName(userName);
         if (user == null) {
             return Constants.USER_NOT_EXIST;
-        } else if (StringUtils.equals(user.getCdbooPassword(), systemService.entryptPassword(password))) {
+        } else if (SystemService.validatePassword(password, user.getPassword())) {
             return Constants.USER_PASSWORD_CORRECT;
         } else {
             return Constants.USER_PASSWORD_NOT_CORRECT;

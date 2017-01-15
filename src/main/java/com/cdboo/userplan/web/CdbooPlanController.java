@@ -130,9 +130,7 @@ public class CdbooPlanController extends BaseController {
 		PlanModel planModel = new PlanModel();
 
 		if (cdbooPlan != null && org.apache.commons.lang3.StringUtils.isNotBlank(cdbooPlan.getId())) {
-			List<CdbooPlan> list = cdbooPlanService.findList(cdbooPlan);
-
-			User user = list.get(0).getUser();
+			User user = cdbooPlan.getUser();
 			
 			List<CdbooUserTimestep> userTimeStepList = cdbooUserTimestepService.findTimeStepByUser(user);
 			
@@ -145,6 +143,8 @@ public class CdbooPlanController extends BaseController {
 			planModel.setCdbooUserTimestepList(userTimeStepList);
 			planModel.setCdbooChannelList(channelList);
 			planModel.setCdbooConditionList(officeList);
+			
+			List<CdbooPlan> list = Lists.newArrayList(cdbooPlan);
 			
 			planModel.setPlanList(list);
 			planModel.setUserId(user.getId());

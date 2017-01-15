@@ -81,6 +81,9 @@ public class CdbooChannelController extends BaseController {
 			if(StringUtils.equals(themeType, Constants.THEMETYPE_HOLIDAY)){
 				dictList = DictUtils.getDictList(Constants.DICT_HOLIDAY_TYPE_NAME);
 			}
+			if(StringUtils.equals(themeType, Constants.THEMETYPE_STYLE)){
+				dictList = DictUtils.getDictList(Constants.DICT_STYLE_TYPE_NAME);
+			}
 			request.setAttribute("themeConcreteTypeList", dictList);
 		}
 	}

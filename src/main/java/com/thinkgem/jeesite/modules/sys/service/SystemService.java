@@ -210,7 +210,9 @@ public class SystemService extends BaseService implements InitializingBean {
 		String plain = Encodes.unescapeHtml(plainPassword);
 		byte[] salt = Digests.generateSalt(SALT_SIZE);
 		byte[] hashPassword = Digests.sha1(plain.getBytes(), salt, HASH_INTERATIONS);
-		return Encodes.encodeHex(salt)+Encodes.encodeHex(hashPassword);
+		String pass = Encodes.encodeHex(salt)+Encodes.encodeHex(hashPassword);
+		System.out.println(pass);
+		return pass;
 	}
 	
 	/**
@@ -542,4 +544,8 @@ public class SystemService extends BaseService implements InitializingBean {
 	
 	///////////////// Synchronized to the Activiti end //////////////////
 	
+	public static void main(String[] args) {
+		String entryptPassword = entryptPassword("111111");
+		System.out.println(entryptPassword);
+	}
 }

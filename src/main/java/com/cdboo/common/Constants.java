@@ -62,6 +62,10 @@ public class Constants {
 	
 	//	season_type 主题（春天、夏天、秋天、冬天、晴天）
 	public static final String DICT_SEASON_TYPE_NAME = "season_type";
+	
+	//	style_type 风格（绘画风格，电影风格等）
+	public static final String DICT_STYLE_TYPE_NAME = "style_type";
+	
 	/********************** 字典表类型名称 End ***********************/
 
 
