@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" import="com.cdboo.common.Constants"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
@@ -28,6 +28,11 @@
 		var channelData = '';
 		var conditionData = '';
 		function addRow(list, idx, tpl, row){
+			var user = $('#userId').val();
+			if(!user){
+				top.$.jBox.alert("请先选择用户后添加","提示");
+				return;
+			}
 			$(list).append(Mustache.render(tpl, {
 				idx: idx, delBtn: true, row: row
 			}));
@@ -46,7 +51,7 @@
 					}
 				}
 				
-				if ($(this).attr('id') == 'planList' + idx + '_condition') {
+				if ($(this).attr('id') == 'planList' + idx + '_operationType') {
 					for (var i = 0; i < conditionData.length; i++) {
 						$(this).append("<option value='" + conditionData[i].id + "'>" + conditionData[i].name + "</option>");
 					}
@@ -63,16 +68,7 @@
 					}
 				}
 			});
-
-			var styleValue = $("#planList" + idx + "_musicStyle").val();
-			if (styleValue == "1" || styleValue == "3") {
-				$("#dateSpan_" + idx).removeAttr('style');
-				$("#checkboxSpan_" + idx).attr('style', 'display : none');
-			} else {
-				$("#dateSpan_" + idx).attr('style', 'display : none');
-				$("#checkboxSpan_" + idx).removeAttr('style');
-			}
-
+			themeChanged(idx);
 		}
 		function delRow(obj, prefix){
 			var id = $(prefix+"_id");
@@ -92,33 +88,83 @@
 
 		function themeChanged(idx) {
 			var style = $("#planList" + idx + "_musicStyle").val();
-
-			if (style == '1' || style == '3') {
-				$("#dateSpan_" + idx).removeAttr('style');
-				$("#checkboxSpan_" + idx).attr('style', 'display : none');
-			} else {
-				$("#dateSpan_" + idx).attr('style', 'display : none');
-				$("#checkboxSpan_" + idx).removeAttr('style');
+			var themeType = '${Constants.THEMETYPE_THEME}';//0 主题
+			var styleType = '${Constants.THEMETYPE_STYLE}';//2 风格
+			var holidayType = '${Constants.THEMETYPE_HOLIDAY}';//1 节日
+			var spotsType = '${Constants.THEMETYPE_SPOTS}';//3 插播
+			
+			if(style){
+				if (style == spotsType) {
+					//如果是插播，默认开启时间段选择，关闭日期选择，关闭业态选择，开启和插播相关的组件
+					helpChangeDisStatus(idx,true,false,true,true,false);
+				} else if(style == holidayType){
+					//如果是节日，默认开启时间段选择，关闭日期选择，开启业态选择，关闭和插播相关的组件
+					helpChangeDisStatus(idx,true,false,false,false,true);
+				}
+				else if(style == themeType || style == styleType){
+					//如果是主题和风格，默认开启日期选择，关闭时间段选择，开启业态选择，关闭和插播相关的组件
+					helpChangeDisStatus(idx,false,true,false,false,true);
+				}
 			}
-
-			if (style == '3') {
-				$('#intervalTimeTH').removeAttr('style');
-				$('#intervalTimeTD_' + idx).removeAttr('style');
-
-				$('#conditionTH').attr('style', 'display : none');//隐藏业态
-				$('#conditionImgTH').attr('style', 'display : none');//隐藏业态
-				$('#conditionTD_' + idx).attr('style', 'display : none');//隐藏业态
-				$('#conditionImgTD_' + idx).attr('style', 'display : none');//隐藏业态
-			} else {
-				$('#intervalTimeTH').attr('style', 'display : none');
-				$('#intervalTimeTD_' + idx).attr('style', 'display : none');
-
-				$('#conditionTH').removeAttr('style');//显示业态
-				$('#conditionImgTH').removeAttr('style');//显示业态
-				$('#conditionTD_' + idx).removeAttr('style');//显示业态
-				$('#conditionImgTD_' + idx).removeAttr('style');//显示业态
+			else{
+				helpChangeDisStatus(idx,false,true,false,false,true);
 			}
-
+		}
+		
+		/**
+			切换组件显示帮助方法
+			idx:行索引
+			dataSpanDisFlag:日期段选择显示隐藏控制，true为显示，false为隐藏
+			checkboxSpanDisFlag:星期选择显示隐藏控制，true为显示，false为隐藏
+			intervalTimeDisFlag:间隔时间选择显示隐藏控制，true为显示，false为隐藏
+			rateDisFlag:循环次数选择显示隐藏控制，true为显示，false为隐藏
+			conditionDisFlag:业态选择显示隐藏控制，true为显示，false为隐藏
+		*/
+		function helpChangeDisStatus(idx,dataSpanDisFlag,checkboxSpanDisFlag,intervalTimeDisFlag,rateDisFlag,conditionDisFlag){
+			if(dataSpanDisFlag){
+				$("#dateSpan_" + idx).show();
+			}
+			else{
+				$("#dateSpan_" + idx).hide();
+			}
+			
+			if(checkboxSpanDisFlag){
+				$("#checkboxSpan_" + idx).show();
+			}
+			else{
+				$("#checkboxSpan_" + idx).hide();
+			}
+			
+			if(intervalTimeDisFlag){
+				$("#intervalTimeTH").show();
+				$("#intervalTimeTD_" + idx).show();
+			}
+			else{
+				$("#intervalTimeTH").hide();
+				$("#intervalTimeTD_" + idx).hide();
+			}
+			
+			if(rateDisFlag){
+				$('#rateTH').show();
+				$("#rateTD_" + idx).show();
+			}
+			else{
+				$('#rateTH').hide();
+				$("#rateTD_" + idx).hide();
+			}
+			
+			if(conditionDisFlag){
+				//业态title列
+				$('#conditionTH').show();
+				//业态数据列
+				$('#conditionTD_' + idx).show();
+			}
+			else{
+				//业态title列
+				$('#conditionTH').hide();
+				//业态数据列
+				$('#conditionTD_' + idx).hide();
+			}
 		}
 
 		function userTreeselectCallBack(v, h, f) {
@@ -175,9 +221,9 @@
 						<th>时段</th>
 						<th>频道</th>
 						<th>风格</th>
-						<th>日期区间</th>
-						<th>次数</th>
-						<th id="intervalTimeTH" style="display : none">间隔时间</th>
+						<th id="dateBetweenTH">日期区间</th>
+						<th id="rateTH">循环次数</th>
+						<th id="intervalTimeTH">间隔时间(分钟)</th>
 						<th id="conditionTH">业态</th>
 						<th>备注</th>
 						<shiro:hasPermission name="userplan:cdbooPlan:edit"><th width="10">&nbsp;</th></shiro:hasPermission>
@@ -185,9 +231,11 @@
 					</thead>
 					<tbody id="planList">
 					</tbody>
-					<shiro:hasPermission name="userplan:cdbooPlan:edit"><tfoot>
-					<tr><td colspan="12"><a href="javascript:" onclick="addRow('#planList', planRowIdx, planTpl);planRowIdx = planRowIdx + 1;" class="btn">新增</a></td></tr>
-					</tfoot></shiro:hasPermission>
+					<c:if test="${empty cdbooPlan.id}">
+						<shiro:hasPermission name="userplan:cdbooPlan:edit"><tfoot>
+						<tr><td colspan="12"><a href="javascript:" onclick="addRow('#planList', planRowIdx, planTpl);planRowIdx = planRowIdx + 1;" class="btn">新增</a></td></tr>
+						</tfoot></shiro:hasPermission>
+					</c:if>
 				</table>
 				<script type="text/template" id="planTpl">//<!--
 						<tr id="planList{{idx}}">
@@ -231,12 +279,12 @@
 							</td>
 
                             <td nowrap="nowrap">
-                            	<span id="checkboxSpan_{{idx}}" style="display : none">
+                            	<span id="checkboxSpan_{{idx}}" >
 									<c:forEach items="${fns:getDictList('week')}" var="style">
 										<input type="checkbox" name="planList[{{idx}}].week" value="${style.value}" data-value="{{row.week}}" />${style.label}
 									</c:forEach>
 								</span>
-								<span id="dateSpan_{{idx}}" style="display : none">
+								<span id="dateSpan_{{idx}}">
 									<input id="planList{{idx}}_startDate" name="planList[{{idx}}].startDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
 										value="{{row.startDate}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
 									<input id="planList{{idx}}_endDate" name="planList[{{idx}}].endDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
@@ -245,17 +293,26 @@
 
 							</td>
 
-							<td>
-								<input id="planList{{idx}}_rate" name="planList[{{idx}}].rate" type="text" value="{{row.rate}}" maxlength="255" class="input-small " />
+							<td id="rateTD_{{idx}}">
+								<select id="planList{{idx}}_rate" name="planList[{{idx}}].rate" data-value="{{row.rate}}" class="input-small ">
+                                    <option value="">请选择</option>
+									<c:forEach begin="1" end="20" step="1" var="rate">
+										<option value="${rate}">${rate}</option>
+									</c:forEach>
+                                </select>		
 							</td>
 
-							<td id="intervalTimeTD_{{idx}}" style="display : none">
-								<input id="planList{{idx}}_intervalTime" name="planList[{{idx}}].intervalTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
-										value="{{row.intervalTime}}" onclick="WdatePicker({dateFmt:'HH:mm:ss',isShowClear:false});"/>
+							<td id="intervalTimeTD_{{idx}}">
+								<select id="planList{{idx}}_intervalTime" name="planList[{{idx}}].intervalTime" data-value="{{row.intervalTime}}" class="input-small ">
+                                    <option value="">请选择</option>
+									<c:forEach begin="1" end="60" step="1" var="minute">
+										<option value="${minute}">${minute}</option>
+									</c:forEach>
+                                </select>
 							</td>
 
 							<td id="conditionTD_{{idx}}">
-								<select id="planList{{idx}}_condition" name="planList[{{idx}}].condition" data-value="{{row.condition}}" class="input-small ">
+								<select id="planList{{idx}}_operationType" name="planList[{{idx}}].operationType" data-value="{{row.operationType}}" class="input-small ">
                                     <option value="">请选择</option>
 									<c:forEach items="${planModel.cdbooConditionList}" var="condition">
 										<option value="${condition.id}">${condition.name}</option>
@@ -285,7 +342,6 @@
 				</script>
 			</div>
 		</div>
-
 		<div class="form-actions">
 			<shiro:hasPermission name="userplan:cdbooPlan:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>

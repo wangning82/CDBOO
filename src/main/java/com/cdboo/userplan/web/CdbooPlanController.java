@@ -87,10 +87,16 @@ public class CdbooPlanController extends BaseController {
 	@RequiresPermissions("userplan:cdbooPlan:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(CdbooPlan cdbooPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
-		Page<CdbooPlan> page = cdbooPlanService.findPage(new Page<CdbooPlan>(request, response), cdbooPlan);
+		Page<CdbooPlan> page = cdbooPlanService.findMyPage(new Page<CdbooPlan>(request, response), cdbooPlan);
 
-		List<Timestep> timestepList = timestepService.findList(new Timestep());
-		List<CdbooChannel> channelList = channelService.findList(new CdbooChannel());
+		List<CdbooUserTimestep> timestepList = Lists.newArrayList();
+		List<CdbooChannel> channelList = Lists.newArrayList();
+		
+		User user = cdbooPlan.getUser();
+		if(user!=null && StringUtils.isNotBlank(user.getId())){
+			timestepList = cdbooUserTimestepService.findTimeStepByUser(user);
+			channelList = cdbooUserChannelService.getChannelListByUser(user);
+		}
 
 		model.addAttribute("channelList", channelList);
 		model.addAttribute("timestepList", timestepList);

@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" import="com.cdboo.common.Constants" %>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
@@ -67,11 +67,8 @@
 				<th>用户时段</th>
 				<th>用户频道</th>
 				<th>风格</th>
-				<%--<th>日期</th>--%>
-				<%--<th>开始日期</th>--%>
-				<%--<th>结束日期</th>--%>
-				<th>更新时间</th>
-				<th>次数</th>
+				<th>日期区间</th>
+				<th>循环次数</th>
 				<th>间隔时间</th>
 				<th>业态</th>
 				<th>备注信息</th>
@@ -99,26 +96,33 @@
 				<td>
 					${fns:getDictLabel(cdbooPlan.musicStyle, 'theme_type', '')}
 				</td>
-				<%--<td>--%>
-					<%--${fns:getDictLabel(cdbooPlan.week, 'week', '')}--%>
-				<%--</td>--%>
-				<%--<td>--%>
-					<%--<fmt:formatDate value="${cdbooPlan.startDate}" pattern="yyyy-MM-dd"/>--%>
-				<%--</td>--%>
-				<%--<td>--%>
-					<%--<fmt:formatDate value="${cdbooPlan.endDate}" pattern="yyyy-MM-dd"/>--%>
-				<%--</td>--%>
 				<td>
-					<fmt:formatDate value="${cdbooPlan.updateDate}" pattern="yyyy-MM-dd"/>
+					<!-- 如果是主题或者风格，显示星期中文字符串-->
+					<c:if test="${cdbooPlan.musicStyle eq Constants.THEMETYPE_THEME || cdbooPlan.musicStyle eq Constants.THEMETYPE_STYLE}">
+						${fns:getChineseWeek(cdbooPlan.week) }
+					</c:if>
+					<!-- 如果不是主题或者风格，显示日期段，只有两种情况，就是插播或者节日-->
+					<c:if test="${cdbooPlan.musicStyle ne Constants.THEMETYPE_THEME && cdbooPlan.musicStyle ne Constants.THEMETYPE_STYLE}">
+						<fmt:formatDate value="${cdbooPlan.startDate}" pattern="yyyy-MM-dd"/>到<fmt:formatDate value="${cdbooPlan.endDate}" pattern="yyyy-MM-dd"/>
+					</c:if>
 				</td>
 				<td>
-						${cdbooPlan.rate}
+					<!-- 如果是插播，显示循环次数-->
+					<c:if test="${cdbooPlan.musicStyle eq Constants.THEMETYPE_SPOTS}">
+						${cdbooPlan.rate}次
+					</c:if>
 				</td>
 				<td>
-						${cdbooPlan.intervalTime}
+					<!-- 如果是插播，显示重复时间-->
+					<c:if test="${cdbooPlan.musicStyle eq Constants.THEMETYPE_SPOTS}">
+						${cdbooPlan.intervalTime}分钟
+					</c:if>
 				</td>
 				<td>
-						${cdbooPlan.condition}
+					<!-- 如果不是插播，显示业态，插播没有业态 -->
+					<c:if test="${cdbooPlan.musicStyle ne Constants.THEMETYPE_SPOTS}">
+						${fns:getEntity('office',cdbooPlan.operationType)}
+					</c:if>
 				</td>
 				<td>
 					${cdbooPlan.remarks}

@@ -95,7 +95,7 @@ public class CdbooRestController {
             planModel.setStatus(_cdbooPlan.getStatus());
             planModel.setCycleTimes(_cdbooPlan.getRate());
             planModel.setIntervalTime(_cdbooPlan.getIntervalTime());
-            planModel.setScene(_cdbooPlan.getCondition());
+            planModel.setScene(_cdbooPlan.getOperationType());
 //            planModel.setSceneImg(_cdbooPlan.getConditionImg());
 
             RestTimeStep restTimeStep = new RestTimeStep();

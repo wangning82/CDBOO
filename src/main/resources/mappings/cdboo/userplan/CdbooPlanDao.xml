@@ -21,7 +21,7 @@
 		a.del_flag AS "delFlag",
 		a.status AS "status",
 		a.rate AS "rate",
-		a.condition AS "condition",
+		a.operation_type AS "operationType",
 		a.interval_time AS "intervalTime",
 		u4.name AS "user.name",
 
@@ -29,34 +29,20 @@
 		b.start_time AS "timestep.starttime",
 		b.end_time AS "timestep.endtime",
 
-		d.channel_no AS "channel.channelNo",
-		d.channel_name AS "channel.channelName",
-		d.photo_path AS "channel.photoPath",
-		d.theme_type AS "channel.themeType",
-		d.theme_concrete_type AS "channel.themeConcreteType",
-		d.music_style AS "channel.musicStyle",
-		d.site AS "channel.site",
-		d.speed AS "channel.speed",
-		d.voice AS "channel.voice",
-		d.element AS "channel.element",
-		d.emotion AS "channel.emotion",
-		d.instrument AS "channel.instrument",
-		d.channel_type AS "channel.channelType",
-
 		m.music_no AS "music.musicNo",
 		m.music_owner AS "music.musicOwner",
 		m.music_name AS "music.musicName",
 		m.actor AS "music.actor",
 		m.special AS "music.special",
 		m.volume AS "music.volume",
-		m.path AS "music.path"
+		m.path AS "music.path",
+		c.channel_id AS "channel.id"
 	</sql>
 	
 	<sql id="cdbooPlanJoins">
 		LEFT JOIN sys_user u4 ON u4.id = a.user_id
 		LEFT JOIN cdboo_user_timestep b on b.id = a.user_timestep_id
 		LEFT JOIN cdboo_user_channel c on c.id = a.user_channel_id
-		LEFT JOIN cdboo_child_channel d on d.id = c.channel_id
 		LEFT JOIN cdboo_music m on m.id = c.music_id
 	</sql>
     
@@ -142,7 +128,7 @@
 			del_flag,
 			status,
 			rate,
-			condition,
+			operation_type,
 			interval_time
 		) VALUES (
 			#{id},
@@ -163,7 +149,7 @@
 			#{delFlag},
 			#{status},
 			#{rate},
-			#{condition},
+			#{operationType},
 			#{intervalTime}
 		)
 	</insert>
@@ -184,7 +170,7 @@
 			remarks = #{remarks},
 			status = #{status},
 			rate = #{rate},
-			condition = #{condition},
+			operation_type = #{operationType},
 			interval_time = #{intervalTime}
 		WHERE id = #{id}
 	</update>

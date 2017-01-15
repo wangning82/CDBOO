@@ -5,14 +5,16 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import com.cdboo.common.cache.cacheEntity.AbstractCache;
+import com.cdboo.common.cache.cacheEntity.OfficeCacheEntity;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.modules.sys.utils.DictUtils;
 
 public class FuncUtil {
 	@SuppressWarnings("rawtypes")
 	private static final Map<String, AbstractCache> map = new LinkedHashMap<>();
-	
+	private static final String CACHE_NAME_OFFICE = "office";
 	static {
-//		map.put(CACHE_NAME_COMPANY, new CompanyCacheEntity());
+		map.put(CACHE_NAME_OFFICE, new OfficeCacheEntity());
 	}
 
 	/**
@@ -117,4 +119,23 @@ public class FuncUtil {
 		}
 		return list;
 	}
+	
+	public static String getChineseWeek(String week){
+		if(StringUtils.isNotBlank(week)){
+			String[] weekArray = StringUtils.split(week,",");
+			StringBuilder weekBuffer = new StringBuilder();
+			for (int i = 0; i < weekArray.length; i++) {
+				String tempWeek = weekArray[i];
+				String chineseWeek = DictUtils.getDictLabel(tempWeek, "week", "");
+				weekBuffer.append(chineseWeek);
+				if(i!=weekArray.length-1){
+					weekBuffer.append(",");
+				}
+			}
+			
+			return weekBuffer.toString();
+		}
+		return "";
+	}
+	
 }

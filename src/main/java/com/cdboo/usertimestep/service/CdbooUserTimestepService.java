@@ -8,11 +8,11 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cdboo.usertimestep.dao.CdbooUserTimestepDao;
+import com.cdboo.usertimestep.entity.CdbooUserTimestep;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.modules.sys.entity.User;
-import com.cdboo.usertimestep.entity.CdbooUserTimestep;
-import com.cdboo.usertimestep.dao.CdbooUserTimestepDao;
 
 /**
  * 用户时段信息Service

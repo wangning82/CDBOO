@@ -291,4 +291,12 @@
     <example>${fns:getVolumeList()}</example>  
   </function>
   
+  <function>
+    <description>获得星期字符串，供查询显示使用</description>
+    <name>getChineseWeek</name>
+    <function-class>com.cdboo.common.func.FuncUtil</function-class>
+    <function-signature>java.lang.String getChineseWeek(java.lang.String)</function-signature>
+    <example>${fns:getChineseWeek(week)}</example>  
+  </function>
+  
 </taglib>
