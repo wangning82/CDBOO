@@ -14,6 +14,42 @@
 			$("#searchForm").submit();
         	return false;
         }
+		
+		function userTreeselectCallBack(v, h, f) {
+			var userId = $('#userId').val();
+			$('#userTimestepId').empty();
+			$('#userChannelId').empty();
+			
+			$.ajax({
+				type: "POST",
+				async: false,
+				url: "${ctx}/userplan/cdbooPlan/getUserInfo",
+				data: {
+					userId: userId
+				},
+				dataType: "json",
+				success: function (data) {
+					$('#planList').empty();
+					var timestepData = data.timeStepList;
+					var channelData = data.channelList;
+					if(timestepData && timestepData.length>0){
+						$('#userTimestepId').append('<option value="" selected>请选择</option>');
+				       	var dataArray = eval(timestepData);
+				       	for(var i = 0;i<dataArray.length;i++){
+				       		$('#userTimestepId').append('<option value="'+dataArray[i].id+'">'+dataArray[i].name+'</option>');
+				       	}
+					}
+					
+					if(channelData && channelData.length>0){
+						$('#userChannelId').append('<option value="" selected>请选择</option>');
+				       	var dataArray = eval(channelData);
+				       	for(var i = 0;i<dataArray.length;i++){
+				       		$('#userChannelId').append('<option value="'+dataArray[i].id+'">'+dataArray[i].channelName+'</option>');
+				       	}
+					}
+				}
+			});
+		}
 	</script>
 </head>
 <body>
@@ -36,13 +72,13 @@
 					title="用户" url="/sys/office/treeData?type=3" cssClass="input-small" allowClear="true" notAllowSelectParent="true"/>
 			</li>
 			<li><label>用户时段：</label>
-				<form:select path="userTimestepId" class="input-medium">
+				<form:select id="userTimestepId" path="userTimestepId" class="input-medium">
 					<form:option value="" label=""/>
-					<form:options items="${timestepList}" itemLabel="timestepName" itemValue="id" htmlEscape="false"/>
+					<form:options items="${timestepList}" itemLabel="name" itemValue="id" htmlEscape="false"/>
 				</form:select>
 			</li>
-			<li><label>用户频道id：</label>
-				<form:select path="userChannelId" class="input-medium">
+			<li><label>用户频道：</label>
+				<form:select id="userChannelId" path="userChannelId" class="input-medium">
 					<form:option value="" label=""/>
 					<form:options items="${channelList}" itemLabel="channelName" itemValue="id" htmlEscape="false"/>
 				</form:select>
@@ -50,7 +86,7 @@
 			<li><label>风格：</label>
 				<form:select path="musicStyle" class="input-medium">
 					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('music_style')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+					<form:options items="${fns:getDictList('theme_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</form:select>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>

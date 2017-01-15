@@ -43,6 +43,7 @@
 		LEFT JOIN sys_user u4 ON u4.id = a.user_id
 		LEFT JOIN cdboo_user_timestep b on b.id = a.user_timestep_id
 		LEFT JOIN cdboo_user_channel c on c.id = a.user_channel_id
+		LEFT JOIN cdboo_child_channel d on d.id = c.channel_id
 		LEFT JOIN cdboo_music m on m.id = c.music_id
 	</sql>
     
@@ -74,7 +75,7 @@
 				AND a.user_timestep_id = #{userTimestepId}
 			</if>
 			<if test="userChannelId != null and userChannelId != ''">
-				AND a.user_channel_id = #{userChannelId}
+				AND d.id = #{userChannelId}
 			</if>
 			<if test="musicStyle != null and musicStyle != ''">
 				AND a.music_style = #{musicStyle}
