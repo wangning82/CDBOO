@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.cdboo.channel.entity.CdbooChannel;
+import com.cdboo.childchannel.entity.CdbooGroupChild;
+import com.cdboo.childchannel.service.CdbooGroupChildService;
 import com.cdboo.common.Constants;
 import com.cdboo.music.dao.CdbooMusicDao;
 import com.cdboo.music.entity.CdbooMusic;
@@ -48,6 +51,9 @@ public class CdbooRestController {
 
     @Autowired
     private OfficeService officeService;
+    
+    @Autowired
+    private CdbooGroupChildService cdbooGroupChildService;
     
     /**
      * 用户登录
@@ -119,33 +125,62 @@ public class CdbooRestController {
             planModel.setTimestep(restTimeStep);
 
             RestChannel restChannel = new RestChannel();
-            if (_cdbooPlan.getChannel() != null) {
-                BeanUtils.copyProperties(restChannel, _cdbooPlan.getChannel());
+            CdbooChannel _channel = _cdbooPlan.getChannel();
+            if (_channel != null) {
+            	String channelType = _channel.getChannelType();
+            	//如果是子频道，走下面
+            	if(StringUtils.equals(channelType, Constants.CHANNEL_TYPE_CHILD)){
+					BeanUtils.copyProperties(restChannel, _cdbooPlan.getChannel());
+					restChannel.setMusicList(getMusicList(_cdbooPlan.getUser(), _channel));
+            	}
+            	//如果是组合频道，走下面
+            	if(StringUtils.equals(channelType, Constants.CHANNEL_TYPE_GROUP)){
+            		
+            		/******************** 根据组合频道id查询子频道列表 Start ********************/
+            		CdbooGroupChild cdbooGroupChild = new CdbooGroupChild();
+            		cdbooGroupChild.setGroupChannelId(_channel);
+            		List<CdbooChannel> childChannelList = cdbooGroupChildService.findChildChannelListByConditions(cdbooGroupChild);
+            		/******************** 根据组合频道id查询子频道列表 End ********************/
+            		
+            		/******************** 根据子频道列表组装restChannelList Start ********************/
+            		List<RestChannel> childRestChannelList = Lists.newArrayList();
+            		for (CdbooChannel cdbooChannel : childChannelList) {
+            			RestChannel restChildChannel = new RestChannel();
+            			BeanUtils.copyProperties(restChildChannel, cdbooChannel);
+            			childRestChannelList.add(restChildChannel);
+            			
+            			restChildChannel.setMusicList(getMusicList(_cdbooPlan.getUser(), cdbooChannel));
+					}
+            		restChannel.setChildChannelList(childRestChannelList);
+            		/******************** 根据子频道列表组装restChannelList End ********************/
+            	}
             }
-
-            CdbooUserChannel  cdbooUserChannel = new CdbooUserChannel();
-            cdbooUserChannel.setUser(_cdbooPlan.getUser());
-            cdbooUserChannel.setChannel(_cdbooPlan.getChannel());
-            List<CdbooUserChannel> userChannels = cdbooUserChannelService.findList(cdbooUserChannel);
-
-            List<RestMusic> musicList = Lists.newArrayList();
-            for (CdbooUserChannel channel : userChannels) {
-                RestMusic restMusic = new RestMusic();
-
-                CdbooMusic cdbooMusic = cdbooMusicDao.get(channel.getMusic().getId());
-
-                BeanUtils.copyProperties(restMusic, cdbooMusic);
-
-                musicList.add(restMusic);
-            }
-            restChannel.setMusicList(musicList);
-
             planModel.setChannel(restChannel);
             planModelList.add(planModel);
-
         }
         model.setPlanModelList(planModelList);
         return model;
     }
+    
+	private List<RestMusic> getMusicList(User user, CdbooChannel channel) {
+		CdbooUserChannel cdbooUserChannel = new CdbooUserChannel();
+		cdbooUserChannel.setUser(user);
+		cdbooUserChannel.setChannel(channel);
+		List<CdbooUserChannel> userChannels = cdbooUserChannelService.findList(cdbooUserChannel);
+
+		List<RestMusic> musicList = Lists.newArrayList();
+		for (CdbooUserChannel channelObj : userChannels) {
+			RestMusic restMusic = new RestMusic();
+			CdbooMusic cdbooMusic = cdbooMusicDao.get(channelObj.getMusic().getId());
+			try {
+				BeanUtils.copyProperties(restMusic, cdbooMusic);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			musicList.add(restMusic);
+		}
+
+		return musicList;
+	}
 
 }

@@ -25,7 +25,8 @@ public class CdbooPlan extends DataEntity<CdbooPlan> {
 	private String playName;		// 计划名称
 	private User user;		// 用户id
 	private String userTimestepId;		// 用户时段id
-	private String userChannelId;		// 用户频道id
+	private String userChannelId;		// 用户频道id或者用户组合频道id
+	private String channelType;     //频道类型，用来区分是组合频道还是子频道
 	private String musicStyle;		// 风格
 	private String week;		// 日期
 	private Date startDate;		// 开始日期
@@ -182,6 +183,14 @@ public class CdbooPlan extends DataEntity<CdbooPlan> {
 
 	public void setIntervalTime(String intervalTime) {
 		this.intervalTime = intervalTime;
+	}
+
+	public String getChannelType() {
+		return channelType;
+	}
+
+	public void setChannelType(String channelType) {
+		this.channelType = channelType;
 	}
 
 }

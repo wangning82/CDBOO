@@ -32,6 +32,13 @@ public class Timestep extends DataEntity<Timestep> {
 	public Timestep(String id){
 		super(id);
 	}
+	
+	public Timestep(String timestepName, String starttime, String endtime) {
+		super();
+		this.timestepName = timestepName;
+		this.starttime = starttime;
+		this.endtime = endtime;
+	}
 
 	@Length(min=0, max=100, message="时段编号长度必须介于 0 和 100 之间")
 	public String getTimestepNo() {

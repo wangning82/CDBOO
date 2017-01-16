@@ -102,6 +102,7 @@
 				<th>用户</th>
 				<th>用户时段</th>
 				<th>用户频道</th>
+				<th>频道类型</th>
 				<th>风格</th>
 				<th>日期区间</th>
 				<th>循环次数</th>
@@ -128,6 +129,9 @@
 				</td>
 				<td>
 					${cdbooPlan.channel.channelName}
+				</td>
+				<td>
+					${fns:getDictLabel(cdbooPlan.channel.channelType, "channel_type", "")}
 				</td>
 				<td>
 					${fns:getDictLabel(cdbooPlan.musicStyle, 'theme_type', '')}

@@ -47,7 +47,7 @@
 
 				if ($(this).attr('id') == 'planList' + idx + '_userChannelId') {
 					for (var i = 0; i < channelData.length; i++) {
-						$(this).append("<option value='" + channelData[i].id + "'>" + channelData[i].channelName + "</option>");
+						$(this).append("<option value='" + channelData[i].id +","+ channelData[i].channelType + "'>" + channelData[i].channelName + "</option>");
 					}
 				}
 				
@@ -58,6 +58,7 @@
 				}
 
 				$(this).val($(this).attr("data-value"));
+				$(this).trigger("change");
 			});
 
 			$(list+idx).find("input[type='checkbox'], input[type='radio']").each(function(){
@@ -186,6 +187,23 @@
 				}
 			});
 		}
+		
+		function channelTypeChanged(obj,idx){
+			var childChannelType = '${Constants.CHANNEL_TYPE_CHILD}';//0 子频道
+			var groupChannelType = '${Constants.CHANNEL_TYPE_GROUP}';//1 组合频道
+			
+			var selectedVal = obj.value;
+			if(selectedVal){
+				var valArray = selectedVal.split(",");
+				var channelType = valArray[1];
+				if(channelType == childChannelType){
+					$('#channelTypeTD'+idx).html("子频道");
+				}
+				if(channelType == groupChannelType){
+					$('#channelTypeTD'+idx).html("组合频道");
+				}
+			}
+		}
 	</script>
 </head>
 <body>
@@ -220,6 +238,7 @@
 						<th>名称</th>
 						<th>时段</th>
 						<th>频道</th>
+						<th>频道类型</th>
 						<th>风格</th>
 						<th id="dateBetweenTH">日期区间</th>
 						<th id="rateTH">循环次数</th>
@@ -243,14 +262,12 @@
 								<input id="planList{{idx}}_id" name="planList[{{idx}}].id" type="hidden" value="{{row.id}}"/>
 								<input id="planList{{idx}}_delFlag" name="planList[{{idx}}].delFlag" type="hidden" value="0"/>
 							</td>
-
 							<td>
 								<input id="planList{{idx}}_planNo" name="planList[{{idx}}].planNo" type="text" value="{{row.planNo}}" maxlength="255" class="input-small "/>
 							</td>
 							<td>
 								<input id="planList{{idx}}_playName" name="planList[{{idx}}].playName" type="text" value="{{row.playName}}" maxlength="255" class="input-small "/>
 							</td>
-
 							<td>
 								<select id="planList{{idx}}_userTimestepId" name="planList[{{idx}}].userTimestepId" data-value="{{row.userTimestepId}}" class="input-small ">
 									<option value="">请选择</option>
@@ -259,16 +276,17 @@
 									</c:forEach>
 								</select>
 							</td>
-
                             <td>
-								<select id="planList{{idx}}_userChannelId" name="planList[{{idx}}].userChannelId" data-value="{{row.userChannelId}}" class="input-small ">
+								<select id="planList{{idx}}_userChannelId" name="planList[{{idx}}].userChannelId" data-value="{{row.channel.id}},{{row.channel.channelType}}" class="input-small " onchange="channelTypeChanged(this,'{{idx}}');">
 									<option value="">请选择</option>
 									<c:forEach items="${planModel.cdbooChannelList}" var="cdbooChannel">
-										<option value="${cdbooChannel.id}">${cdbooChannel.channelName}</option>
+										<option value="${cdbooChannel.id},${cdbooChannel.channelType}">${cdbooChannel.channelName}</option>
 									</c:forEach>
 								</select>
 							</td>
-							
+							<td id="channelTypeTD{{idx}}" align="center">
+								
+							</td>
                             <td>
                                 <select id="planList{{idx}}_musicStyle" name="planList[{{idx}}].musicStyle" data-value="{{row.musicStyle}}" class="input-small " onchange="javascript:themeChanged({{idx}});">
                                     <option value="">请选择</option>

@@ -23,41 +23,12 @@
 		a.rate AS "rate",
 		a.operation_type AS "operationType",
 		a.interval_time AS "intervalTime",
-		u4.name AS "user.name",
-		b.name AS "timestep.timestepName",
-		b.start_time AS "timestep.starttime",
-		b.end_time AS "timestep.endtime",
-		d.channel_version AS "channel.channelVersion",
-		d.channel_no AS "channel.channelNo",
-		d.channel_name AS "channel.channelName",
-		d.photo_path AS "channel.photoPath",
-		d.theme_type AS "channel.themeType",
-		d.theme_concrete_type AS "channel.themeConcreteType",
-		d.music_style AS "channel.musicStyle",
-		d.site AS "channel.site",
-		d.speed AS "channel.speed",
-		d.voice AS "channel.voice",
-		d.element AS "channel.element",
-		d.emotion AS "channel.emotion",
-		d.instrument AS "channel.instrument",
-		d.channel_type AS "channel.channelType",
-		d.remarks AS "channel.remarks",
-		m.music_no AS "music.musicNo",
-		m.music_owner AS "music.musicOwner",
-		m.music_name AS "music.musicName",
-		m.actor AS "music.actor",
-		m.special AS "music.special",
-		m.volume AS "music.volume",
-		m.path AS "music.path",
-		c.channel_id AS "channel.id"
+		a.channel_type AS "channelType",
+		u4.name AS "user.name"
 	</sql>
 	
 	<sql id="cdbooPlanJoins">
 		LEFT JOIN sys_user u4 ON u4.id = a.user_id
-		LEFT JOIN cdboo_user_timestep b on b.id = a.user_timestep_id
-		LEFT JOIN cdboo_user_channel c on c.id = a.user_channel_id
-		LEFT JOIN cdboo_child_channel d on d.id = c.channel_id
-		LEFT JOIN cdboo_music m on m.id = c.music_id
 	</sql>
     
 	<select id="get" resultType="CdbooPlan">
@@ -87,11 +58,11 @@
 			<if test="userTimestepId != null and userTimestepId != ''">
 				AND a.user_timestep_id = #{userTimestepId}
 			</if>
-			<if test="userChannelId != null and userChannelId != ''">
-				AND d.id = #{userChannelId}
-			</if>
 			<if test="musicStyle != null and musicStyle != ''">
 				AND a.music_style = #{musicStyle}
+			</if>
+			<if test="channelType != null and channelType != ''">
+				AND a.channel_type = #{channelType}
 			</if>
 		</where>
 		<choose>
@@ -143,7 +114,8 @@
 			status,
 			rate,
 			operation_type,
-			interval_time
+			interval_time,
+			channel_type
 		) VALUES (
 			#{id},
 			#{planNo},
@@ -164,7 +136,8 @@
 			#{status},
 			#{rate},
 			#{operationType},
-			#{intervalTime}
+			#{intervalTime},
+			#{channelType}
 		)
 	</insert>
 	
@@ -185,7 +158,8 @@
 			status = #{status},
 			rate = #{rate},
 			operation_type = #{operationType},
-			interval_time = #{intervalTime}
+			interval_time = #{intervalTime},
+			channel_type = #{channelType}
 		WHERE id = #{id}
 	</update>
 	

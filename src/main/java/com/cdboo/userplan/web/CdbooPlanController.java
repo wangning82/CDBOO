@@ -22,9 +22,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.cdboo.channel.entity.CdbooChannel;
 import com.cdboo.channel.service.CdbooChannelService;
+import com.cdboo.common.Constants;
 import com.cdboo.timestep.entity.Timestep;
 import com.cdboo.timestep.service.TimestepService;
+import com.cdboo.userchannel.entity.CdbooUserChannel;
 import com.cdboo.userchannel.service.CdbooUserChannelService;
+import com.cdboo.usergroup.entity.CdbooUserGroup;
+import com.cdboo.usergroup.service.CdbooUserGroupService;
 import com.cdboo.userplan.entity.CdbooPlan;
 import com.cdboo.userplan.model.PlanModel;
 import com.cdboo.userplan.service.CdbooPlanService;
@@ -39,7 +43,6 @@ import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.modules.sys.entity.Office;
 import com.thinkgem.jeesite.modules.sys.entity.User;
 import com.thinkgem.jeesite.modules.sys.service.OfficeService;
-import com.thinkgem.jeesite.modules.sys.service.SystemService;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 
 /**
@@ -61,9 +64,6 @@ public class CdbooPlanController extends BaseController {
 	private CdbooChannelService channelService;
 
 	@Autowired
-	private SystemService systemService;
-
-	@Autowired
 	private CdbooUserTimestepService cdbooUserTimestepService;
 
 	@Autowired
@@ -71,6 +71,9 @@ public class CdbooPlanController extends BaseController {
 
 	@Autowired
 	private OfficeService officeService;
+	
+	@Autowired
+	private CdbooUserGroupService userGroupService;
 	
 	@ModelAttribute
 	public CdbooPlan get(@RequestParam(required=false) String id) {
@@ -134,7 +137,7 @@ public class CdbooPlanController extends BaseController {
 			
 			List<CdbooUserTimestep> userTimeStepList = cdbooUserTimestepService.findTimeStepByUser(user);
 			
-			List<CdbooChannel> channelList = cdbooUserChannelService.getChannelListByUser(user);
+			List<CdbooChannel> channelList = getChannelByUser(user);
 			
 			User userObj = UserUtils.get(user.getId());
 			Office office = userObj.getOffice();
@@ -143,6 +146,11 @@ public class CdbooPlanController extends BaseController {
 			planModel.setCdbooUserTimestepList(userTimeStepList);
 			planModel.setCdbooChannelList(channelList);
 			planModel.setCdbooConditionList(officeList);
+			
+			
+			String userChannelId = cdbooPlan.getUserChannelId();
+			String channelType = cdbooPlan.getChannelType();
+			cdbooPlan.setChannel(cdbooPlanService.getChannelByUserChannelIdAndChannelType(userChannelId,channelType));
 			
 			List<CdbooPlan> list = Lists.newArrayList(cdbooPlan);
 			
@@ -220,7 +228,7 @@ public class CdbooPlanController extends BaseController {
 		
 		List<CdbooUserTimestep> userTimeStepList = cdbooUserTimestepService.findTimeStepByUser(user);
 		
-		List<CdbooChannel> channelList = cdbooUserChannelService.getChannelListByUser(user);
+		List<CdbooChannel> channelList = getChannelByUser(user);
 		
 		User userObj = UserUtils.get(userId);
 		Office office = userObj.getOffice();
@@ -232,6 +240,20 @@ public class CdbooPlanController extends BaseController {
 		userInfoMap.put("officeList", CollectionUtils.isEmpty(officeList)?Lists.newArrayList():officeList);
 		
 		return userInfoMap;
+	}
+	
+	private List<CdbooChannel> getChannelByUser(User user){
+		List<CdbooChannel> channelList = Lists.newArrayList();
+		
+		List<CdbooChannel> childChannelList = cdbooUserChannelService.getChannelListByUser(user);
+		if(CollectionUtils.isNotEmpty(childChannelList))
+			channelList.addAll(childChannelList);
+		
+		List<CdbooChannel> groupChannelList = userGroupService.getGroupChannelListByUser(user);
+		if(CollectionUtils.isNotEmpty(groupChannelList))
+			channelList.addAll(groupChannelList);
+		
+		return channelList;
 	}
 
 }

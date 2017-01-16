@@ -37,6 +37,13 @@ public class CdbooUserGroupService extends CrudService<CdbooUserGroupDao, CdbooU
 	@Autowired
 	private CdbooUserChannelService cdbooUserChannelService;
 
+	public List<CdbooChannel> getGroupChannelListByUser(User user) {
+		CdbooUserGroup cdbooUserGroup = new CdbooUserGroup();
+		cdbooUserGroup.setUser(user);
+		List<CdbooUserGroup> list = this.findList(cdbooUserGroup);
+		return convertUserGroupToChannel(list);
+	}
+	
 	public List<CdbooChannel> convertUserGroupToChannel(List<CdbooUserGroup> cdbooUserGroups) {
 		List<CdbooChannel> cdbooChannels = Lists.newArrayList();
 		if (CollectionUtils.isNotEmpty(cdbooUserGroups)) {
