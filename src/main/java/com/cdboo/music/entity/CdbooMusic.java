@@ -27,6 +27,7 @@ public class CdbooMusic extends DataEntity<CdbooMusic> {
 	private String volume;		// 音量
 	private String status;		// 状态
 	private String path;		// 音乐路径
+	private String duration;    // 音乐时长
 	private String ids;
 	private List<String> idArray;
 	private List<String> inIdArray;
@@ -191,6 +192,14 @@ public class CdbooMusic extends DataEntity<CdbooMusic> {
 
 	public void setEndCreateDate(Date endCreateDate) {
 		this.endCreateDate = endCreateDate;
+	}
+
+	public String getDuration() {
+		return duration;
+	}
+
+	public void setDuration(String duration) {
+		this.duration = duration;
 	}
 	
 }

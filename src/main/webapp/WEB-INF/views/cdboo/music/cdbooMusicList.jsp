@@ -96,6 +96,7 @@
 				<th>专辑</th>
 				<th>音乐类型</th>
 				<th>音量</th>
+				<th>音乐时长</th>
 				<th>创建时间</th>
 				<shiro:hasPermission name="music:cdbooMusic:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
@@ -121,6 +122,9 @@
 				</td>
 				<td>
 					${cdbooMusic.volume}%
+				</td>
+				<td>
+					${cdbooMusic.duration}
 				</td>
 				<td>
 					<fmt:formatDate value="${cdbooMusic.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>

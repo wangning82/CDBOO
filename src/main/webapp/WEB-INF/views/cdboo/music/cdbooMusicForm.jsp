@@ -23,6 +23,27 @@
 				}
 			});
 		});
+		
+		function pathSelectedCallBack(selectedVal){
+			if(selectedVal){
+				$.ajax({
+			        type: "post",
+			        async: false,
+			        url: "${ctx}/music/cdbooMusic/getMusicInfo",
+			        data: {
+			        	path: selectedVal
+			        },
+			        dataType: "json",
+			        success: function (data) {
+						var dataObj = eval(data);
+						$('#musicName').val(dataObj.songName);//歌曲名称
+						$('#actor').val(dataObj.artist);//歌手
+						$('#special').val(dataObj.album);//专辑
+						$('#duration').val(dataObj.duration);//专辑时长
+			        }
+			   });
+			}
+		}
 	</script>
 </head>
 <body>
@@ -42,19 +63,25 @@
 		<div class="control-group">
 			<label class="control-label">音乐名称：</label>
 			<div class="controls">
-				<form:input path="musicName" htmlEscape="false" maxlength="1000" class="input-xlarge "/>
+				<form:input id="musicName" path="musicName" htmlEscape="false" maxlength="1000" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">艺人：</label>
 			<div class="controls">
-				<form:input path="actor" htmlEscape="false" maxlength="1000" class="input-xlarge "/>
+				<form:input id="actor" path="actor" htmlEscape="false" maxlength="1000" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">专辑：</label>
 			<div class="controls">
-				<form:input path="special" htmlEscape="false" maxlength="1000" class="input-xlarge "/>
+				<form:input id="special" path="special" htmlEscape="false" maxlength="1000" class="input-xlarge "/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">时长：</label>
+			<div class="controls">
+				<form:input readonly="true" id="duration" path="duration" htmlEscape="false"  class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">

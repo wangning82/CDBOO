@@ -5,11 +5,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
+import org.jaudiotagger.audio.mp3.MP3AudioHeader;
 import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
@@ -59,9 +59,63 @@ public class Mp3ResolveUtils {
 			mp3InfoMap.put("year", year);
 			mp3InfoMap.put("type", type);
 			mp3InfoMap.put("comm", comm);
+			
+			String musicLength = getMusicLength(f);
+			mp3InfoMap.put("duration", musicLength);
 		}
 		
 		return mp3InfoMap;
+	}
+	
+	public static String getMusicLength(MP3File f) {
+		MP3AudioHeader audioHeader = (MP3AudioHeader) f.getAudioHeader();
+		String trackLength = audioHeader.getTrackLengthAsString();
+		String[] time = StringUtils.split(trackLength, ":");
+		String str = "";
+		if (time.length == 1) {
+			int s = Integer.parseInt(time[0]);
+			if (s < 10) {
+				str = "00:00:0" + s;
+			} else {
+				str = "00:00:" + s;
+			}
+		} else if (time.length == 2) {
+			int m = Integer.parseInt(time[0]);
+			if (m < 10) {
+				str = "00:0" + m;
+			} else {
+				str = "00:" + m;
+			}
+
+			int s = Integer.parseInt(time[1]);
+			if (s < 10) {
+				str += ":0" + s;
+			} else {
+				str += ":" + s;
+			}
+		} else if (time.length == 3) {
+			int h = Integer.parseInt(time[0]);
+			if (h < 10) {
+				str = "0" + h;
+			} else {
+				str = "" + h;
+			}
+
+			int m = Integer.parseInt(time[1]);
+			if (m < 10) {
+				str += ":0" + m;
+			} else {
+				str += ":" + m;
+			}
+
+			int s = Integer.parseInt(time[2]);
+			if (s < 10) {
+				str += ":0" + s;
+			} else {
+				str += ":" + s;
+			}
+		}
+		return str;
 	}
 	
 	public static void main(String[] args) throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException {

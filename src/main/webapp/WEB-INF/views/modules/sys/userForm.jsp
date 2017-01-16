@@ -132,6 +132,45 @@
 				<form:input path="mobile" htmlEscape="false" maxlength="100"/>
 			</div>
 		</div>
+		
+		
+		<div class="control-group">
+			<label class="control-label">店长姓名:</label>
+			<div class="controls">
+				<form:input path="shopOwnerName" htmlEscape="false" maxlength="100"/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">营业时间:</label>
+			<div class="controls">
+				<input name="businessHoursBegin" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
+					value="${user.businessHoursBegin }"
+					onclick="WdatePicker({dateFmt:'HH:mm:ss',isShowClear:false});"/> - 
+				
+				<input name="businessHoursEnd" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
+					value="${user.businessHoursEnd}"
+					onclick="WdatePicker({dateFmt:'HH:mm:ss',isShowClear:false});"/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">门店地址:</label>
+			<div class="controls">
+				<form:input path="address" htmlEscape="false" maxlength="100"/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">服务时间:</label>
+			<div class="controls">
+				<input name="serviceTimeBegin" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
+					value="<fmt:formatDate value="${user.serviceTimeBegin}" pattern="yyyy-MM-dd"/>"
+					onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/> - 
+				
+				<input name="serviceTimeEnd" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
+					value="<fmt:formatDate value="${user.serviceTimeEnd}" pattern="yyyy-MM-dd"/>"
+					onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
+			</div>
+		</div>
+		
 		<div class="control-group">
 			<label class="control-label">是否允许登录:</label>
 			<div class="controls">

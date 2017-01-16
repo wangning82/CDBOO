@@ -17,7 +17,8 @@
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
 		a.status AS "status",
-		a.path AS "path"
+		a.path AS "path",
+		a.duration AS "duration"
 	</sql>
 	
 	<sql id="cdbooMusicJoins">
@@ -186,7 +187,8 @@
 			remarks,
 			del_flag,
 			status,
-			path
+			path,
+			duration
 		) VALUES (
 			#{id},
 			#{musicNo},
@@ -202,7 +204,8 @@
 			#{remarks},
 			#{delFlag},
 			#{status},
-			#{path}
+			#{path},
+			#{duration}
 		)
 	</insert>
 	
@@ -218,7 +221,8 @@
 			update_date = #{updateDate},
 			remarks = #{remarks},
 			status = #{status},
-			path = #{path}
+			path = #{path},
+			duration = #{duration}
 		WHERE id = #{id}
 	</update>
 	

@@ -31,7 +31,7 @@
 jQuery.fn.jmp3 = function(passedOptions){
 	// hard-wired options
 	//var playerpath = "/media/flash/smp/";					// SET THIS FIRST: path to singlemp3player.swf
-	var playerpath = "/cdboo/static/jquery-mp3/";		
+	var playerpath = "/CDBOO/static/jquery-mp3/";		
 	// passable options
 	var options = {
 		"filepath": "",										// path to MP3 file (default: current directory)

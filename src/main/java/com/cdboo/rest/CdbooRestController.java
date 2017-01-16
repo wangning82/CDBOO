@@ -3,7 +3,6 @@ package com.cdboo.rest;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.cdboo.channel.entity.CdbooChannel;
 import com.cdboo.childchannel.entity.CdbooGroupChild;
 import com.cdboo.childchannel.service.CdbooGroupChildService;
@@ -95,7 +93,13 @@ public class CdbooRestController {
         RestModel model = new RestModel();
         model.setUserName(userObj.getName());
         model.setPhoneNumber(userObj.getPhone());
-        model.setAddress(userObj.getRemarks());
+        model.setAddress(userObj.getAddress());
+        model.setBusinessHoursBegin(userObj.getBusinessHoursBegin());
+        model.setBusinessHoursEnd(userObj.getBusinessHoursEnd());
+        model.setServiceTimeBegin(userObj.getServiceTimeBegin());
+        model.setServiceTimeEnd(userObj.getServiceTimeEnd());
+        model.setShopOwnerName(userObj.getShopOwnerName());
+        
         model.setPhoto(userObj.getPhoto());
         
         List<PlanModel> planModelList = new ArrayList<>();

@@ -5,6 +5,9 @@ package com.cdboo.music.service;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -12,6 +15,10 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
+import org.jaudiotagger.tag.TagException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -56,8 +63,46 @@ public class CdbooMusicService extends CrudService<CdbooMusicDao, CdbooMusic> {
 		return page;
 	}
 	
+	/**
+	 * 获得音乐绝对路径
+	 * @param path
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	public String getMusicPath(String path) throws UnsupportedEncodingException {
+		String baseDir = Global.getUserfilesBaseDir();
+		baseDir = baseDir.substring(0, baseDir.lastIndexOf("\\"));
+		baseDir = baseDir.substring(0, baseDir.lastIndexOf("\\"));
+		try {
+			String decodePath = URLDecoder.decode(path, "utf-8");
+			return baseDir + "/" + decodePath;
+		} catch (UnsupportedEncodingException e1) {
+			throw e1;
+		}
+	}
+	
 	@Transactional(readOnly = false)
-	public void save(CdbooMusic cdbooMusic) {
+	public void save(CdbooMusic cdbooMusic){
+		super.save(cdbooMusic);
+	}
+	
+	/**
+	 * 保存音乐
+	 * @param cdbooMusic
+	 * @throws Exception
+	 */
+	@Transactional(readOnly = false)
+	public void saveMusic(CdbooMusic cdbooMusic) throws Exception {
+		try {
+			String path = getMusicPath(cdbooMusic.getPath());
+			Map<String, Object> result = Mp3ResolveUtils.resolveMp3(path);
+			cdbooMusic.setMusicName(Objects.toString(result.get("songName")));//歌曲名称
+			cdbooMusic.setActor(Objects.toString(result.get("artist")));//歌手
+			cdbooMusic.setSpecial(Objects.toString(result.get("album")));//专辑
+			cdbooMusic.setDuration(Objects.toString(result.get("duration")));
+		} catch (Exception e) {
+			throw e;
+		}
 		super.save(cdbooMusic);
 	}
 	
@@ -135,11 +180,12 @@ public class CdbooMusicService extends CrudService<CdbooMusicDao, CdbooMusic> {
 							/******************
 							 * 创建音乐文件记录，保存到数据库中 Start
 							 *******************/
-							Map<String, Object> result = Mp3ResolveUtils.resolveMp3(orgMp3Path);
+							Map<String, Object> result = Mp3ResolveUtils.resolveMp3("/cdboo/userfiles/1/media/music/2017/1/Jason Mraz - I'm Yours.mp3");
 							CdbooMusic cdbooMusic = new CdbooMusic();
 							cdbooMusic.setMusicName(Objects.toString(result.get("songName")));//歌曲名称
 							cdbooMusic.setActor(Objects.toString(result.get("artist")));//歌手
 							cdbooMusic.setSpecial(Objects.toString(result.get("album")));//专辑
+							cdbooMusic.setDuration(Objects.toString(result.get("duration")));
 							cdbooMusic.setCreateBy(UserUtils.getUser());
 							cdbooMusic.setCreateDate(new Date());
 							cdbooMusic.setDelFlag(CdbooMusic.DEL_FLAG_NORMAL);
@@ -150,6 +196,9 @@ public class CdbooMusicService extends CrudService<CdbooMusicDao, CdbooMusic> {
 							/******************
 							 * 创建音乐文件记录，保存到数据库中 End
 							 *******************/
+						}
+						else{
+							throw new Exception("拷贝歌曲失败");
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -177,5 +226,13 @@ public class CdbooMusicService extends CrudService<CdbooMusicDao, CdbooMusic> {
 				tempFile.delete();
 			}
 		}
+	}
+	
+	public static void main(String[] args) throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException {
+		String path = "/cdboo/userfiles/1/media/music/2017/01/%E4%BD%99%E6%B3%A2%E8%8D%A1%E6%BC%BE.mp3";
+		path = URLDecoder.decode(path, "utf-8");
+//		Map<String, Object> resolveMp3 = Mp3ResolveUtils.resolveMp3("D:\\workspace-cdboo\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\CDBOO\\userfiles\\1\\media\\music\\2017\\01\\余波荡漾.mp3");
+//		System.out.println(resolveMp3.toString());
+		System.out.println(path);
 	}
 }

@@ -106,7 +106,14 @@
     	ou.id AS "office.primaryPerson.id",
     	ou.name AS "office.primaryPerson.name",
     	ou2.id AS "office.deputyPerson.id",
-    	ou2.name AS "office.deputyPerson.name"<!-- ,
+    	ou2.name AS "office.deputyPerson.name",
+    	a.shop_owner_name AS "shopOwnerName",
+    	a.business__hours_begin AS "businessHoursBegin",
+    	a.business__hours_end AS "businessHoursEnd",
+    	a.address AS "address",
+    	a.service_time_begin AS "serviceTimeBegin",
+    	a.service_time_end AS "serviceTimeEnd"
+    	<!-- ,
         r.id AS "roleList.id",
         r.office_id AS "roleList.office.id",
         r.name AS "roleList.name",
@@ -252,7 +259,13 @@
 			remarks, 
 			login_flag, 
 			photo, 
-			del_flag
+			del_flag,
+			shop_owner_name,
+    		business__hours_begin,
+    		business__hours_end,
+    		address,
+    		service_time_begin,
+    		service_time_end
 		) VALUES (
 			#{id}, 
 			#{company.id}, 
@@ -273,7 +286,13 @@
 			#{remarks}, 
 			#{loginFlag}, 
 			#{photo}, 
-			#{delFlag}
+			#{delFlag},
+			#{shopOwnerName},
+			#{businessHoursBegin},
+			#{businessHoursEnd},
+			#{address},
+			#{serviceTimeBegin},
+			#{serviceTimeEnd}
 		)
 	</insert>
 	
@@ -294,7 +313,13 @@
 			update_date = #{updateDate}, 
 			remarks = #{remarks},
 			login_flag = #{loginFlag},
-			photo = #{photo}
+			photo = #{photo},
+			shop_owner_name = #{shopOwnerName},
+			business__hours_begin = #{businessHoursBegin},
+			business__hours_end = #{businessHoursEnd},
+			address = #{address},
+			service_time_begin = #{serviceTimeBegin},
+			service_time_end = #{serviceTimeEnd}
 		WHERE id = #{id}
 	</update>
 	

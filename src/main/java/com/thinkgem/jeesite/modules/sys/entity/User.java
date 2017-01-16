@@ -60,6 +60,18 @@ public class User extends DataEntity<User> {
 	
 	private List<Role> roleList = Lists.newArrayList(); // 拥有角色列表
 
+	private String shopOwnerName;//店长姓名
+	
+	private String businessHoursBegin;//营业时间开始
+	
+	private String businessHoursEnd;//营业时间结束
+	
+	private String address;//门店地址
+	
+	private Date serviceTimeBegin;//用户服务时间开始时间，就是用户买了多久的会员就能用多久
+	
+    private Date serviceTimeEnd;//用户服务时间结束时间
+    
 	public User() {
 		super();
 		this.loginFlag = Global.YES;
@@ -343,4 +355,53 @@ public class User extends DataEntity<User> {
 	public void setBusiness(Business business) {
 		this.business = business;
 	}
+
+	public String getShopOwnerName() {
+		return shopOwnerName;
+	}
+
+	public void setShopOwnerName(String shopOwnerName) {
+		this.shopOwnerName = shopOwnerName;
+	}
+
+	public String getBusinessHoursBegin() {
+		return businessHoursBegin;
+	}
+
+	public void setBusinessHoursBegin(String businessHoursBegin) {
+		this.businessHoursBegin = businessHoursBegin;
+	}
+
+	public String getBusinessHoursEnd() {
+		return businessHoursEnd;
+	}
+
+	public void setBusinessHoursEnd(String businessHoursEnd) {
+		this.businessHoursEnd = businessHoursEnd;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public Date getServiceTimeBegin() {
+		return serviceTimeBegin;
+	}
+
+	public void setServiceTimeBegin(Date serviceTimeBegin) {
+		this.serviceTimeBegin = serviceTimeBegin;
+	}
+
+	public Date getServiceTimeEnd() {
+		return serviceTimeEnd;
+	}
+
+	public void setServiceTimeEnd(Date serviceTimeEnd) {
+		this.serviceTimeEnd = serviceTimeEnd;
+	}
+	
 }
