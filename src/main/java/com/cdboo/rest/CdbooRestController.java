@@ -139,11 +139,13 @@ public class CdbooRestController {
             	String channelType = _channel.getChannelType();
             	//如果是子频道，走下面
             	if(StringUtils.equals(channelType, Constants.CHANNEL_TYPE_CHILD)){
-					BeanUtils.copyProperties(restChannel, _cdbooPlan.getChannel());
+					BeanUtils.copyProperties(restChannel, _channel);
 					restChannel.setMusicList(getMusicList(_cdbooPlan.getUser(), _channel));
             	}
             	//如果是组合频道，走下面
             	if(StringUtils.equals(channelType, Constants.CHANNEL_TYPE_GROUP)){
+            		
+            		BeanUtils.copyProperties(restChannel, _channel);
             		
             		/******************** 根据组合频道id查询子频道列表 Start ********************/
             		CdbooGroupChild cdbooGroupChild = new CdbooGroupChild();
