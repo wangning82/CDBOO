@@ -73,8 +73,8 @@ public class Constants {
 	public static final String USER_PASSWORD_NOT_CORRECT = "1";//密码不正确
 	public static final String USER_PASSWORD_CORRECT = "2";//正确
 	
-	public static final String IMG_WIDTH = "100";
-	public static final String IMG_HEIGHT = "100";
+	public static final String IMG_WIDTH = "100px";
+	public static final String IMG_HEIGHT = "100px";
 	
 	//机构类型-业态
 	public static final String OFFICE_TYPE_CONDITION = "5";
