@@ -86,7 +86,7 @@ public class CdbooRestController {
         user.setName(userName);
         CdbooPlan cdbooPlan = new CdbooPlan();
         cdbooPlan.setUser(user);
-        List<CdbooPlan> list = planService.findList(cdbooPlan);
+        List<CdbooPlan> list = planService.findMyList(cdbooPlan);
 
         User userObj = systemService.getUserByLoginName(userName);
         
@@ -117,8 +117,13 @@ public class CdbooRestController {
             planModel.setScene(_cdbooPlan.getOperationType());
             String operationType = _cdbooPlan.getOperationType();
             Office office = officeService.get(operationType);
-            String photo = office.getPhoto();
-            planModel.setSceneImg(photo);
+            if(office!=null){
+            	String photo = office.getPhoto();
+                planModel.setSceneImg(photo);
+            }
+            else{
+            	System.out.println("empty:"+operationType);
+            }
             
             RestTimeStep restTimeStep = new RestTimeStep();
             if (_cdbooPlan.getTimestep() != null) {

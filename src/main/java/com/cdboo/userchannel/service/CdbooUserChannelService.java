@@ -166,11 +166,16 @@ public class CdbooUserChannelService extends CrudService<CdbooUserChannelDao, Cd
 	 * @author yubin
 	 * @return 频道集合
 	 */
-	public List<CdbooChannel> getChannelListByUser(User user) {
+	public List<CdbooChannel> getChannelListByUser(User user,String channelType) {
 		List<CdbooChannel> cdbooChannels = Lists.newArrayList();
 
 		// 组装查询对象
 		CdbooUserChannel cdbooUserChannel = new CdbooUserChannel();
+		if(StringUtils.isNotBlank(channelType)){
+			CdbooChannel cdbooChannel2 = new CdbooChannel();
+			cdbooChannel2.setChannelType(channelType);
+			cdbooUserChannel.setChannel(cdbooChannel2);
+		}
 		cdbooUserChannel.setUser(user);
 
 		/******************* 查询用户对应的频道信息返回 Start ********************/
@@ -186,7 +191,7 @@ public class CdbooUserChannelService extends CrudService<CdbooUserChannelDao, Cd
 		/******************* 查询用户对应的频道信息返回 End ********************/
 		return cdbooChannels;
 	}
-
+	
 	/**
 	 * 根据用户和频道查询用户在频道上绑定的音乐信息
 	 * 

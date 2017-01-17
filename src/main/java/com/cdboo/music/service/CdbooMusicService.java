@@ -180,7 +180,7 @@ public class CdbooMusicService extends CrudService<CdbooMusicDao, CdbooMusic> {
 							/******************
 							 * 创建音乐文件记录，保存到数据库中 Start
 							 *******************/
-							Map<String, Object> result = Mp3ResolveUtils.resolveMp3("/cdboo/userfiles/1/media/music/2017/1/Jason Mraz - I'm Yours.mp3");
+							Map<String, Object> result = Mp3ResolveUtils.resolveMp3(destMp3Path);
 							CdbooMusic cdbooMusic = new CdbooMusic();
 							cdbooMusic.setMusicName(Objects.toString(result.get("songName")));//歌曲名称
 							cdbooMusic.setActor(Objects.toString(result.get("artist")));//歌手

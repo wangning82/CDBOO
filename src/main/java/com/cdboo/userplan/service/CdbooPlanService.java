@@ -57,6 +57,12 @@ public class CdbooPlanService extends CrudService<CdbooPlanDao, CdbooPlan> {
 	public List<CdbooPlan> findList(CdbooPlan cdbooPlan) {
 		return super.findList(cdbooPlan);
 	}
+	
+	public List<CdbooPlan> findMyList(CdbooPlan cdbooPlan) {
+		List<CdbooPlan> list = super.findList(cdbooPlan);
+		helpQueryMethod(list);
+		return list;
+	}
 
 	public Page<CdbooPlan> findPage(Page<CdbooPlan> page, CdbooPlan cdbooPlan) {
 		return super.findPage(page, cdbooPlan);
@@ -65,6 +71,11 @@ public class CdbooPlanService extends CrudService<CdbooPlanDao, CdbooPlan> {
 	public Page<CdbooPlan> findMyPage(Page<CdbooPlan> page, CdbooPlan cdbooPlan) {
 		page = findPage(page, cdbooPlan);
 		List<CdbooPlan> list = page.getList();
+		helpQueryMethod(list);
+		return page;
+	}
+	
+	public void helpQueryMethod(List<CdbooPlan> list) {
 		if (CollectionUtils.isNotEmpty(list)) {
 			for (CdbooPlan tempObj : list) {
 				String userChannelId = tempObj.getUserChannelId();
@@ -102,9 +113,8 @@ public class CdbooPlanService extends CrudService<CdbooPlanDao, CdbooPlan> {
 				}
 			}
 		}
-		return page;
 	}
-
+	
 	@Transactional(readOnly = false)
 	public void save(PlanModel planModel) {
 

@@ -69,7 +69,7 @@
 						<c:if test="${user.id == null}">
 							<sys:treeselect id="businessId" name="business.id" value="${business.id}" labelName="business.name"
 											labelValue="${business.name}"
-											title="行业" url="/business/business/treeData" cssClass="required" />
+											title="行业" url="/business/business/treeData" />
 						</c:if>
 
 						<c:if test="${user.id != ''}">

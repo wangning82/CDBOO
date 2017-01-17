@@ -64,8 +64,13 @@
 			<if test="user != null and user.id != null and user.id != ''">
 				AND a.user_id = #{user.id}
 			</if>
-			<if test="channel != null and channel.id != null and channel.id != ''">
-				AND a.channel_id = #{channel.id}
+			<if test="channel != null">
+				<if test="channel.id != null and channel.id != ''">
+					AND a.channel_id = #{channel.id}
+				</if>
+				<if test="channel.channelType != null and channel.channelType != ''">
+					AND exists(select 1 from cdboo_child_channel b where a.channel_id = b.id and b.channel_type = #{channel.channelType})
+				</if>
 			</if>
 			<if test="music != null and music.id != null and music.id != ''">
 				AND a.music_id = #{music.id}
@@ -81,6 +86,14 @@
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			<if test="user != null and user.id != null and user.id != ''">
 				AND a.user_id = #{user.id}
+			</if>
+			<if test="channel != null">
+				<if test="channel.id != null and channel.id != ''">
+					AND a.channel_id = #{channel.id}
+				</if>
+				<if test="channel.channelType != null and channel.channelType != ''">
+					AND exists(select 1 from cdboo_child_channel b where a.channel_id = b.id and b.channel_type = #{channel.channelType})
+				</if>
 			</if>
 		</where>
 		group by a.channel_id

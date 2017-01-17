@@ -22,12 +22,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.cdboo.channel.entity.CdbooChannel;
 import com.cdboo.channel.service.CdbooChannelService;
-import com.cdboo.common.Constants;
 import com.cdboo.timestep.entity.Timestep;
 import com.cdboo.timestep.service.TimestepService;
-import com.cdboo.userchannel.entity.CdbooUserChannel;
 import com.cdboo.userchannel.service.CdbooUserChannelService;
-import com.cdboo.usergroup.entity.CdbooUserGroup;
 import com.cdboo.usergroup.service.CdbooUserGroupService;
 import com.cdboo.userplan.entity.CdbooPlan;
 import com.cdboo.userplan.model.PlanModel;
@@ -98,7 +95,7 @@ public class CdbooPlanController extends BaseController {
 		User user = cdbooPlan.getUser();
 		if(user!=null && StringUtils.isNotBlank(user.getId())){
 			timestepList = cdbooUserTimestepService.findTimeStepByUser(user);
-			channelList = cdbooUserChannelService.getChannelListByUser(user);
+			channelList = cdbooUserChannelService.getChannelListByUser(user,null);
 		}
 
 		model.addAttribute("channelList", channelList);
@@ -245,7 +242,7 @@ public class CdbooPlanController extends BaseController {
 	private List<CdbooChannel> getChannelByUser(User user){
 		List<CdbooChannel> channelList = Lists.newArrayList();
 		
-		List<CdbooChannel> childChannelList = cdbooUserChannelService.getChannelListByUser(user);
+		List<CdbooChannel> childChannelList = cdbooUserChannelService.getChannelListByUser(user,null);
 		if(CollectionUtils.isNotEmpty(childChannelList))
 			channelList.addAll(childChannelList);
 		

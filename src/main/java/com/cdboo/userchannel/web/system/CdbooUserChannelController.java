@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.cdboo.channel.entity.CdbooChannel;
 import com.cdboo.channel.service.CdbooChannelService;
+import com.cdboo.common.Constants;
 import com.cdboo.music.entity.CdbooMusic;
 import com.cdboo.userchannel.entity.CdbooUserChannel;
 import com.cdboo.userchannel.service.CdbooUserChannelService;
@@ -64,7 +65,7 @@ public class CdbooUserChannelController extends BaseController {
 
 		User user = cdbooUserChannel.getUser();
 		if (user != null && StringUtils.isNotBlank(user.getId())) {
-			List<CdbooChannel> channelList = cdbooUserChannelService.getChannelListByUser(user);
+			List<CdbooChannel> channelList = cdbooUserChannelService.getChannelListByUser(user,Constants.CHANNEL_TYPE_CHILD);
 			cdbooUserChannel.setChannelList(channelList);
 		}
 		return "cdboo/userchannel/system/cdbooUserChannelList";
@@ -79,9 +80,9 @@ public class CdbooUserChannelController extends BaseController {
 		if (user != null && StringUtils.isNotBlank(user.getId()) && channel != null
 				&& StringUtils.isNotBlank(channel.getId())) {
 			/************************
-			 * 根据用户检索绑定频道信息列表 Start
+			 * 根据用户检索绑定子频道信息列表 Start
 			 ***********************/
-			List<CdbooChannel> userChannels = cdbooUserChannelService.getChannelListByUser(user);
+			List<CdbooChannel> userChannels = cdbooUserChannelService.getChannelListByUser(user,Constants.CHANNEL_TYPE_CHILD);
 			model.addAttribute("channelList", userChannels);
 			/************************
 			 * 根据用户检索绑定频道信息列表 End
@@ -97,9 +98,9 @@ public class CdbooUserChannelController extends BaseController {
 			 ***********************/
 		} else {
 			/************************
-			 * 新增时查询所有频道列表信息返回 Start
+			 * 新增时查询所有子频道列表信息返回 Start
 			 ***********************/
-			List<CdbooChannel> channels = cdbooChannelService.findList(new CdbooChannel());
+			List<CdbooChannel> channels = cdbooChannelService.findChildChannelList();
 			model.addAttribute("channelList", channels);
 			/************************
 			 * 新增时查询所有频道列表信息返回 End
@@ -132,7 +133,7 @@ public class CdbooUserChannelController extends BaseController {
 	public List<CdbooChannel> getChannelList(@RequestParam(required = false) String userId,
 			HttpServletResponse response) {
 		User user = new User(userId);
-		List<CdbooChannel> channel = cdbooUserChannelService.getChannelListByUser(user);
+		List<CdbooChannel> channel = cdbooUserChannelService.getChannelListByUser(user,Constants.CHANNEL_TYPE_CHILD);
 		return channel;
 	}
 
