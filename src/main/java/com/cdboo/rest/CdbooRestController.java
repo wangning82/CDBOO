@@ -114,15 +114,12 @@ public class CdbooRestController {
             planModel.setEndDate(_cdbooPlan.getEndDate() != null ? new SimpleDateFormat("yyyy-MM-dd").format(_cdbooPlan.getEndDate()) : null);
             planModel.setCycleTimes(_cdbooPlan.getRate());
             planModel.setIntervalTime(_cdbooPlan.getIntervalTime());
-            planModel.setScene(_cdbooPlan.getOperationType());
             String operationType = _cdbooPlan.getOperationType();
             Office office = officeService.get(operationType);
             if(office!=null){
             	String photo = office.getPhoto();
                 planModel.setSceneImg(photo);
-            }
-            else{
-            	System.out.println("empty:"+operationType);
+                planModel.setScene(office.getName());
             }
             
             RestTimeStep restTimeStep = new RestTimeStep();

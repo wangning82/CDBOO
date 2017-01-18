@@ -69,7 +69,7 @@
 					}
 				}
 			});
-			themeChanged(idx);
+			//themeChanged(idx);
 		}
 		function delRow(obj, prefix){
 			var id = $(prefix+"_id");
@@ -137,32 +137,32 @@
 			}
 			
 			if(intervalTimeDisFlag){
-				$("#intervalTimeTH").show();
+				//$("#intervalTimeTH").show();
 				$("#intervalTimeTD_" + idx).show();
 			}
 			else{
-				$("#intervalTimeTH").hide();
+				//$("#intervalTimeTH").hide();
 				$("#intervalTimeTD_" + idx).hide();
 			}
 			
 			if(rateDisFlag){
-				$('#rateTH').show();
+				//$('#rateTH').show();
 				$("#rateTD_" + idx).show();
 			}
 			else{
-				$('#rateTH').hide();
+				//$('#rateTH').hide();
 				$("#rateTD_" + idx).hide();
 			}
 			
 			if(conditionDisFlag){
 				//业态title列
-				$('#conditionTH').show();
+				//$('#conditionTH').show();
 				//业态数据列
 				$('#conditionTD_' + idx).show();
 			}
 			else{
 				//业态title列
-				$('#conditionTH').hide();
+				//$('#conditionTH').hide();
 				//业态数据列
 				$('#conditionTD_' + idx).hide();
 			}
@@ -245,14 +245,16 @@
 						<th id="intervalTimeTH">间隔时间(分钟)</th>
 						<th id="conditionTH">业态</th>
 						<th>备注</th>
-						<shiro:hasPermission name="userplan:cdbooPlan:edit"><th width="10">&nbsp;</th></shiro:hasPermission>
+						<c:if test="${empty cdbooPlan.id}">
+							<shiro:hasPermission name="userplan:cdbooPlan:edit"><th>操作</th></shiro:hasPermission>
+						</c:if>
 					</tr>
 					</thead>
 					<tbody id="planList">
 					</tbody>
 					<c:if test="${empty cdbooPlan.id}">
 						<shiro:hasPermission name="userplan:cdbooPlan:edit"><tfoot>
-						<tr><td colspan="12"><a href="javascript:" onclick="addRow('#planList', planRowIdx, planTpl);planRowIdx = planRowIdx + 1;" class="btn">新增</a></td></tr>
+						<tr><td colspan="13"><a href="javascript:" onclick="addRow('#planList', planRowIdx, planTpl);planRowIdx = planRowIdx + 1;" class="btn">新增</a></td></tr>
 						</tfoot></shiro:hasPermission>
 					</c:if>
 				</table>
@@ -308,43 +310,50 @@
 									<input id="planList{{idx}}_endDate" name="planList[{{idx}}].endDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
 										value="{{row.endDate}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
 								</span>
-
 							</td>
 
-							<td id="rateTD_{{idx}}">
-								<select id="planList{{idx}}_rate" name="planList[{{idx}}].rate" data-value="{{row.rate}}" class="input-small ">
-                                    <option value="">请选择</option>
-									<c:forEach begin="1" end="20" step="1" var="rate">
-										<option value="${rate}">${rate}</option>
-									</c:forEach>
-                                </select>		
+							<td>
+								<span id="rateTD_{{idx}}" >
+									<select id="planList{{idx}}_rate" name="planList[{{idx}}].rate" data-value="{{row.rate}}" class="input-small ">
+                                    	<option value="">请选择</option>
+										<c:forEach begin="1" end="20" step="1" var="rate">
+											<option value="${rate}">${rate}</option>
+										</c:forEach>
+                                	</select>
+								</span>		
 							</td>
 
-							<td id="intervalTimeTD_{{idx}}">
-								<select id="planList{{idx}}_intervalTime" name="planList[{{idx}}].intervalTime" data-value="{{row.intervalTime}}" class="input-small ">
-                                    <option value="">请选择</option>
-									<c:forEach begin="1" end="60" step="1" var="minute">
-										<option value="${minute}">${minute}</option>
-									</c:forEach>
-                                </select>
+							<td>
+								<span id="intervalTimeTD_{{idx}}" >
+									<select id="planList{{idx}}_intervalTime" name="planList[{{idx}}].intervalTime" data-value="{{row.intervalTime}}" class="input-small ">
+                                    	<option value="">请选择</option>
+										<c:forEach begin="1" end="60" step="1" var="minute">
+											<option value="${minute}">${minute}</option>
+										</c:forEach>
+                                	</select>
+								</span>
 							</td>
 
-							<td id="conditionTD_{{idx}}">
-								<select id="planList{{idx}}_operationType" name="planList[{{idx}}].operationType" data-value="{{row.operationType}}" class="input-small ">
-                                    <option value="">请选择</option>
-									<c:forEach items="${planModel.cdbooConditionList}" var="condition">
-										<option value="${condition.id}">${condition.name}</option>
-									</c:forEach>
-                                </select>
+							<td>
+								<span id="conditionTD_{{idx}}" >
+									<select id="planList{{idx}}_operationType" name="planList[{{idx}}].operationType" data-value="{{row.operationType}}" class="input-small ">
+                                    	<option value="">请选择</option>
+										<c:forEach items="${planModel.cdbooConditionList}" var="condition">
+											<option value="${condition.id}">${condition.name}</option>
+										</c:forEach>
+                                	</select>
+								</span>
 							</td>
 
 							<td>
 								<input id="planList{{idx}}_remarks" name="planList[{{idx}}].remarks" type="text" value="{{row.remarks}}" maxlength="255" class="input-small "/>
 							</td>
 
-							<shiro:hasPermission name="userplan:cdbooPlan:edit"><td class="text-center" width="10">
-								{{#delBtn}}<span class="close" onclick="delRow(this, '#planList{{idx}}')" title="删除">&times;</span>{{/delBtn}}
-							</td></shiro:hasPermission>
+							<c:if test="${empty cdbooPlan.id}">
+								<shiro:hasPermission name="userplan:cdbooPlan:edit"><td class="text-center" width="10">
+									{{#delBtn}}<span class="close" onclick="delRow(this, '#planList{{idx}}')" title="删除">&times;</span>{{/delBtn}}
+								</td></shiro:hasPermission>
+							</c:if>
 						</tr>//-->
 				</script>
 				<script type="text/javascript">

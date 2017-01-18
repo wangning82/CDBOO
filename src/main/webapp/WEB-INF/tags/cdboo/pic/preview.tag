@@ -11,4 +11,4 @@
 	}
 </script>
 
-<img src="${path}" width="${empty picwidth ? Constants.IMG_WIDTH : picwidth }" height="${empty picheight ? Constants.IMG_HEIGHT : picheight }" onclick="disPic('${path}')"/>
+<img src="${path}" style="width:${empty picwidth ? Constants.IMG_WIDTH : picwidth };height:${empty picheight ? Constants.IMG_HEIGHT : picheight };" onclick="disPic('${path}')"/>
