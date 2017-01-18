@@ -25,6 +25,10 @@
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
+			<li><label>用户：</label>
+				${fns:getUser().name }
+				<input type="hidden" id="userId" name="user.id" value="${fns:getUser().id }"/>
+			</li>
 			<li><label>组合频道：</label>
 				<form:select id="groupId" path="cdbooChannel.id" class="input-medium">
 					<form:option value="" label="请选择"/>

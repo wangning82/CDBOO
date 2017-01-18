@@ -80,7 +80,9 @@
 	<form:form id="searchForm" modelAttribute="cdbooChannel" action="${ctx}/channel/cdbooChannel/openChannelWin" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
-		<input type="hidden" name="channelType" value="0"/>
+		<form:hidden path="userId"/>
+		<form:hidden path="ids"/>
+		<form:hidden path="channelType"/>
 		<ul class="ul-form">
 			<li><label>频道编号：</label>
 				<form:input path="channelNo" htmlEscape="false" maxlength="100" class="input-medium"/>

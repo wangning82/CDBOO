@@ -15,7 +15,8 @@
 		<div class="control-group">
 			<label class="control-label">用户：</label>
 			<div class="controls">
-				${cdbooUserGroup.user.name}
+				${fns:getUser().name }
+				<input type="hidden" id="userId" name="user.id" value="${fns:getUser().id }"/>
 			</div>
 		</div>
 		

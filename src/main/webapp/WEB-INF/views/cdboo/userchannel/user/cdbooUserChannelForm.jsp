@@ -57,13 +57,13 @@
 		<form:hidden path="id"/>
 		<input type="hidden" id="owner_type_public" value="${Constants.MUSICOWNER_PUBLIC}"/>
 		<input type="hidden" id="owner_type_private" value="${Constants.MUSICOWNER_PRIVATE}"/>
-		<form:hidden id="userId" path="user.id"/>
 		<sys:message content="${message}"/>
 		
 		<div class="control-group">
 			<label class="control-label">用户名称：</label>
 			<div class="controls">
-				${fns:getUserById(cdbooUserChannel.user.id).name}
+				${fns:getUser().name}
+				<input type="hidden" id="userId" name="user.id" value="${fns:getUser().id }"/>
 			</div>
 		</div>
 		

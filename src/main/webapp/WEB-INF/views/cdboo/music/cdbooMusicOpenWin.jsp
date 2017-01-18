@@ -55,6 +55,8 @@
 	<form:form id="searchForm" modelAttribute="cdbooMusic" action="${ctx}/music/cdbooMusic/openMusicWin" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
+		<form:hidden path="userId"/>
+		<form:hidden path="ids"/>
 		<ul class="ul-form">
 			<li><label>音乐编号：</label>
 				<form:input path="musicNo" htmlEscape="false" maxlength="100" class="input-medium"/>

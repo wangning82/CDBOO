@@ -25,10 +25,10 @@
 	<form:form id="searchForm" modelAttribute="cdbooOwnerMusic" action="${ctx}/usermusic/ownerMusic/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
-		<form:hidden id="userId" path="user.id" />
 		<ul class="ul-form">
 			<li><label>用户名称：</label>
-				${fns:getUserById(cdbooOwnerMusic.user.id).name}
+				${fns:getUser().name}
+				<input type="hidden" id="userId" name="user.id" value="${fns:getUser().id }"/>
 			</li>
 			<li><label>音乐：</label>
 				<form:select id="musicId" path="musicId.id" class="input-medium">

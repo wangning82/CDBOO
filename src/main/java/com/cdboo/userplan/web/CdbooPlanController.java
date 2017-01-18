@@ -21,9 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.cdboo.channel.entity.CdbooChannel;
-import com.cdboo.channel.service.CdbooChannelService;
-import com.cdboo.timestep.entity.Timestep;
-import com.cdboo.timestep.service.TimestepService;
 import com.cdboo.userchannel.service.CdbooUserChannelService;
 import com.cdboo.usergroup.service.CdbooUserGroupService;
 import com.cdboo.userplan.entity.CdbooPlan;
@@ -53,12 +50,6 @@ public class CdbooPlanController extends BaseController {
 
 	@Autowired
 	private CdbooPlanService cdbooPlanService;
-
-	@Autowired
-	private TimestepService timestepService;
-
-	@Autowired
-	private CdbooChannelService channelService;
 
 	@Autowired
 	private CdbooUserTimestepService cdbooUserTimestepService;
@@ -105,16 +96,20 @@ public class CdbooPlanController extends BaseController {
 		return "cdboo/userplan/cdbooPlanList";
 	}
 
-	@RequiresPermissions("userplan:cdbooPlan:view")
+	@RequiresPermissions("plan:cdbooPlan:view")
 	@RequestMapping(value = {"userPlanList"})
 	public String userPlanList(CdbooPlan cdbooPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
 
 		User user = UserUtils.getUser();
 		cdbooPlan.setUser(user);
-		Page<CdbooPlan> page = cdbooPlanService.findPage(new Page<CdbooPlan>(request, response), cdbooPlan);
+		
+		Page<CdbooPlan> page = cdbooPlanService.findMyPage(new Page<CdbooPlan>(request, response), cdbooPlan);
 
-		List<Timestep> timestepList = timestepService.findList(new Timestep());
-		List<CdbooChannel> channelList = channelService.findList(new CdbooChannel());
+		List<CdbooUserTimestep> timestepList = Lists.newArrayList();
+		List<CdbooChannel> channelList = Lists.newArrayList();
+		
+		timestepList = cdbooUserTimestepService.findTimeStepByUser(user);
+		channelList = cdbooUserChannelService.getChannelListByUser(user,null);
 
 		model.addAttribute("channelList", channelList);
 		model.addAttribute("timestepList", timestepList);
@@ -159,28 +154,38 @@ public class CdbooPlanController extends BaseController {
 		return "cdboo/userplan/cdbooPlanForm";
 	}
 
-	@RequiresPermissions("userplan:cdbooPlan:edit")
+	@RequiresPermissions("plan:cdbooPlan:edit")
 	@RequestMapping(value = "userPlanForm")
 	public String userPlanForm(CdbooPlan cdbooPlan, HttpServletRequest request, HttpServletResponse response, Model model) {
 
 		PlanModel planModel = new PlanModel();
 
 		if (cdbooPlan != null && org.apache.commons.lang3.StringUtils.isNotBlank(cdbooPlan.getId())) {
-			List<CdbooPlan> list = cdbooPlanService.findList(cdbooPlan);
-
-			User user = list.get(0).getUser();
-
+			User user = cdbooPlan.getUser();
+			
+			List<CdbooUserTimestep> userTimeStepList = cdbooUserTimestepService.findTimeStepByUser(user);
+			
+			List<CdbooChannel> channelList = getChannelByUser(user);
+			
+			User userObj = UserUtils.get(user.getId());
+			Office office = userObj.getOffice();
+			List<Office> officeList = officeService.findOfficeListByParentForCondition(office);
+			
+			planModel.setCdbooUserTimestepList(userTimeStepList);
+			planModel.setCdbooChannelList(channelList);
+			planModel.setCdbooConditionList(officeList);
+			
+			
+			String userChannelId = cdbooPlan.getUserChannelId();
+			String channelType = cdbooPlan.getChannelType();
+			cdbooPlan.setChannel(cdbooPlanService.getChannelByUserChannelIdAndChannelType(userChannelId,channelType));
+			
+			List<CdbooPlan> list = Lists.newArrayList(cdbooPlan);
+			
 			planModel.setPlanList(list);
 			planModel.setUserId(user.getId());
 			planModel.setUserName(user.getName());
 		}
-
-		//所有时段
-		List<Timestep> timestepList = timestepService.findList(new Timestep());
-		List<CdbooChannel> channelList = channelService.findList(new CdbooChannel());
-
-		model.addAttribute("channelList", channelList);
-		model.addAttribute("timestepList", timestepList);
 		model.addAttribute("planModel", planModel);
 		return "cdboo/userplan/userPlanForm";
 	}
@@ -193,7 +198,7 @@ public class CdbooPlanController extends BaseController {
 		return "redirect:"+Global.getAdminPath()+"/userplan/cdbooPlan/?repage";
 	}
 
-	@RequiresPermissions("userplan:cdbooPlan:edit")
+	@RequiresPermissions("plan:cdbooPlan:edit")
 	@RequestMapping(value = "userPlanSave")
 	public String userPlanSave(PlanModel planModel, Model model, RedirectAttributes redirectAttributes) {
 		cdbooPlanService.save(planModel);
@@ -209,14 +214,6 @@ public class CdbooPlanController extends BaseController {
 		return "redirect:"+Global.getAdminPath()+"/userplan/cdbooPlan/?repage";
 	}
 
-	@RequiresPermissions("userplan:cdbooPlan:edit")
-	@RequestMapping(value = "userPlanDelete")
-	public String userPlanDelete(CdbooPlan cdbooPlan, RedirectAttributes redirectAttributes) {
-		cdbooPlanService.delete(cdbooPlan);
-		addMessage(redirectAttributes, "删除用户计划成功");
-		return "redirect:"+Global.getAdminPath()+"/userplan/cdbooPlan/userPlanList/?repage";
-	}
-	
 	@RequestMapping(value = "getUserInfo")
 	@ResponseBody
 	public HashMap<String, Object> getUserInfo(@RequestParam(required=true) String userId, RedirectAttributes redirectAttributes) {
