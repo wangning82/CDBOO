@@ -19,9 +19,9 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/userplan/cdbooPlan/userPlanList">用户计划列表</a></li>
+		<li class="active"><a href="${ctx}/plan/cdbooPlan/">用户计划列表</a></li>
 	</ul>
-	<form:form id="searchForm" modelAttribute="cdbooPlan" action="${ctx}/userplan/cdbooPlan/userPlanList" method="post" class="breadcrumb form-search">
+	<form:form id="searchForm" modelAttribute="cdbooPlan" action="${ctx}/plan/cdbooPlan/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
@@ -79,7 +79,7 @@
 		<tbody>
 		<c:forEach items="${page.list}" var="cdbooPlan">
 			<tr>
-				<td><a href="${ctx}/userplan/cdbooPlan/userPlanForm?id=${cdbooPlan.id}">
+				<td><a href="${ctx}/plan/cdbooPlan/userPlanForm?id=${cdbooPlan.id}">
 					${cdbooPlan.planNo}
 				</a></td>
 				<td>
@@ -132,7 +132,7 @@
 					${cdbooPlan.remarks}
 				</td>
 				<shiro:hasPermission name="plan:cdbooPlan:edit"><td>
-    				<a href="${ctx}/userplan/cdbooPlan/userPlanForm?id=${cdbooPlan.id}">修改</a>
+    				<a href="${ctx}/plan/cdbooPlan/userPlanForm?id=${cdbooPlan.id}">修改</a>
 				</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>

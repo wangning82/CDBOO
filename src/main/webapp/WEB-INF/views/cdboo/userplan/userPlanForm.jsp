@@ -188,10 +188,10 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/userplan/cdbooPlan/userPlanList">用户计划列表</a></li>
+		<li><a href="${ctx}/plan/cdbooPlan/">用户计划列表</a></li>
 		<li class="active"><a href="#">用户计划编辑</a></li>
 	</ul><br/>
-	<form:form id="inputForm" modelAttribute="planModel" action="${ctx}/userplan/cdbooPlan/userPlanSave" method="post" class="form-horizontal">
+	<form:form id="inputForm" modelAttribute="planModel" action="${ctx}/plan/cdbooPlan/userPlanSave" method="post" class="form-horizontal">
 		<sys:message content="${message}"/>
 		<div class="control-group">
 			<label class="control-label">用户：</label>
