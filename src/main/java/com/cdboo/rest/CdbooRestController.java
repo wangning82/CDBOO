@@ -1,8 +1,11 @@
 package com.cdboo.rest;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.cdboo.music.service.CdbooMusicService;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,7 +48,7 @@ public class CdbooRestController {
     private CdbooUserChannelService cdbooUserChannelService;
 
     @Autowired
-    private CdbooMusicDao cdbooMusicDao;
+    private CdbooMusicService cdbooMusicService;
 
     @Autowired
     private OfficeService officeService;
@@ -179,9 +182,13 @@ public class CdbooRestController {
 		List<RestMusic> musicList = Lists.newArrayList();
 		for (CdbooUserChannel channelObj : userChannels) {
 			RestMusic restMusic = new RestMusic();
-			CdbooMusic cdbooMusic = cdbooMusicDao.get(channelObj.getMusic().getId());
+			CdbooMusic cdbooMusic = cdbooMusicService.get(channelObj.getMusic().getId());
 			try {
 				BeanUtils.copyProperties(restMusic, cdbooMusic);
+                File musicFile = new File(cdbooMusicService.getMusicPath(cdbooMusic.getPath()));
+                if(musicFile.exists()){
+                    restMusic.setLength(musicFile.length());
+                }
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

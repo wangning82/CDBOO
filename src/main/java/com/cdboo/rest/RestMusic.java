@@ -4,76 +4,101 @@ import java.io.Serializable;
 
 /**
  * 用户音乐信息rest实体
- * @author yubin
  *
+ * @author yubin
  */
-public class RestMusic implements Serializable{
+public class RestMusic implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private String musicNo;		// 音乐编号
-	private String musicOwner;		// 音乐拥有者类型
-	private String musicName;		// 音乐名称
-	private String duration;    // 音乐时长
-	private String actor;		// 艺人
-	private String special;		// 专辑
-	private String volume;		// 音量
-	private String status;		// 状态
-	private String path;		// 音乐路径
-	public String getMusicNo() {
-		return musicNo;
-	}
-	public void setMusicNo(String musicNo) {
-		this.musicNo = musicNo;
-	}
-	public String getMusicOwner() {
-		return musicOwner;
-	}
-	public void setMusicOwner(String musicOwner) {
-		this.musicOwner = musicOwner;
-	}
-	public String getMusicName() {
-		return musicName;
-	}
-	public void setMusicName(String musicName) {
-		this.musicName = musicName;
-	}
-	public String getActor() {
-		return actor;
-	}
-	public void setActor(String actor) {
-		this.actor = actor;
-	}
-	public String getSpecial() {
-		return special;
-	}
-	public void setSpecial(String special) {
-		this.special = special;
-	}
-	public String getVolume() {
-		return volume;
-	}
-	public void setVolume(String volume) {
-		this.volume = volume;
-	}
-	public String getStatus() {
-		return status;
-	}
-	public void setStatus(String status) {
-		this.status = status;
-	}
-	public String getPath() {
-		return path;
-	}
-	public void setPath(String path) {
-		this.path = path;
-	}
+    private String musicNo;        // 音乐编号
+    private String musicOwner;        // 音乐拥有者类型
+    private String musicName;        // 音乐名称
+    private String duration;    // 音乐时长
+    private String actor;        // 艺人
+    private String special;        // 专辑
+    private String volume;        // 音量
+    private String status;        // 状态
+    private String path;        // 音乐路径
+    private Long length;      // 音乐文件大小
 
-	public String getDuration() {
-		return duration;
-	}
+    public String getMusicNo() {
+        return musicNo;
+    }
 
-	public void setDuration(String duration) {
-		this.duration = duration;
-	}
+    public void setMusicNo(String musicNo) {
+        this.musicNo = musicNo;
+    }
+
+    public String getMusicOwner() {
+        return musicOwner;
+    }
+
+    public void setMusicOwner(String musicOwner) {
+        this.musicOwner = musicOwner;
+    }
+
+    public String getMusicName() {
+        return musicName;
+    }
+
+    public void setMusicName(String musicName) {
+        this.musicName = musicName;
+    }
+
+    public String getActor() {
+        return actor;
+    }
+
+    public void setActor(String actor) {
+        this.actor = actor;
+    }
+
+    public String getSpecial() {
+        return special;
+    }
+
+    public void setSpecial(String special) {
+        this.special = special;
+    }
+
+    public String getVolume() {
+        return volume;
+    }
+
+    public void setVolume(String volume) {
+        this.volume = volume;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
+    public Long getLength() {
+        return length;
+    }
+
+    public void setLength(Long length) {
+        this.length = length;
+    }
 }
