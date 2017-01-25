@@ -29,6 +29,7 @@ import com.cdboo.childchannel.entity.CdbooGroupChild;
 import com.cdboo.childchannel.service.CdbooGroupChildService;
 import com.cdboo.common.Constants;
 import com.cdboo.music.service.CdbooMusicService;
+import com.cdboo.usergroup.entity.CdbooUserGroup;
 import com.google.common.collect.Lists;
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
@@ -185,34 +186,38 @@ public class CdbooChannelController extends BaseController {
 
 	@RequestMapping(value = { "getGroupChannelInfo" })
 	@ResponseBody
-	public CdbooChannel getGroupChannelInfo(@RequestParam(required = true) String groupChannelId) {
+	public CdbooUserGroup getGroupChannelInfo(@RequestParam(required = true) String groupChannelId) {
+		CdbooUserGroup cdbooUserGroup = new CdbooUserGroup();
+
 		CdbooChannel cdbooChannel = cdbooChannelService.get(groupChannelId);
 		if (cdbooChannel != null) {
 			String channelType = cdbooChannel.getChannelType();
 			if (StringUtils.equals(Constants.CHANNEL_TYPE_GROUP, channelType)) {
 				CdbooGroupChild cdbooGroupChild = new CdbooGroupChild();
 				cdbooGroupChild.setGroupChannelId(cdbooChannel);
-				List<CdbooChannel> childChannelList = cdbooGroupChildService
-						.findChildChannelListByConditions(cdbooGroupChild);
-				if (CollectionUtils.isNotEmpty(childChannelList)) {
-					for (CdbooChannel cdbooChannel2 : childChannelList) {
-						String theme = cdbooChannel2.getThemeType();
-						String themeConcreteType = cdbooChannel2.getThemeConcreteType();
-						cdbooChannel2.setThemeType(DictUtils.getDictLabel(theme, "theme_type", ""));
+				List<CdbooGroupChild> groupChilds = cdbooGroupChildService.findList(cdbooGroupChild);
+
+				if (CollectionUtils.isNotEmpty(groupChilds)) {
+					for (CdbooGroupChild groupChild : groupChilds) {
+						CdbooChannel childChannel = groupChild.getChildChannelId();
+						String theme = childChannel.getThemeType();
+						String themeConcreteType = childChannel.getThemeConcreteType();
+						childChannel.setThemeType(DictUtils.getDictLabel(theme, "theme_type", ""));
 						if (StringUtils.equals(Constants.THEMETYPE_THEME, theme)) {
-							cdbooChannel2
+							childChannel
 									.setThemeConcreteType(DictUtils.getDictLabel(themeConcreteType, "season_type", ""));
 						}
 						if (StringUtils.equals(Constants.THEMETYPE_HOLIDAY, theme)) {
-							cdbooChannel2.setThemeConcreteType(
+							childChannel.setThemeConcreteType(
 									DictUtils.getDictLabel(themeConcreteType, "holiday_type", ""));
 						}
 					}
 				}
-				cdbooChannel.setChildChannelList(childChannelList);
+
+				cdbooUserGroup.setGroupChildChannelList(groupChilds);
 			}
 		}
-		return cdbooChannel;
+		return cdbooUserGroup;
 	}
 
 	/**

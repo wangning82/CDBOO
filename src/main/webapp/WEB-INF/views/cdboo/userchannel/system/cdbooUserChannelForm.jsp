@@ -86,17 +86,15 @@
 					<form:option value="" label="请选择"/>
 					<form:options items="${channelList}" itemLabel="channelName" itemValue="id" htmlEscape="false"/>
 				</form:select>
-				&nbsp;
-				<input id="assignButton" <c:if test = "${empty cdbooUserChannel.user.id && empty cdbooUserChannel.channel.id}">disabled="disabled"</c:if> class="btn btn-primary" type="button" value="分配音乐" onclick="openMappingWin()"/>
 			</div>
 		</div>
 		
-		<div class="control-group">
+		<%-- <div class="control-group">
 			<label class="control-label">音乐列表：</label>
 			<div class="controls">
 				<music:musicListTag musicIdElementName="musicIds" musicList="${musicList }" userElementId="userId"></music:musicListTag>
 			</div>
-		</div>
+		</div> --%>
 		
 		<div class="form-actions">
 			<shiro:hasPermission name="userchannel:cdbooUserChannel:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>

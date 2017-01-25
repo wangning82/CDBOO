@@ -20,4 +20,5 @@ public interface CdbooUserChannelDao extends CrudDao<CdbooUserChannel> {
 	public List<CdbooUserChannel> findGroupByList(CdbooUserChannel cdbooUserChannel);//根据用户和频道分组查询，带分页
 	public List<CdbooUserChannel> findChannelByUser(CdbooUserChannel cdbooUserChannel);//根据用户查询对应的频道列表，频道为不重复的
 	public void remove(CdbooUserChannel cdbooUserChannel);//真实删除方法
+	public void removeByUserAndChannel(CdbooUserChannel cdbooUserChannel);//根据用户和频道删除，是真实删除，不会再数据库保留
 }

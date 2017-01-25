@@ -17,6 +17,14 @@
         	return false;
         }
 		
+		function openMusicListWin(channelId){
+			top.$.jBox.open("iframe:${ctx}/channel/cdbooChannel/openChannelMusicWin?id="+channelId, "音乐列表",$(top.document).width()-240,$(top.document).height()-400,{
+				buttons:{"关闭":true}, loaded:function(h){
+					$(".jbox-content", top.document).css("overflow-y","hidden");
+				}
+			});
+		}
+		
 	</script>
 </head>
 <body>
@@ -47,17 +55,17 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th>用户名称</th>
-				<th>频道编号</th>
-				<th>频道名称</th>
-				<th>频道图片</th>
-				<th>风格类型</th>
-				<th>风格类型明细</th>
-				<th>频道版本</th>
-				<th>创建时间</th>
-				<th>频道类型</th>
-				<th>歌曲数量</th>
-				<shiro:hasPermission name="userchannel:cdbooUserChannel:edit"><th>操作</th></shiro:hasPermission>
+				<th style="width: 10%">用户名称</th>
+				<th style="width: 5%">频道编号</th>
+				<th style="width: 10%">频道名称</th>
+				<th style="width: 10%">频道图片</th>
+				<th style="width: 5%">风格类型</th>
+				<th style="width: 5%">风格类型明细</th>
+				<th style="width: 5%">频道版本</th>
+				<th style="width: 10%">创建时间</th>
+				<th style="width: 5%">频道类型</th>
+				<th style="width: 5%">歌曲数量</th>
+				<shiro:hasPermission name="userchannel:cdbooUserChannel:edit"><th style="width: 20%">操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
 		<tbody>
@@ -96,6 +104,7 @@
 						<shiro:hasPermission name="userchannel:cdbooUserChannel:edit"><td>
 		    				<a href="${ctx}/userchannel/cdbooUserChannel/form?user.id=${cdbooUserChannel.user.id}&&channel.id=${cdbooUserChannel.channel.id}&&user.name=${cdbooUserChannel.user.name}&&channel.channelName=${cdbooUserChannel.channel.channelName}">修改</a>
 							<a href="${ctx}/userchannel/cdbooUserChannel/delete?user.id=${cdbooUserChannel.user.id}&&channel.id=${cdbooUserChannel.channel.id}" onclick="return confirmx('确认要删除该用户频道吗？', this.href)">删除</a>
+							<a href="#" onclick="openMusicListWin('${cdbooUserChannel.channel.id}')" >音乐列表</a>
 						</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>

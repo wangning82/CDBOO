@@ -3,6 +3,7 @@ package com.cdboo.usergroup.entity;
 import java.util.List;
 
 import com.cdboo.channel.entity.CdbooChannel;
+import com.cdboo.childchannel.entity.CdbooGroupChild;
 import com.thinkgem.jeesite.common.persistence.DataEntity;
 import com.thinkgem.jeesite.modules.sys.entity.User;
 
@@ -21,6 +22,8 @@ public class CdbooUserGroup extends DataEntity<CdbooUserGroup> {
 	private List<CdbooChannel> channelList = Lists.newArrayList();
 
 	private List<CdbooChannel> groupChildList = Lists.newArrayList();
+	
+	private List<CdbooGroupChild> groupChildChannelList = Lists.newArrayList();//子频道集合
 	
 	private int childChannelSize;
 
@@ -62,6 +65,14 @@ public class CdbooUserGroup extends DataEntity<CdbooUserGroup> {
 
 	public void setGroupChildList(List<CdbooChannel> groupChildList) {
 		this.groupChildList = groupChildList;
+	}
+
+	public List<CdbooGroupChild> getGroupChildChannelList() {
+		return groupChildChannelList;
+	}
+
+	public void setGroupChildChannelList(List<CdbooGroupChild> groupChildChannelList) {
+		this.groupChildChannelList = groupChildChannelList;
 	}
 
 }

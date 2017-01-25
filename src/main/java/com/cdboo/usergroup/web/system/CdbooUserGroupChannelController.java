@@ -108,7 +108,7 @@ public class CdbooUserGroupChannelController extends BaseController {
 			CdbooGroupChild cdbooGroupChild2 = new CdbooGroupChild();
 			cdbooGroupChild2.setGroupChannelId(channel);
 			List<CdbooGroupChild> groupChildList = groupChildService.findList(cdbooGroupChild2);
-			userGroup.setGroupChildList(groupChildService.convertGroupChannelToChannel(groupChildList));
+			userGroup.setGroupChildChannelList(groupChildList);
 			/**************** 查询组合频道下子频道列表 End ******************/
 		}
 		else{

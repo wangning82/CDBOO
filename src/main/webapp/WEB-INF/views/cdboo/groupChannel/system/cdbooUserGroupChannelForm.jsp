@@ -25,6 +25,7 @@
 		});
 		
 		function linkChannelInfo(groupChannelId){
+			$('#tb').empty();
 			$.ajax({
 		        type: "post",
 		        async: false,
@@ -35,13 +36,14 @@
 		        dataType: "json",
 		        success: function (data) {
 					var dataObj = eval(data);
-					var dataArray = dataObj.childChannelList;
+					var dataArray = dataObj.groupChildChannelList;
 		        	var tpl = $("#channelTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
 					for (var i = 0; i < dataArray.length; i++) {
-						var entity = dataArray[i];
+						var entity = dataArray[i].childChannelId;
+						var sort = dataArray[i].sort;
 						//alert(entity.id+":"+entity.name+":"+entity.actor+":"+entity.special+":"+entity.musicOwner+":"+entity.volume)
 						var rowSize = $('#tb tr').size();
-						$('#tb').append(Mustache.render(tpl, {row: entity,rowIndex : ++rowSize}));
+						$('#tb').append(Mustache.render(tpl, {row: entity,sort:sort}));
 					}
 		        }
 		   });
@@ -124,8 +126,7 @@
 									${cdbooChannel.channelVersion}
 								</td>
 								<td>
-									<input name="groupChildChannelList[${status.index }].id" value="${cdbooGroupChildChannel.id}" type="hidden">
-									<input name="groupChildChannelList[${status.index }].sort" value="${cdbooGroupChildChannel.sort}">
+									${cdbooGroupChildChannel.sort}
 								</td>
 								<td>
 									<fmt:formatDate value="${cdbooChannel.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
@@ -153,10 +154,7 @@
 			<td>{{row.themeType}}</td>
 			<td>{{row.themeConcreteType}}</td>
 			<td>{{row.channelVersion}}</td>
-			<td>
-				<input name="groupChildChannelList[{{rowIndex}}].id" type="hidden">
-				<input name="groupChildChannelList[{{rowIndex}}].sort" value="{{row.sort}}">
-			</td>
+			<td>{{sort}}</td>
 			<td>{{row.createDate}}</td>
 		</tr>//-->
 	</script>

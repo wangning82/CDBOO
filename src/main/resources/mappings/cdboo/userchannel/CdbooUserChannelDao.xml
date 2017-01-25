@@ -164,4 +164,8 @@
 		DELETE FROM cdboo_user_channel WHERE id = #{id}
 	</update>
 	
+	<update id="removeByUserAndChannel">
+		DELETE FROM cdboo_user_channel WHERE id = user_id = #{user.id} and channel_id = #{channel.id}
+	</update>
+	
 </mapper>

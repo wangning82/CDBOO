@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.cdboo.channel.entity.CdbooChannel;
 import com.cdboo.channel.service.CdbooChannelService;
+import com.cdboo.channelmusic.entity.CdbooChannelMusic;
+import com.cdboo.channelmusic.service.CdbooChannelMusicService;
 import com.cdboo.music.entity.CdbooMusic;
 import com.cdboo.music.service.CdbooMusicService;
 import com.cdboo.userchannel.dao.CdbooUserChannelDao;
@@ -42,6 +44,9 @@ public class CdbooUserChannelService extends CrudService<CdbooUserChannelDao, Cd
 
 	@Autowired
 	private CdbooMusicService cdbooMusicService;
+	
+	@Autowired
+	private CdbooChannelMusicService channelMusicService;
 
 	public CdbooUserChannel get(String id) {
 		return super.get(id);
@@ -57,90 +62,32 @@ public class CdbooUserChannelService extends CrudService<CdbooUserChannelDao, Cd
 
 	@Transactional(readOnly = false)
 	public void saveUserChannel(CdbooUserChannel cdbooUserChannel) {
-
-		/******************* 把音乐id集合转成音乐对象集合 Start ********************/
-		List<String> musicIdList = cdbooUserChannel.getMusicIds();
-		String musicIds = StringUtils.join(musicIdList.toArray(), ",");
-		List<CdbooMusic> musicList = Lists.newArrayList();
-		if(StringUtils.isNotBlank(musicIds)){
-			CdbooMusic cdbooMusic = new CdbooMusic();
-			cdbooMusic.setInIds(musicIds);
-			musicList = cdbooMusicService.findList(cdbooMusic);
-		}
-		/******************* 把音乐id集合转成音乐对象集合 End ********************/
-
 		// 用户
 		User user = cdbooUserChannel.getUser();
 		// 频道
 		CdbooChannel channel = cdbooUserChannel.getChannel();
 
-		/******************* 检索用户对应频道下的音乐相关信息 Start ********************/
-		CdbooUserChannel queryObj = new CdbooUserChannel();
-		queryObj.setUser(user);
-		queryObj.setChannel(channel);
-		List<CdbooUserChannel> userChannelList = super.findList(queryObj);
-		/******************* 检索用户对应频道下的音乐相关信息 Start ********************/
+		dao.removeByUserAndChannel(cdbooUserChannel);
 
-		/*******************
-		 * 将原先库里对应用户，频道以及音乐的关联信息封装成map，key是音乐id，值为映射对象，准备下一步过滤操作 Start
-		 ********************/
-		List<CdbooUserChannel> delList = Lists.newArrayList();
-		Map<String, CdbooUserChannel> musicMap = new HashMap<>();
-		if (CollectionUtils.isNotEmpty(userChannelList)) {
-			for (CdbooUserChannel userChannel : userChannelList) {
-				CdbooMusic music = userChannel.getMusic();
-				if(music == null || StringUtils.isBlank(music.getId())){
-					delList.add(userChannel);
-					continue;
-				}
-				String musicId = userChannel.getMusic().getId();
-				musicMap.put(musicId, userChannel);
-			}
-		}
-		/*******************
-		 * 将原先库里对应用户，频道以及音乐的关联信息封装成map，key是音乐id，值为映射对象，准备下一步过滤操作 End
-		 ********************/
+		CdbooChannelMusic cdbooChannelMusic = new CdbooChannelMusic();
+		cdbooChannelMusic.setChannel(channel);
+		List<CdbooChannelMusic> musicList = channelMusicService.findList(cdbooChannelMusic);
 
-		/*******************
-		 * 过滤加移除，看哪些音乐是原先库里没有的，创建映射对象，存在的则直接移除 Start
-		 ********************/
 		List<CdbooUserChannel> saveList = Lists.newArrayList();
+
 		if (CollectionUtils.isNotEmpty(musicList)) {
-			for (CdbooMusic music : musicList) {
-				@SuppressWarnings("unused")
-				CdbooUserChannel tempObj = null;
-				if ((tempObj = musicMap.remove(music.getId())) == null) {
-					CdbooUserChannel saveObj = new CdbooUserChannel();
-					saveObj.setChannel(channel);
-					saveObj.setUser(user);
-					saveObj.setMusic(music);
-					saveList.add(saveObj);
-				}
+			for (CdbooChannelMusic channelMusic : musicList) {
+				CdbooUserChannel saveObj = new CdbooUserChannel();
+				saveObj.setChannel(channel);
+				saveObj.setUser(user);
+				saveObj.setMusic(channelMusic.getMusic());
+				saveList.add(saveObj);
 			}
 		}
-		/*******************
-		 * 过滤加移除，看哪些是原先库里没有的，创建映射对象，存在的则直接移除 End
-		 ********************/
-
-		/*******************
-		 * 过滤加移除后map中剩下的就是被前台移除的音乐，取出准备下一步数据库操作 Start
-		 ********************/
-		if (MapUtils.isNotEmpty(musicMap)) {
-			delList.addAll(musicMap.values());
-		}
-		/*******************
-		 * 过滤加移除后map中剩下的就是被前台移除的音乐，取出准备下一步数据库操作 Start
-		 ********************/
 
 		if (CollectionUtils.isNotEmpty(saveList)) {
 			for (CdbooUserChannel saveObj : saveList) {
 				super.save(saveObj);
-			}
-		}
-
-		if (CollectionUtils.isNotEmpty(delList)) {
-			for (CdbooUserChannel delObj : delList) {
-				dao.remove(delObj);
 			}
 		}
 	}
