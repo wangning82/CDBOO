@@ -13,16 +13,20 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.tag.TagException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
+import com.cdboo.channel.entity.CdbooChannel;
+import com.cdboo.channel.service.CdbooChannelService;
+import com.cdboo.channelmusic.entity.CdbooChannelMusic;
+import com.cdboo.channelmusic.service.CdbooChannelMusicService;
 import com.cdboo.common.Constants;
 import com.cdboo.music.dao.CdbooMusicDao;
 import com.cdboo.music.entity.CdbooMusic;
@@ -44,6 +48,12 @@ import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 @Transactional(readOnly = true)
 public class CdbooMusicService extends CrudService<CdbooMusicDao, CdbooMusic> {
 
+	@Autowired
+	private CdbooChannelService cdbooChannelService;
+	
+	@Autowired
+	private CdbooChannelMusicService cdbooChannelMusicService;
+	
 	public CdbooMusic get(String id) {
 		return super.get(id);
 	}
@@ -106,13 +116,28 @@ public class CdbooMusicService extends CrudService<CdbooMusicDao, CdbooMusic> {
 		super.save(cdbooMusic);
 	}
 	
+	public synchronized int getMaxMusicNo(){
+		List<CdbooMusic> maxMusicNo = dao.getMaxMusicNo();
+		if(CollectionUtils.isNotEmpty(maxMusicNo)){
+			CdbooMusic cdbooMusic = maxMusicNo.get(0);
+			if(cdbooMusic!=null){
+				Integer musicNo = cdbooMusic.getMusicNo();
+				if(musicNo!=null){
+					return musicNo+1;
+				}
+			}
+		}
+		return 1;
+	}
+	
 	@Transactional(readOnly = false)
 	public void delete(CdbooMusic cdbooMusic) {
 		super.delete(cdbooMusic);
 	}
 	
+	
 	@Transactional(readOnly=false)
-	public void importMusicFile(MultipartFile file) throws Exception {
+	public void importMusicFile(MultipartFile file,String channelId) throws Exception {
 		File tempPath = null;
 		File tempFile = null;
 		try {
@@ -163,6 +188,7 @@ public class CdbooMusicService extends CrudService<CdbooMusicDao, CdbooMusic> {
 				String realPath = path + "media" + "/" + "music" + "/" + year + "/" + month;
 				String realDir = dir + "media" + "/" + "music" + "/" + year + "/" + month;
 				
+				int maxMusicNo = getMaxMusicNo();
 				for (int i = 0; i < mp3Files.length; i++) {
 					File mp3File = mp3Files[i];
 					String destMp3Path = null;
@@ -182,6 +208,7 @@ public class CdbooMusicService extends CrudService<CdbooMusicDao, CdbooMusic> {
 							 *******************/
 							Map<String, Object> result = Mp3ResolveUtils.resolveMp3(destMp3Path);
 							CdbooMusic cdbooMusic = new CdbooMusic();
+							cdbooMusic.setMusicNo(maxMusicNo++);
 							cdbooMusic.setMusicName(Objects.toString(result.get("songName")));//歌曲名称
 							cdbooMusic.setActor(Objects.toString(result.get("artist")));//歌手
 							cdbooMusic.setSpecial(Objects.toString(result.get("album")));//专辑
@@ -193,6 +220,19 @@ public class CdbooMusicService extends CrudService<CdbooMusicDao, CdbooMusic> {
 							cdbooMusic.setPath(destMp3Dir);
 							cdbooMusic.setVolume(Constants.MUSIC_VOLUME_DEFAULT);
 							save(cdbooMusic);
+							
+							/******************
+							 * 创建音乐文件记录并保存到数据库后需要跟频道进行关联，这样就直接放到对应的频道列表里了 Start
+							 *******************/
+							CdbooChannel cdbooChannel = cdbooChannelService.get(channelId);
+							CdbooChannelMusic cdbooChannelMusic = new CdbooChannelMusic();
+							cdbooChannelMusic.setChannel(cdbooChannel);
+							cdbooChannelMusic.setMusic(cdbooMusic);
+							cdbooChannelMusic.setSort(0);
+							cdbooChannelMusicService.save(cdbooChannelMusic);
+							/******************
+							 * 创建音乐文件记录并保存到数据库后需要跟频道进行关联，这样就直接放到对应的频道列表里了 End
+							 *******************/
 							/******************
 							 * 创建音乐文件记录，保存到数据库中 End
 							 *******************/

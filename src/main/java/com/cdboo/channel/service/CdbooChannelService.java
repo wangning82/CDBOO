@@ -5,11 +5,13 @@ package com.cdboo.channel.service;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cdboo.channel.dao.CdbooChannelDao;
 import com.cdboo.channel.entity.CdbooChannel;
+import com.cdboo.music.entity.CdbooMusic;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
 
@@ -46,8 +48,23 @@ public class CdbooChannelService extends CrudService<CdbooChannelDao, CdbooChann
 		return super.findPage(page, cdbooChannel);
 	}
 	
+	public synchronized int getMaxChannelNo(){
+		List<CdbooChannel> maxNo = dao.getMaxChannelNo();
+		if(CollectionUtils.isNotEmpty(maxNo)){
+			CdbooChannel cdbooChannel = maxNo.get(0);
+			if(cdbooChannel!=null){
+				Integer channelNo = cdbooChannel.getChannelNo();
+				if(channelNo!=null){
+					return channelNo+1;
+				}
+			}
+		}
+		return 1;
+	}
+	
 	@Transactional(readOnly = false)
 	public void save(CdbooChannel cdbooChannel) {
+		cdbooChannel.setChannelNo(getMaxChannelNo());
 		super.save(cdbooChannel);
 	}
 	

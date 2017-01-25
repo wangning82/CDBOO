@@ -12,10 +12,57 @@
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
-		a.status AS "status"
+		a.status AS "status",
+		a.sort AS "sort",
+		
+		b.channel_no AS "childChannelId.channelNo",
+		b.channel_name AS "childChannelId.channelName",
+		b.photo_path AS "childChannelId.photoPath",
+		b.theme_type AS "childChannelId.themeType",
+		b.theme_concrete_type AS "childChannelId.themeConcreteType",
+		b.channel_version AS "childChannelId.channelVersion",
+		b.music_style AS "childChannelId.musicStyle",
+		b.site AS "childChannelId.site",
+		b.speed AS "childChannelId.speed",
+		b.voice AS "childChannelId.voice",
+		b.element AS "childChannelId.element",
+		b.emotion AS "childChannelId.emotion",
+		b.instrument AS "childChannelId.instrument",
+		b.create_by AS "childChannelId.createBy.id",
+		b.create_date AS "childChannelId.createDate",
+		b.update_by AS "childChannelId.updateBy.id",
+		b.update_date AS "childChannelId.updateDate",
+		b.remarks AS "childChannelId.remarks",
+		b.del_flag AS "childChannelId.delFlag",
+		b.status AS "childChannelId.status",
+		b.channel_type AS "childChannelId.channelType",
+		
+		c.channel_no AS "groupChannelId.channelNo",
+		c.channel_name AS "groupChannelId.channelName",
+		c.photo_path AS "groupChannelId.photoPath",
+		c.theme_type AS "groupChannelId.themeType",
+		c.theme_concrete_type AS "groupChannelId.themeConcreteType",
+		c.channel_version AS "groupChannelId.channelVersion",
+		c.music_style AS "groupChannelId.musicStyle",
+		c.site AS "groupChannelId.site",
+		c.speed AS "groupChannelId.speed",
+		c.voice AS "groupChannelId.voice",
+		c.element AS "groupChannelId.element",
+		c.emotion AS "groupChannelId.emotion",
+		c.instrument AS "groupChannelId.instrument",
+		c.create_by AS "groupChannelId.createBy.id",
+		c.create_date AS "groupChannelId.createDate",
+		c.update_by AS "groupChannelId.updateBy.id",
+		c.update_date AS "groupChannelId.updateDate",
+		c.remarks AS "groupChannelId.remarks",
+		c.del_flag AS "groupChannelId.delFlag",
+		c.status AS "groupChannelId.status",
+		c.channel_type AS "groupChannelId.channelType"
 	</sql>
 	
 	<sql id="cdbooGroupChildJoins">
+		INNER JOIN cdboo_child_channel b on a.child_channel_id = b.id
+		INNER JOIN cdboo_child_channel c on a.group_channel_id = c.id
 	</sql>
     
 	<select id="get" resultType="CdbooGroupChild">
@@ -45,7 +92,7 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY a.create_date DESC
+				ORDER BY a.create_date DESC,a.sort ASC
 			</otherwise>
 		</choose>
 	</select>
@@ -84,7 +131,7 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY a.create_date DESC
+				ORDER BY a.create_date DESC,a.sort ASC
 			</otherwise>
 		</choose>
 	</select>
@@ -100,7 +147,8 @@
 			update_date,
 			remarks,
 			del_flag,
-			status
+			status,
+			sort
 		) VALUES (
 			#{id},
 			#{groupChannelId.id},
@@ -111,7 +159,8 @@
 			#{updateDate},
 			#{remarks},
 			#{delFlag},
-			#{status}
+			#{status},
+			#{sort}
 		)
 	</insert>
 	
@@ -122,7 +171,8 @@
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
 			remarks = #{remarks},
-			status = #{status}
+			status = #{status},
+			sort = #{sort}
 		WHERE id = #{id}
 	</update>
 	

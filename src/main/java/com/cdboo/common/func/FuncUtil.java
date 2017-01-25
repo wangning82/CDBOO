@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import com.cdboo.common.cache.cacheEntity.AbstractCache;
+import com.cdboo.common.cache.cacheEntity.ChannelCacheEntity;
 import com.cdboo.common.cache.cacheEntity.OfficeCacheEntity;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.sys.utils.DictUtils;
@@ -13,8 +14,10 @@ public class FuncUtil {
 	@SuppressWarnings("rawtypes")
 	private static final Map<String, AbstractCache> map = new LinkedHashMap<>();
 	private static final String CACHE_NAME_OFFICE = "office";
+	private static final String CACHE_NAME_CHANNEL = "channel";
 	static {
 		map.put(CACHE_NAME_OFFICE, new OfficeCacheEntity());
+		map.put(CACHE_NAME_CHANNEL, new ChannelCacheEntity());
 	}
 
 	/**

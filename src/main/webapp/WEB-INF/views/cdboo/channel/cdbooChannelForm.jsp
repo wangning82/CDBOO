@@ -60,12 +60,6 @@
 		<input type="hidden" id="channelType" name="channelType" value="${Constants.CHANNEL_TYPE_CHILD }">
 		<sys:message content="${message}"/>		
 		<div class="control-group">
-			<label class="control-label">频道编号：</label>
-			<div class="controls">
-				<form:input path="channelNo" htmlEscape="false" maxlength="100" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
 			<label class="control-label">频道名称：</label>
 			<div class="controls">
 				<form:input path="channelName" htmlEscape="false" maxlength="200" class="input-xlarge "/>

@@ -4,7 +4,6 @@
 package com.cdboo.music.web;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -124,9 +123,9 @@ public class CdbooMusicController extends BaseController {
 	 */
 	@RequiresPermissions("music:cdbooMusic:edit")
     @RequestMapping(value = "import", method=RequestMethod.POST)
-	public String importFile(MultipartFile file, RedirectAttributes redirectAttributes) {
+	public String importFile(@RequestParam(required=true) String channelId,MultipartFile file, RedirectAttributes redirectAttributes) {
 		try {
-			cdbooMusicService.importMusicFile(file);
+			cdbooMusicService.importMusicFile(file,channelId);
 			addMessage(redirectAttributes, "导入歌曲信息成功");
 		} catch (Exception e) {
 			LogUtils.saveLog(Servlets.getRequest(), null, e, "导入歌曲");

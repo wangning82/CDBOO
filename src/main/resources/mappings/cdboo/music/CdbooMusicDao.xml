@@ -24,6 +24,13 @@
 	<sql id="cdbooMusicJoins">
 	</sql>
     
+    <select id="getMaxMusicNo" resultType="CdbooMusic">
+		SELECT 
+			max(a.music_no) AS "musicNo"
+		FROM cdboo_music a
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+	</select>
+	
 	<select id="get" resultType="CdbooMusic">
 		SELECT 
 			<include refid="cdbooMusicColumns"/>
@@ -87,7 +94,7 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY a.create_date DESC
+				ORDER BY a.create_date DESC,a.music_no ASC
 			</otherwise>
 		</choose>
 	</select>
@@ -148,7 +155,7 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY a.create_date DESC
+				ORDER BY a.create_date DESC,a.music_no ASC
 			</otherwise>
 		</choose>
 	</select>
@@ -166,7 +173,7 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY a.create_date DESC
+				ORDER BY a.create_date DESC,a.music_no ASC
 			</otherwise>
 		</choose>
 	</select>

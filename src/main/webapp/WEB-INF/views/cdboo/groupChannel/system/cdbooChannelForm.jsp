@@ -95,7 +95,7 @@
 		<div class="control-group">
 			<label class="control-label">子频道列表：</label>
 			<div class="controls">
-				<channel:channelListTag channelElementName="channelIds" channelList="${cdbooGroupChild.childChannelList }" channelType="0"></channel:channelListTag>
+				<channel:channelListTag channelElementName="channelIds" sortElementName="sorts" channelList="${cdbooGroupChild.groupChildChannelList }" channelType="0"></channel:channelListTag>
 			</div>
 		</div>
 		

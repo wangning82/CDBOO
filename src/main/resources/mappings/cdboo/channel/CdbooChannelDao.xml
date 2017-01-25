@@ -38,6 +38,13 @@
 		WHERE a.id = #{id}
 	</select>
 	
+	<select id="getMaxChannelNo" resultType="CdbooChannel">
+		SELECT 
+			max(a.channel_no) AS "channelNo"
+		FROM cdboo_child_channel a
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+	</select>
+	
 	<select id="findList" resultType="CdbooChannel">
 		SELECT 
 			<include refid="cdbooChannelColumns"/>
@@ -114,7 +121,7 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY a.create_date DESC
+				ORDER BY a.create_date DESC,a.channel_no ASC
 			</otherwise>
 		</choose>
 	</select>
@@ -251,7 +258,7 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY a.create_date DESC
+				ORDER BY a.create_date DESC,a.channel_no ASC
 			</otherwise>
 		</choose>
 	</select>

@@ -40,7 +40,8 @@
 					for (var i = 0; i < dataArray.length; i++) {
 						var entity = dataArray[i];
 						//alert(entity.id+":"+entity.name+":"+entity.actor+":"+entity.special+":"+entity.musicOwner+":"+entity.volume)
-						$('#tb').append(Mustache.render(tpl, {row: entity}));
+						var rowSize = $('#tb tr').size();
+						$('#tb').append(Mustache.render(tpl, {row: entity,rowIndex : ++rowSize}));
 					}
 		        }
 		   });
@@ -96,11 +97,13 @@
 							<th>风格类型</th>
 							<th>风格类型明细</th>
 							<th>频道版本</th>
+							<th>排序</th>
 							<th>创建时间</th>
 						</tr>
 					</thead>					
 					<tbody id="tb">
-						<c:forEach items="${cdbooUserGroup.groupChildList}" var="cdbooChannel" varStatus="status">
+						<c:forEach items="${cdbooUserGroup.groupChildChannelList}" var="cdbooGroupChildChannel" varStatus="status">
+							<c:set value="${cdbooGroupChildChannel.childChannelId }" var="cdbooChannel"></c:set>
 							<tr>
 								<td>
 									${cdbooChannel.channelNo}
@@ -119,6 +122,10 @@
 								</td>
 								<td>
 									${cdbooChannel.channelVersion}
+								</td>
+								<td>
+									<input name="groupChildChannelList[${status.index }].id" value="${cdbooGroupChildChannel.id}" type="hidden">
+									<input name="groupChildChannelList[${status.index }].sort" value="${cdbooGroupChildChannel.sort}">
 								</td>
 								<td>
 									<fmt:formatDate value="${cdbooChannel.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
@@ -146,6 +153,10 @@
 			<td>{{row.themeType}}</td>
 			<td>{{row.themeConcreteType}}</td>
 			<td>{{row.channelVersion}}</td>
+			<td>
+				<input name="groupChildChannelList[{{rowIndex}}].id" type="hidden">
+				<input name="groupChildChannelList[{{rowIndex}}].sort" value="{{row.sort}}">
+			</td>
 			<td>{{row.createDate}}</td>
 		</tr>//-->
 	</script>

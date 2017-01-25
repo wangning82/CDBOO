@@ -18,4 +18,6 @@ import com.cdboo.music.entity.CdbooMusic;
 @MyBatisDao
 public interface CdbooMusicDao extends CrudDao<CdbooMusic> {
 	public List<CdbooMusic> findListFromUserId(CdbooMusic cdbooMusic);
+	
+	public List<CdbooMusic> getMaxMusicNo();
 }

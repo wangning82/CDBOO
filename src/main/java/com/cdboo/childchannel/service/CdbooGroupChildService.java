@@ -26,14 +26,15 @@ import com.thinkgem.jeesite.common.service.CrudService;
  *
  */
 @Service
-@Transactional(readOnly=true)
+@Transactional(readOnly = true)
 public class CdbooGroupChildService extends CrudService<CdbooGroupChildDao, CdbooGroupChild> {
-	
+
 	@Autowired
 	private CdbooChannelService cdbooChannelService;
-	
+
 	/**
 	 * 按照用户和频道进行分组查询组合频道中间表，并分页
+	 * 
 	 * @param page
 	 * @param cdbooGroupChild
 	 * @return
@@ -52,9 +53,10 @@ public class CdbooGroupChildService extends CrudService<CdbooGroupChildDao, Cdbo
 		}
 		return page;
 	}
-	
+
 	/**
 	 * 根据查询条件获取组合频道列表
+	 * 
 	 * @param cdbooGroupChild
 	 * @return
 	 */
@@ -62,8 +64,8 @@ public class CdbooGroupChildService extends CrudService<CdbooGroupChildDao, Cdbo
 		List<CdbooGroupChild> list = super.findList(cdbooGroupChild);
 		return convertGroupChannelToChannel(list);
 	}
-	
-	public List<CdbooChannel> convertGroupChannelToChannel(List<CdbooGroupChild> list){
+
+	public List<CdbooChannel> convertGroupChannelToChannel(List<CdbooGroupChild> list) {
 		List<CdbooChannel> channelList = Lists.newArrayList();
 		if (CollectionUtils.isNotEmpty(list)) {
 			for (CdbooGroupChild cdbooGroupChild2 : list) {
@@ -73,33 +75,34 @@ public class CdbooGroupChildService extends CrudService<CdbooGroupChildDao, Cdbo
 				channelList.add(cdbooChannel);
 			}
 		}
-		
+
 		return channelList;
 	}
-	
-	@Transactional(readOnly=false)
+
+	@Transactional(readOnly = false)
 	public void delete(CdbooGroupChild cdbooGroupChild) {
 		CdbooChannel groupChannel = cdbooGroupChild.getGroupChannelId();
 		cdbooChannelService.delete(groupChannel);
-		
+
 		List<CdbooGroupChild> list = super.findList(cdbooGroupChild);
-		if(CollectionUtils.isNotEmpty(list)){
+		if (CollectionUtils.isNotEmpty(list)) {
 			for (CdbooGroupChild removeObj : list) {
 				dao.remove(removeObj);
 			}
 		}
 	}
-	
-	@Transactional(readOnly=false)
+
+	@Transactional(readOnly = false)
 	public void save(CdbooGroupChild cdbooGroupChild) {
 		CdbooChannel groupChannel = cdbooGroupChild.getGroupChannelId();
 		cdbooChannelService.save(groupChannel);
 
 		List<String> channelIds = cdbooGroupChild.getChannelIds();
+		List<Integer> sorts = cdbooGroupChild.getSorts();
 
 		CdbooGroupChild cdbooGroupChild2 = new CdbooGroupChild();
 		cdbooGroupChild2.setGroupChannelId(groupChannel);
-		
+
 		List<CdbooGroupChild> list = dao.findList(cdbooGroupChild2);
 		Map<String, CdbooGroupChild> map = Maps.newHashMap();
 		if (CollectionUtils.isNotEmpty(list)) {
@@ -110,11 +113,17 @@ public class CdbooGroupChildService extends CrudService<CdbooGroupChildDao, Cdbo
 
 		List<CdbooGroupChild> saveList = Lists.newArrayList();
 		if (CollectionUtils.isNotEmpty(channelIds)) {
-			for (String channelId : channelIds) {
+			for (int i = 0; i < channelIds.size(); i++) {
+				String channelId = channelIds.get(i);
+				Integer sort = sorts.get(i);
 				CdbooGroupChild child = null;
 				if ((child = map.remove(channelId)) == null) {
 					CdbooChannel cdbooChannel = cdbooChannelService.get(channelId);
-					child = new CdbooGroupChild(groupChannel, cdbooChannel);
+					child = new CdbooGroupChild(groupChannel, cdbooChannel, sort);
+					saveList.add(child);
+				}
+				else{
+					child.setSort(sort);
 					saveList.add(child);
 				}
 			}

@@ -54,12 +54,12 @@
 	<form:form id="inputForm" modelAttribute="cdbooMusic" action="${ctx}/music/cdbooMusic/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>
-		<div class="control-group">
+		<%--<div class="control-group">
 			<label class="control-label">音乐编号：</label>
 			<div class="controls">
 				<form:input path="musicNo" htmlEscape="false" maxlength="1000" class="input-xlarge "/>
 			</div>
-		</div>		
+		</div>	 --%>	
 		<div class="control-group">
 			<label class="control-label">音乐名称：</label>
 			<div class="controls">

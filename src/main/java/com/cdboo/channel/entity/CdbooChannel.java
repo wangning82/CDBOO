@@ -9,6 +9,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.Length;
 
+import com.cdboo.channelmusic.entity.CdbooChannelMusic;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.Lists;
 import com.thinkgem.jeesite.common.persistence.DataEntity;
@@ -22,7 +23,7 @@ import com.thinkgem.jeesite.common.persistence.DataEntity;
 public class CdbooChannel extends DataEntity<CdbooChannel> {
 
 	private static final long serialVersionUID = 1L;
-	private String channelNo; // 频道编号
+	private Integer channelNo; // 频道编号
 	private String channelName; // 频道名称
 	private String photoPath; // 频道图片
 	private String themeType; // 风格类型
@@ -42,11 +43,14 @@ public class CdbooChannel extends DataEntity<CdbooChannel> {
 	private List<String> musicIds = Lists.newArrayList();
 	//子频道列表
 	private List<CdbooChannel> childChannelList = Lists.newArrayList();
+	private List<CdbooChannelMusic> cdbooChannelMusics = Lists.newArrayList();
+	private List<String> sortArray = Lists.newArrayList();
 	
 	private List<String> idArray;
 	private List<String> inIdArray;
 	private String ids;
 	private String userId;
+	private String volume;
 	
 	public CdbooChannel() {
 		super();
@@ -57,11 +61,11 @@ public class CdbooChannel extends DataEntity<CdbooChannel> {
 	}
 
 	@Length(min = 0, max = 100, message = "频道编号长度必须介于 0 和 100 之间")
-	public String getChannelNo() {
+	public Integer getChannelNo() {
 		return channelNo;
 	}
 
-	public void setChannelNo(String channelNo) {
+	public void setChannelNo(Integer channelNo) {
 		this.channelNo = channelNo;
 	}
 
@@ -318,4 +322,29 @@ public class CdbooChannel extends DataEntity<CdbooChannel> {
 	public void setInIdArray(List<String> inIdArray) {
 		this.inIdArray = inIdArray;
 	}
+
+	public List<CdbooChannelMusic> getCdbooChannelMusics() {
+		return cdbooChannelMusics;
+	}
+
+	public void setCdbooChannelMusics(List<CdbooChannelMusic> cdbooChannelMusics) {
+		this.cdbooChannelMusics = cdbooChannelMusics;
+	}
+
+	public List<String> getSortArray() {
+		return sortArray;
+	}
+
+	public void setSortArray(List<String> sortArray) {
+		this.sortArray = sortArray;
+	}
+
+	public String getVolume() {
+		return volume;
+	}
+
+	public void setVolume(String volume) {
+		this.volume = volume;
+	}
+	
 }

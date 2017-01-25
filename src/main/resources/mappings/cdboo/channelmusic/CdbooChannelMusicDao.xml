@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdboo.channelmusic.dao.CdbooChannelMusicDao">
+    
+	<sql id="cdbooChannelMusicColumns">
+		a.id AS "id",
+		a.channel_id AS "channel.id",
+		a.music_id AS "music.id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.sort AS "sort",
+		
+		b.music_no AS "music.musicNo",
+		b.music_owner AS "music.musicOwner",
+		b.music_name AS "music.musicName",
+		b.actor AS "music.actor",
+		b.special AS "music.special",
+		b.volume AS "music.volume",
+		b.create_by AS "music.createBy.id",
+		b.create_date AS "music.createDate",
+		b.update_by AS "music.updateBy.id",
+		b.update_date AS "music.updateDate",
+		b.remarks AS "music.remarks",
+		b.del_flag AS "music.delFlag",
+		b.status AS "music.status",
+		b.path AS "music.path",
+		b.duration AS "music.duration",
+		
+		c.channel_no AS "channel.channelNo",
+		c.channel_name AS "channel.channelName",
+		c.photo_path AS "channel.photoPath",
+		c.theme_type AS "channel.themeType",
+		c.theme_concrete_type AS "channel.themeConcreteType",
+		c.channel_version AS "channel.channelVersion",
+		c.music_style AS "channel.musicStyle",
+		c.site AS "channel.site",
+		c.speed AS "channel.speed",
+		c.voice AS "channel.voice",
+		c.element AS "channel.element",
+		c.emotion AS "channel.emotion",
+		c.instrument AS "channel.instrument",
+		c.create_by AS "channel.createBy.id",
+		c.create_date AS "channel.createDate",
+		c.update_by AS "channel.updateBy.id",
+		c.update_date AS "channel.updateDate",
+		c.remarks AS "channel.remarks",
+		c.del_flag AS "channel.delFlag",
+		c.status AS "channel.status",
+		c.channel_type AS "channel.channelType"
+	</sql>
+	
+	<sql id="cdbooChannelMusicJoins">
+		INNER JOIN cdboo_music b on a.music_id = b.id
+		INNER JOIN cdboo_child_channel c on a.channel_id = c.id
+	</sql>
+    
+	<select id="get" resultType="CdbooChannelMusic">
+		SELECT 
+			<include refid="cdbooChannelMusicColumns"/>
+		FROM cdboo_channel_music a
+		<include refid="cdbooChannelMusicJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="CdbooChannelMusic">
+		SELECT 
+			<include refid="cdbooChannelMusicColumns"/>
+		FROM cdboo_channel_music a
+		<include refid="cdbooChannelMusicJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="channel != null and channel.id != null and channel.id != ''">
+				AND a.channel_id = #{channel.id}
+			</if>
+			<if test="music != null and music.id != null and music.id != ''">
+				AND a.music_id = #{music.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date DESC,b.music_no ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CdbooChannelMusic">
+		SELECT 
+			<include refid="cdbooChannelMusicColumns"/>
+		FROM cdboo_channel_music a
+		<include refid="cdbooChannelMusicJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cdboo_channel_music(
+			id,
+			channel_id,
+			music_id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			sort
+		) VALUES (
+			#{id},
+			#{channel.id},
+			#{music.id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{sort}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cdboo_channel_music SET 	
+			channel_id = #{channel.id},
+			music_id = #{music.id},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			sort = #{sort}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE cdboo_channel_music SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

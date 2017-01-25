@@ -19,7 +19,7 @@ import com.thinkgem.jeesite.common.utils.excel.annotation.ExcelField;
 public class CdbooMusic extends DataEntity<CdbooMusic> {
 	
 	private static final long serialVersionUID = 1L;
-	private String musicNo;		// 音乐编号
+	private Integer musicNo;		// 音乐编号
 	private String musicOwner;		// 音乐拥有者类型
 	private String musicName;		// 音乐名称
 	private String actor;		// 艺人
@@ -45,11 +45,11 @@ public class CdbooMusic extends DataEntity<CdbooMusic> {
 
 	@Length(min=0, max=100, message="音乐编号长度必须介于 0 和 100 之间")
 	@ExcelField(title="音乐编号",type=1,align=2, sort=10)
-	public String getMusicNo() {
+	public Integer getMusicNo() {
 		return musicNo;
 	}
 
-	public void setMusicNo(String musicNo) {
+	public void setMusicNo(Integer musicNo) {
 		this.musicNo = musicNo;
 	}
 	

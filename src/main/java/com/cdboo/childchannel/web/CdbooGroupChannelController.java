@@ -90,13 +90,14 @@ public class CdbooGroupChannelController extends BaseController {
 			CdbooGroupChild cdbooGroupChild2 = new CdbooGroupChild();
 			cdbooGroupChild2.setGroupChannelId(groupChannel);
 			List<CdbooGroupChild> groupChildList = cdbooGroupChildService.findList(cdbooGroupChild2);
+			cdbooGroupChild.setGroupChildChannelList(groupChildList);
 			/**************** 查询组合频道下子频道列表 End ******************/
 			
-			/**************** 转换组合频道子频道中间表列表为频道列表 Start ******************/
-			List<CdbooChannel> groupChildChannelList = cdbooGroupChildService
-					.convertGroupChannelToChannel(groupChildList);
-			/**************** 转换组合频道子频道中间表列表为频道列表 End ******************/
-			cdbooGroupChild.setChildChannelList(groupChildChannelList);
+//			/**************** 转换组合频道子频道中间表列表为频道列表 Start ******************/
+//			List<CdbooChannel> groupChildChannelList = cdbooGroupChildService
+//					.convertGroupChannelToChannel(groupChildList);
+//			/**************** 转换组合频道子频道中间表列表为频道列表 End ******************/
+//			cdbooGroupChild.setChildChannelList(groupChildChannelList);
 		}
 
 		return "cdboo/groupChannel/system/cdbooChannelForm";

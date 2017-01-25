@@ -12,7 +12,7 @@ public class Constants {
 	public static final String MUSICOWNER_PRIVATE = "1";
 	
 	//默认音量
-	public static final String MUSIC_VOLUME_DEFAULT = "10";
+	public static final String MUSIC_VOLUME_DEFAULT = "50";
 	
 	//子频道
 	public static final String CHANNEL_TYPE_CHILD = "0";

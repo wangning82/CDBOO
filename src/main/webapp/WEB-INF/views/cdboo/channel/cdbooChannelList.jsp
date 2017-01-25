@@ -41,9 +41,65 @@
 				}
 			}
 		}
+		
+		function importButtonClick(channelId){
+			$('#importForm').attr('action','${ctx}/channel/cdbooChannel/import?channelId='+channelId);
+			$.jBox($("#importBox").html(), {title:"导入数据", buttons:{"关闭":true}, 
+				bottomText:"导入文件不能超过500M，仅允许导入“zip”格式文件！"});
+		}
+		
+		function openMusicListWin(channelId){
+			top.$.jBox.open("iframe:${ctx}/channel/cdbooChannel/openChannelMusicWin?id="+channelId, "音乐列表",$(top.document).width()-240,$(top.document).height()-400,{
+				buttons:{"关闭":true}, loaded:function(h){
+					$(".jbox-content", top.document).css("overflow-y","hidden");
+				}
+			});
+		}
+		
+		function setVolumeWin(channelId){
+			
+			var submit = function (v, h, f) {
+               $('#channelId').val(channelId);
+               $('#volumeId').val(f.volume);
+               $('#setVolumeForm').submit();
+               return true;
+            };
+
+			var html = "";
+			html += '<div id="setVolumeBox">';
+			html += '<form class="form-search" style="padding-left:20px;text-align:center;"><br/>';
+			html += '<input id="id" name="id" type="hidden" value="'+channelId+'"/>';
+			html += '<select name="volume" id="volume" class="input-xlarge ">';	
+			html += '<option value="">请选择</option>';
+			var volumeJson = ${fns:toJson(fns:getVolumeList()) };
+			if(volumeJson && volumeJson.length>0){
+				for(var i = 0;i<volumeJson.length;i++){
+					html += '<option value="'+volumeJson[i].value+'" >'+volumeJson[i].lable+'</option>';
+				}
+			}
+			html += '</select>';
+			html += '</form>';
+			html += '</div>';	
+		
+			jBox(html, {
+                title: "音量调整", submit: submit
+            });
+		}
 	</script>
 </head>
 <body>
+	<div id="importBox" class="hide">
+		<form id="importForm" action="${ctx}/channel/cdbooChannel/import" method="post" enctype="multipart/form-data"
+			class="form-search" style="padding-left:20px;text-align:center;" onsubmit="loading('正在导入，请稍等...');"><br/>
+			<input id="uploadFile" name="file" type="file" style="width:330px"/><br/><br/>　　
+			<input id="btnImportSubmit" class="btn btn-primary" type="submit" value="   导    入   "/>
+		</form>
+	</div>
+	<form id="setVolumeForm" action="${ctx}/channel/cdbooChannel/setVolume" method="post"
+			class="form-search" style="padding-left:20px;text-align:center;" onsubmit="loading('正在导入，请稍等...');">
+		<input type="hidden" name="id" id="channelId"/>	
+		<input type="hidden" name="volume" id="volumeId"/>	
+	</form>
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/channel/cdbooChannel/">频道信息列表</a></li>
 		<shiro:hasPermission name="channel:cdbooChannel:edit"><li><a href="${ctx}/channel/cdbooChannel/form">频道信息添加</a></li></shiro:hasPermission>
@@ -167,8 +223,11 @@
 					<fmt:formatDate value="${cdbooChannel.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<shiro:hasPermission name="channel:cdbooChannel:edit"><td>
-    				<a href="${ctx}/channel/cdbooChannel/form?id=${cdbooChannel.id}">修改</a>
+					<a href="${ctx}/channel/cdbooChannel/form?id=${cdbooChannel.id}">修改</a>
 					<a href="${ctx}/channel/cdbooChannel/delete?id=${cdbooChannel.id}" onclick="return confirmx('确认要删除该频道信息吗？', this.href)">删除</a>
+					<a href="#" onclick="importButtonClick('${cdbooChannel.id}')" >导入音乐</a>
+					<a href="#" onclick="openMusicListWin('${cdbooChannel.id}')" >音乐列表</a>
+					<a href="#" onclick="setVolumeWin('${cdbooChannel.id}')" >调整音量</a>
 				</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>

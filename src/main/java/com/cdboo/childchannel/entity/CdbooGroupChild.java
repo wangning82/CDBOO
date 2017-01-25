@@ -30,11 +30,14 @@ public class CdbooGroupChild extends DataEntity<CdbooGroupChild> {
 	private CdbooChannel groupChannelId;		// 组合频道
 	private CdbooChannel childChannelId;		// 子频道
 	private String status;		// 状态位显示
+	private Integer sort;
 	private Integer childChannelSize; //子频道数量
 	private List<CdbooChannel> channelList = Lists.newArrayList();//组合频道集合
 	private List<CdbooChannel> childChannelList = Lists.newArrayList();//子频道集合
+	private List<CdbooGroupChild> groupChildChannelList = Lists.newArrayList();//子频道集合
 	
 	private List<String> channelIds = Lists.newArrayList();
+	private List<Integer> sorts = Lists.newArrayList();
 	
 	public CdbooGroupChild() {
 		super();
@@ -44,10 +47,14 @@ public class CdbooGroupChild extends DataEntity<CdbooGroupChild> {
 		super(id);
 	}
 
-	public CdbooGroupChild(CdbooChannel groupChannelId, CdbooChannel childChannelId) {
+	public CdbooGroupChild(CdbooChannel groupChannelId, CdbooChannel childChannelId, Integer sort) {
 		super();
 		this.groupChannelId = groupChannelId;
 		this.childChannelId = childChannelId;
+		if (sort == null) {
+			sort = 0;
+		}
+		this.sort = sort;
 	}
 
 	public CdbooChannel getGroupChannelId() {
@@ -105,6 +112,30 @@ public class CdbooGroupChild extends DataEntity<CdbooGroupChild> {
 
 	public void setChannelIds(List<String> channelIds) {
 		this.channelIds = channelIds;
+	}
+
+	public Integer getSort() {
+		return sort;
+	}
+
+	public void setSort(Integer sort) {
+		this.sort = sort;
+	}
+
+	public List<CdbooGroupChild> getGroupChildChannelList() {
+		return groupChildChannelList;
+	}
+
+	public void setGroupChildChannelList(List<CdbooGroupChild> groupChildChannelList) {
+		this.groupChildChannelList = groupChildChannelList;
+	}
+
+	public List<Integer> getSorts() {
+		return sorts;
+	}
+
+	public void setSorts(List<Integer> sorts) {
+		this.sorts = sorts;
 	}
 
 }

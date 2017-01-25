@@ -2,6 +2,7 @@
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <%@ attribute name="channelList" type="java.util.List" required="true" description="频道集合"%>
 <%@ attribute name="channelElementName" type="java.lang.String" required="true" description="频道隐藏域id名称"%>
+<%@ attribute name="sortElementName" type="java.lang.String" required="true" description="排序隐藏域id名称"%>
 <%@ attribute name="userElementId" type="java.lang.String" required="false" description="查询对应用户id所关联的频道,不传查询所有"%>
 <%@ attribute name="channelType" type="java.lang.String" required="false" description="指定频道类型"%>
 <script type="text/javascript">
@@ -72,21 +73,23 @@
 <table id="contentTable" class="table table-striped table-bordered table-condensed">
 	<thead>
 		<tr>
-			<th>频道编号</th>
-			<th>频道名称</th>
-			<th>频道图片</th>
-			<th>风格类型</th>
-			<th>风格类型明细</th>
-			<th>频道版本</th>
-			<th>创建时间</th>
-			<th>操作</th>
+			<th style="width: 10%">频道编号</th>
+			<th style="width: 15%">频道名称</th>
+			<th style="width: 10%">频道图片</th>
+			<th style="width: 10%">风格类型</th>
+			<th style="width: 10%">风格类型明细</th>
+			<th style="width: 10%">频道版本</th>
+			<th style="width: 10%">排序</th>
+			<th style="width: 15%">创建时间</th>
+			<th style="width: 10%">操作</th>
 		</tr>
 	</thead>					
 	<tbody id="tb">
-		<c:forEach items="${channelList}" var="cdbooChannel" varStatus="status">
+		<c:forEach items="${channelList}" var="groupChildChannel" varStatus="status">
+			<c:set value="${groupChildChannel.childChannelId }" var="cdbooChannel"></c:set>
 			<tr>
 				<td>
-					${cdbooChannel.channelNo}<input type="hidden" name = '${channelElementName }' value="${cdbooChannel.id }">
+					${cdbooChannel.channelNo}<input type="hidden" id="${channelElementName }" name = '${channelElementName }' value="${cdbooChannel.id }">
 				</td>
 				<td>
 					${cdbooChannel.channelName}
@@ -112,6 +115,9 @@
 					${cdbooChannel.channelVersion}
 				</td>
 				<td>
+					<input type="text" name="${sortElementName }" value="${groupChildChannel.sort}" class="input-small">
+				</td>
+				<td>
 					<fmt:formatDate value="${cdbooChannel.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<td><a href="#" onclick="deleteRow(this)">删除</a></td>
@@ -122,12 +128,13 @@
 
 <script type="text/template" id="channelTpl">//<!--
 		<tr>
-			<td>{{row.channelNo}}<input type="hidden" name = 'channelIds' value="{{row.id}}"></td>
+			<td>{{row.channelNo}}<input type="hidden" name = '${channelElementName }' value='{{row.id}}'></td>
 			<td>{{row.channelName}}</td>
 			<td><img src="{{row.photoPath}}" width="${Constants.IMG_WIDTH}" height="${Constants.IMG_HEIGHT}" onclick="disPic('{{row.photoPath}}')"/></td>
 			<td>{{row.themeType}}</td>
 			<td>{{row.themeConcreteType}}</td>
 			<td>{{row.channelVersion}}</td>
+			<td><input type="text" name="${sortElementName }" value="0" class="input-small"></td>
 			<td>{{row.createDate}}</td>
 			<td><a href="#" onclick="deleteRow(this)">删除</a></td>
 		</tr>//-->
