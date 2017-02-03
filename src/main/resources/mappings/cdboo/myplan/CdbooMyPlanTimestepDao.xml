@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdboo.myplan.dao.CdbooMyPlanTimestepDao">
+    
+	<sql id="cdbooMyPlanTimestepColumns">
+		a.id AS "id",
+		a.plan_id AS "plan.id",
+		a.user_timestep_id AS "userTimestep.id",
+		a.user_channel_id AS "userChannel.id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.channel_type AS "channelType",
+		a.operation_type AS "operationType"
+	</sql>
+	
+	<sql id="cdbooMyPlanTimestepJoins">
+		LEFT JOIN cdboo_my_plan b ON b.id = a.plan_id
+	</sql>
+    
+	<select id="get" resultType="CdbooMyPlanTimestep">
+		SELECT 
+			<include refid="cdbooMyPlanTimestepColumns"/>
+		FROM cdboo_my_plan_timestep a
+		<include refid="cdbooMyPlanTimestepJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CdbooMyPlanTimestep">
+		SELECT 
+			<include refid="cdbooMyPlanTimestepColumns"/>
+		FROM cdboo_my_plan_timestep a
+		<include refid="cdbooMyPlanTimestepJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="plan != null and plan.id != null and plan.id != ''">
+				AND a.plan_id = #{plan.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CdbooMyPlanTimestep">
+		SELECT 
+			<include refid="cdbooMyPlanTimestepColumns"/>
+		FROM cdboo_my_plan_timestep a
+		<include refid="cdbooMyPlanTimestepJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cdboo_my_plan_timestep(
+			id,
+			plan_id,
+			user_timestep_id,
+			user_channel_id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			channel_type,
+			operation_type
+		) VALUES (
+			#{id},
+			#{plan.id},
+			#{userTimestep.id},
+			#{userChannel.id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{channelType},
+			#{operationType}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cdboo_my_plan_timestep SET 	
+			plan_id = #{plan.id},
+			user_timestep_id = #{userTimestep.id},
+			user_channel_id = #{userChannel.id},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			channel_type = #{channelType},
+			operation_type = #{operationType}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE cdboo_my_plan_timestep SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE plan_id = #{plan.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

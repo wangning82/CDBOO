@@ -28,11 +28,11 @@
 			<li><label>计划名称：</label>
 				<form:input path="planName" htmlEscape="false" maxlength="100" class="input-medium"/>
 			</li>
-			<li><label>用户id：</label>
+			<li><label>用户：</label>
 				<sys:treeselect id="user" name="user.id" value="${cdbooMyPlan.user.id}" labelName="user.name" labelValue="${cdbooMyPlan.user.name}"
 					title="用户" url="/sys/office/treeData?type=3" cssClass="input-small" allowClear="true" notAllowSelectParent="true"/>
 			</li>
-			<li><label>风格（主题，节日，计划，插播）：</label>
+			<li><label>风格：</label>
 				<form:select path="style" class="input-medium">
 					<form:option value="" label=""/>
 					<form:options items="${fns:getDictList('theme_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
@@ -47,13 +47,12 @@
 		<thead>
 			<tr>
 				<th>计划名称</th>
-				<th>用户id</th>
-				<th>周属性</th>
-				<th>风格（主题，节日，计划，插播）</th>
-				<th>开始日期</th>
-				<th>结束日期</th>
+				<th>用户</th>
+				<th>风格</th>
+				<th>日期区间</th>
 				<th>循环次数</th>
 				<th>重复时间</th>
+				<th>备注</th>
 				<shiro:hasPermission name="myplan:cdbooMyPlan:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
@@ -67,22 +66,32 @@
 					${cdbooMyPlan.user.name}
 				</td>
 				<td>
-					${cdbooMyPlan.week}
-				</td>
-				<td>
 					${fns:getDictLabel(cdbooMyPlan.style, 'theme_type', '')}
 				</td>
 				<td>
-					<fmt:formatDate value="${cdbooMyPlan.startDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+					<!-- 如果是主题或者风格，显示星期中文字符串-->
+					<c:if test="${cdbooMyPlan.style eq Constants.THEMETYPE_THEME || cdbooMyPlan.style eq Constants.THEMETYPE_STYLE}">
+						${fns:getChineseWeek(cdbooMyPlan.week) }
+					</c:if>
+					<!-- 如果不是主题或者风格，显示日期段，只有两种情况，就是插播或者节日-->
+					<c:if test="${cdbooMyPlan.style ne Constants.THEMETYPE_THEME && cdbooMyPlan.style ne Constants.THEMETYPE_STYLE}">
+						<fmt:formatDate value="${cdbooMyPlan.startDate}" pattern="yyyy-MM-dd"/>到<fmt:formatDate value="${cdbooMyPlan.endDate}" pattern="yyyy-MM-dd"/>
+					</c:if>
 				</td>
 				<td>
-					<fmt:formatDate value="${cdbooMyPlan.endDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+					<!-- 如果是插播，显示循环次数-->
+					<c:if test="${cdbooMyPlan.style eq Constants.THEMETYPE_SPOTS}">
+						${cdbooMyPlan.cycleIndex}次
+					</c:if>
 				</td>
 				<td>
-					${cdbooMyPlan.cycleIndex}
+					<!-- 如果是插播，显示循环次数-->
+					<c:if test="${cdbooMyPlan.style eq Constants.THEMETYPE_SPOTS}">
+						${cdbooMyPlan.intervalTime}分钟
+					</c:if>
 				</td>
 				<td>
-					${cdbooMyPlan.intervalTime}
+					${cdbooMyPlan.remarks}
 				</td>
 				<shiro:hasPermission name="myplan:cdbooMyPlan:edit"><td>
     				<a href="${ctx}/myplan/cdbooMyPlan/form?id=${cdbooMyPlan.id}">修改</a>
