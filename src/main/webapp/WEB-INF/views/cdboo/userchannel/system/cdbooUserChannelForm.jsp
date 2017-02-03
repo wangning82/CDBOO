@@ -77,24 +77,18 @@
 					<sys:treeselect id="user" name="user.id" value="${cdbooUserChannel.user.id}" labelName="user.name" labelValue="${cdbooUserChannel.user.name}"
 						title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true" notAllowSelectParent="true" />
 				</c:if>
+				
+				&nbsp;
+				<input id="assignButton" class="btn btn-primary" type="button" value="分配频道" onclick="openMappingWin()"/>
 			</div>
 		</div>
+
 		<div class="control-group">
-			<label class="control-label">频道：</label>
+			<label class="control-label">子频道列表：</label>
 			<div class="controls">
-				<form:select id="channelId" path="channel.id" class="input-xlarge " onchange="linkMusic()">
-					<form:option value="" label="请选择"/>
-					<form:options items="${channelList}" itemLabel="channelName" itemValue="id" htmlEscape="false"/>
-				</form:select>
+				<channel:channelListTag channelElementName="channelIds" channelList="${cdbooUserChannel.channelList }" channelType="0"></channel:channelListTag>
 			</div>
 		</div>
-		
-		<%-- <div class="control-group">
-			<label class="control-label">音乐列表：</label>
-			<div class="controls">
-				<music:musicListTag musicIdElementName="musicIds" musicList="${musicList }" userElementId="userId"></music:musicListTag>
-			</div>
-		</div> --%>
 		
 		<div class="form-actions">
 			<shiro:hasPermission name="userchannel:cdbooUserChannel:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>

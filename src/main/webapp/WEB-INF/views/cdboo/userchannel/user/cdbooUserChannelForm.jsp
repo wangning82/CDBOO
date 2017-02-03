@@ -64,25 +64,15 @@
 			<div class="controls">
 				${fns:getUser().name}
 				<input type="hidden" id="userId" name="user.id" value="${fns:getUser().id }"/>
-			</div>
-		</div>
-		
-		<div class="control-group">
-			<label class="control-label">频道：</label>
-			<div class="controls">
-				<form:select id="channelId" path="channel.id" class="input-xlarge " onchange="linkMusic()">
-					<form:option value="" label="请选择"/>
-					<form:options items="${channelList}" itemLabel="channelName" itemValue="id" htmlEscape="false"/>
-				</form:select>
 				&nbsp;
-				<input id="assignButton" class="btn btn-primary" type="button" value="分配音乐" onclick="openMappingWin()"/>
+			<input id="assignButton" class="btn btn-primary" type="button" value="分配频道" onclick="openMappingWin()"/>
 			</div>
 		</div>
 		
 		<div class="control-group">
-			<label class="control-label">音乐列表：</label>
+			<label class="control-label">子频道列表：</label>
 			<div class="controls">
-				<music:musicListTag musicIdElementName="musicIds" musicList="${musicList }" userElementId="userId"></music:musicListTag>
+				<channel:channelListTag channelElementName="channelIds" channelList="${cdbooUserChannel.channelList }" channelType="0" userElementId="userId"></channel:channelListTag>
 			</div>
 		</div>
 		
