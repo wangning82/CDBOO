@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdboo.myplan.dao.CdbooMyPlanDao">
+    
+	<sql id="cdbooMyPlanColumns">
+		a.id AS "id",
+		a.plan_name AS "planName",
+		a.user_id AS "user.id",
+		a.week AS "week",
+		a.style AS "style",
+		a.start_date AS "startDate",
+		a.end_date AS "endDate",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.cycle_index AS "cycleIndex",
+		a.interval_time AS "intervalTime",
+		a.remarks AS "remarks",
+		u3.name AS "user.name"
+	</sql>
+	
+	<sql id="cdbooMyPlanJoins">
+		LEFT JOIN sys_user u3 ON u3.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="CdbooMyPlan">
+		SELECT 
+			<include refid="cdbooMyPlanColumns"/>
+		FROM cdboo_my_plan a
+		<include refid="cdbooMyPlanJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CdbooMyPlan">
+		SELECT 
+			<include refid="cdbooMyPlanColumns"/>
+		FROM cdboo_my_plan a
+		<include refid="cdbooMyPlanJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="planName != null and planName != ''">
+				AND a.plan_name = #{planName}
+			</if>
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.user_id = #{user.id}
+			</if>
+			<if test="style != null and style != ''">
+				AND a.style = #{style}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CdbooMyPlan">
+		SELECT 
+			<include refid="cdbooMyPlanColumns"/>
+		FROM cdboo_my_plan a
+		<include refid="cdbooMyPlanJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cdboo_my_plan(
+			id,
+			plan_name,
+			user_id,
+			week,
+			style,
+			start_date,
+			end_date,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag,
+			cycle_index,
+			interval_time,
+			remarks
+		) VALUES (
+			#{id},
+			#{planName},
+			#{user.id},
+			#{week},
+			#{style},
+			#{startDate},
+			#{endDate},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag},
+			#{cycleIndex},
+			#{intervalTime},
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cdboo_my_plan SET 	
+			plan_name = #{planName},
+			user_id = #{user.id},
+			week = #{week},
+			style = #{style},
+			start_date = #{startDate},
+			end_date = #{endDate},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			cycle_index = #{cycleIndex},
+			interval_time = #{intervalTime},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE cdboo_my_plan SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
