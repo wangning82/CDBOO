@@ -124,4 +124,13 @@
 		</choose>
 	</update>
 	
+	<update id="remove">
+		delete from cdboo_my_plan_timestep
+		<where>
+			<if test="plan != null and plan.id != null and plan.id != ''">
+				AND plan_id = #{plan.id}
+			</if>
+		</where>
+	</update>
+	
 </mapper>

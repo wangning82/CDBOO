@@ -3,16 +3,17 @@
  */
 package com.cdboo.myplan.entity;
 
-import org.hibernate.validator.constraints.Length;
-import com.thinkgem.jeesite.modules.sys.entity.User;
 import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.validator.constraints.Length;
 
 import com.cdboo.usertimestep.entity.CdbooUserTimestep;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import java.util.List;
 import com.google.common.collect.Lists;
-
 import com.thinkgem.jeesite.common.persistence.DataEntity;
+import com.thinkgem.jeesite.modules.sys.entity.User;
 
 /**
  * 新计划表Entity
@@ -32,6 +33,7 @@ public class CdbooMyPlan extends DataEntity<CdbooMyPlan> {
 	private String intervalTime;		// 重复时间
 	private List<CdbooMyPlanTimestep> cdbooMyPlanTimestepList = Lists.newArrayList();		// 子表列表
 	private List<CdbooUserTimestep> cdbooUserTimestepList = Lists.newArrayList();		// 用户时段中间表列表
+	private List<String> userTimestepIds = Lists.newArrayList();
 	
 	public CdbooMyPlan() {
 		super();
@@ -58,7 +60,6 @@ public class CdbooMyPlan extends DataEntity<CdbooMyPlan> {
 		this.user = user;
 	}
 	
-	@Length(min=0, max=2, message="周属性长度必须介于 0 和 2 之间")
 	public String getWeek() {
 		return week;
 	}
@@ -127,5 +128,25 @@ public class CdbooMyPlan extends DataEntity<CdbooMyPlan> {
 	public void setCdbooUserTimestepList(List<CdbooUserTimestep> cdbooUserTimestepList) {
 		this.cdbooUserTimestepList = cdbooUserTimestepList;
 	}
-	
+
+	public List<String> getUserTimestepIds() {
+		return userTimestepIds;
+	}
+
+	public void setUserTimestepIds(List<String> userTimestepIds) {
+		this.userTimestepIds = userTimestepIds;
+	}
+
+	public List<String> getWeeks() {
+		if (StringUtils.isNotBlank(this.week)) {
+			String[] weekArray = this.week.split(",");
+			return Lists.newArrayList(weekArray);
+		}
+		return Lists.newArrayList();
+	}
+
+	public void setWeeks(List<String> weeks) {
+		this.week = StringUtils.join(weeks, ",");
+	}
+
 }

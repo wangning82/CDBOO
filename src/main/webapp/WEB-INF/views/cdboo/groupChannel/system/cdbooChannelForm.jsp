@@ -92,15 +92,9 @@
 			</div>
 		</div>
 		
-		<div class="control-group">
-			<label class="control-label">子频道列表：</label>
-			<div class="controls">
-				<channel:channelListTag channelElementName="channelIds" sortElementName="sorts" channelList="${cdbooGroupChild.childChannelList }" channelType="0"></channel:channelListTag>
-			</div>
-		</div>
+		<channel:channelListTag channelElementName="channelIds" sortElementName="sorts" channelList="${cdbooGroupChild.childChannelList }" channelType="0"></channel:channelListTag>
 		
 		<div class="form-actions">
-			<input id="assignButton" class="btn btn-primary" type="button" value="分配频道" onclick="openMappingWin()"/>
 			<shiro:hasPermission name="channel:groupChannel:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
 		</div>

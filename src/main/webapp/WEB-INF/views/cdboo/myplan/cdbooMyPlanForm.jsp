@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" import="com.cdboo.common.Constants" %>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
@@ -91,7 +91,7 @@
 		cycleIndexDisFlag:循环次数选择显示隐藏控制，true为显示，false为隐藏
 		*/
 		function helpChangeDisStatus(dateDisFlag,weekDisFlag,intervalTimeDisFlag,cycleIndexDisFlag){
-			if(dateSpanDisFlag){
+			if(dateDisFlag){
 				$("#startDateDiv").show();
 				$("#endDateDiv").show();
 			}
@@ -156,9 +156,7 @@
 		<div class="control-group" id="weekDiv">
 			<label class="control-label">周属性：</label>
 			<div class="controls">
-				<c:forEach items="${fns:getDictList('week')}" var="style">
-					<input type="checkbox" name="week" value="${style.value}" />${style.label}
-				</c:forEach>
+				<form:checkboxes path="weeks" items="${fns:getDictList('week')}" itemLabel="label" itemValue="value" htmlEscape="false" class="required"/>
 			</div>
 		</div>
 		
@@ -206,53 +204,9 @@
 				<form:textarea path="remarks" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label">时段列表：</label>
-			<div class="controls">
-				<table id="contentTable" class="table table-striped table-bordered table-condensed">
-					<thead>
-						<tr>
-							<th class="hide"></th>
-							<th>时段名称</th>
-							<th>开始时间</th>
-							<th>结束时间</th>
-							<shiro:hasPermission name="myplan:cdbooMyPlan:edit"><th width="10">&nbsp;</th></shiro:hasPermission>
-						</tr>
-					</thead>
-					<tbody id="cdbooUserTimestepList">
-					</tbody>
-				</table>	
-				<script type="text/template" id="cdbooUserTimestepTpl">//<!--
-					<tr id="cdbooUserTimestepList{{idx}}">
-							<td class="hide">
-								<input id="cdbooUserTimestepList{{idx}}_id" name="cdbooUserTimestepList[{{idx}}].id" type="hidden" value="{{row.id}}"/>
-							</td>
-							<td>
-								{{row.name}}
-							</td>
-							<td>
-								{{row.startTime}}
-							</td>
-							<td>
-								{{row.endTime}}
-							</td>
-							<shiro:hasPermission name="myplan:cdbooMyPlan:edit"><td class="text-center" width="10">
-								{{#delBtn}}<span class="close" onclick="delRow(this, '#cdbooUserTimestepList{{idx}}')" title="删除">&times;</span>{{/delBtn}}
-							</td></shiro:hasPermission>
-						</tr>//-->
-					</script>
-					<script type="text/javascript">
-						var cdbooUserTimestepRowIdx = 0, cdbooUserTimestepTpl = $("#cdbooUserTimestepTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
-						$(document).ready(function() {
-							var data = ${fns:toJson(cdbooMyPlan.cdbooUserTimestepList)};
-							for (var i=0; i<data.length; i++){
-								addRow('#cdbooUserTimestepList', cdbooUserTimestepRowIdx, cdbooUserTimestepTpl, data[i]);
-								cdbooUserTimestepRowIdx = cdbooUserTimestepRowIdx + 1;
-							}
-						});
-					</script>
-			</div>	
-		</div>
+		
+		<userTimestep:userTimestep userElementId="userId" userTimestepElementName="userTimestepIds" userTimestepList="${cdbooMyPlan.cdbooUserTimestepList }"></userTimestep:userTimestep>
+		
 		<div class="form-actions">
 			<shiro:hasPermission name="myplan:cdbooMyPlan:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>

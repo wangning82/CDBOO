@@ -4,18 +4,17 @@
 package com.cdboo.myplan.service;
 
 import java.util.List;
-
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import com.cdboo.myplan.dao.CdbooMyPlanDao;
+import com.cdboo.myplan.entity.CdbooMyPlan;
+import com.cdboo.myplan.entity.CdbooMyPlanTimestep;
+import com.cdboo.usertimestep.service.CdbooUserTimestepService;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
-import com.thinkgem.jeesite.common.utils.StringUtils;
-import com.cdboo.myplan.entity.CdbooMyPlan;
-import com.cdboo.myplan.dao.CdbooMyPlanDao;
-import com.cdboo.myplan.entity.CdbooMyPlanTimestep;
-import com.cdboo.myplan.dao.CdbooMyPlanTimestepDao;
+import jersey.repackaged.com.google.common.collect.Lists;
 
 /**
  * 新计划表Service
@@ -27,11 +26,14 @@ import com.cdboo.myplan.dao.CdbooMyPlanTimestepDao;
 public class CdbooMyPlanService extends CrudService<CdbooMyPlanDao, CdbooMyPlan> {
 
 	@Autowired
-	private CdbooMyPlanTimestepDao cdbooMyPlanTimestepDao;
+	private CdbooMyPlanTimestepService cdbooMyPlanTimestepService;
+	
+	@Autowired
+	private CdbooUserTimestepService cdbooUserTimestepService;
 	
 	public CdbooMyPlan get(String id) {
 		CdbooMyPlan cdbooMyPlan = super.get(id);
-		cdbooMyPlan.setCdbooMyPlanTimestepList(cdbooMyPlanTimestepDao.findList(new CdbooMyPlanTimestep(cdbooMyPlan)));
+		cdbooMyPlan.setCdbooMyPlanTimestepList(cdbooMyPlanTimestepService.findList(new CdbooMyPlanTimestep(cdbooMyPlan)));
 		return cdbooMyPlan;
 	}
 	
@@ -46,21 +48,25 @@ public class CdbooMyPlanService extends CrudService<CdbooMyPlanDao, CdbooMyPlan>
 	@Transactional(readOnly = false)
 	public void save(CdbooMyPlan cdbooMyPlan) {
 		super.save(cdbooMyPlan);
-		for (CdbooMyPlanTimestep cdbooMyPlanTimestep : cdbooMyPlan.getCdbooMyPlanTimestepList()){
-			if (cdbooMyPlanTimestep.getId() == null){
-				continue;
+		List<String> userTimestepIds = cdbooMyPlan.getUserTimestepIds();
+
+		if (CollectionUtils.isNotEmpty(userTimestepIds)) {
+
+			List<CdbooMyPlanTimestep> saveList = Lists.newArrayList();
+			
+			CdbooMyPlanTimestep removeObj = new CdbooMyPlanTimestep();
+			removeObj.setPlan(cdbooMyPlan);
+			cdbooMyPlanTimestepService.remove(removeObj);
+
+			for (String userTimestepId : userTimestepIds) {
+				CdbooMyPlanTimestep cdbooMyPlanTimestep = new CdbooMyPlanTimestep();
+				cdbooMyPlanTimestep.setPlan(cdbooMyPlan);
+				cdbooMyPlanTimestep.setUserTimestep(cdbooUserTimestepService.get(userTimestepId));
+				saveList.add(cdbooMyPlanTimestep);
 			}
-			if (CdbooMyPlanTimestep.DEL_FLAG_NORMAL.equals(cdbooMyPlanTimestep.getDelFlag())){
-				if (StringUtils.isBlank(cdbooMyPlanTimestep.getId())){
-					cdbooMyPlanTimestep.setPlan(cdbooMyPlan);
-					cdbooMyPlanTimestep.preInsert();
-					cdbooMyPlanTimestepDao.insert(cdbooMyPlanTimestep);
-				}else{
-					cdbooMyPlanTimestep.preUpdate();
-					cdbooMyPlanTimestepDao.update(cdbooMyPlanTimestep);
-				}
-			}else{
-				cdbooMyPlanTimestepDao.delete(cdbooMyPlanTimestep);
+			
+			for (CdbooMyPlanTimestep cdbooMyPlanTimestep : saveList) {
+				cdbooMyPlanTimestepService.save(cdbooMyPlanTimestep);
 			}
 		}
 	}
@@ -68,7 +74,7 @@ public class CdbooMyPlanService extends CrudService<CdbooMyPlanDao, CdbooMyPlan>
 	@Transactional(readOnly = false)
 	public void delete(CdbooMyPlan cdbooMyPlan) {
 		super.delete(cdbooMyPlan);
-		cdbooMyPlanTimestepDao.delete(new CdbooMyPlanTimestep(cdbooMyPlan));
+		cdbooMyPlanTimestepService.delete(new CdbooMyPlanTimestep(cdbooMyPlan));
 	}
 	
 }

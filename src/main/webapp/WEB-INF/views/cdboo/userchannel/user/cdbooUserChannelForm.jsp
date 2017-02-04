@@ -64,17 +64,10 @@
 			<div class="controls">
 				${fns:getUser().name}
 				<input type="hidden" id="userId" name="user.id" value="${fns:getUser().id }"/>
-				&nbsp;
-			<input id="assignButton" class="btn btn-primary" type="button" value="分配频道" onclick="openMappingWin()"/>
 			</div>
 		</div>
 		
-		<div class="control-group">
-			<label class="control-label">子频道列表：</label>
-			<div class="controls">
-				<channel:channelListTag channelElementName="channelIds" channelList="${cdbooUserChannel.channelList }" channelType="0" userElementId="userId"></channel:channelListTag>
-			</div>
-		</div>
+		<channel:channelListTag channelElementName="channelIds" channelList="${cdbooUserChannel.channelList }" channelType="0" userElementId="userId"></channel:channelListTag>
 		
 		<div class="form-actions">
 			<shiro:hasPermission name="userchannel:userChannel:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>

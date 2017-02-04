@@ -118,4 +118,29 @@ public class CdbooUserTimestepController extends BaseController {
 		return userTimesteps;
 	}
 	
+	/**
+	 * 导入用户数据
+	 * 
+	 * @param file
+	 * @param redirectAttributes
+	 * @return
+	 */
+	@RequestMapping(value = "openUserTimestepWin")
+	public String openUserTimestepWin(CdbooUserTimestep cdbooUserTimestep, HttpServletRequest request,
+			HttpServletResponse response, Model model) {
+		String userId = cdbooUserTimestep.getUserId();
+		
+		if (StringUtils.isNotBlank(userId)) {
+			cdbooUserTimestep.setUser(new User(userId));
+			Page<CdbooUserTimestep> page = cdbooUserTimestepService
+					.findPage(new Page<CdbooUserTimestep>(request, response), cdbooUserTimestep);
+			model.addAttribute("page", page);
+		} else {
+			Page<CdbooUserTimestep> page = cdbooUserTimestepService
+					.findPage(new Page<CdbooUserTimestep>(request, response), new CdbooUserTimestep());
+			model.addAttribute("page", page);
+		}
+		return "cdboo/usertimestep/cdbooUserTimestepOpenWin";
+	}
+	
 }

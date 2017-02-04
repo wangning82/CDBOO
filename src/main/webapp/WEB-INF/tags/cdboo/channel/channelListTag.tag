@@ -70,64 +70,73 @@
 	}
 </script>
 
-<table id="contentTable" class="table table-striped table-bordered table-condensed">
-	<thead>
-		<tr>
-			<th style="width: 10%">频道编号</th>
-			<th style="width: 15%">频道名称</th>
-			<th style="width: 10%">频道图片</th>
-			<th style="width: 10%">风格类型</th>
-			<th style="width: 10%">风格类型明细</th>
-			<th style="width: 10%">频道版本</th>
-			<c:if test="${not empty sortElementName }">
-				<th style="width: 10%">排序</th>
-			</c:if>	
-			<th style="width: 15%">创建时间</th>
-			<th style="width: 10%">操作</th>
-		</tr>
-	</thead>					
-	<tbody id="tb">
-		<c:forEach items="${channelList}" var="cdbooChannel" varStatus="status">
-			<tr>
-				<td>
-					${cdbooChannel.channelNo}<input type="hidden" id="${channelElementName }" name = '${channelElementName }' value="${cdbooChannel.id }">
-				</td>
-				<td>
-					${cdbooChannel.channelName}
-				</td>
-				<td>
-					<pic:preview path="${cdbooChannel.photoPath}"></pic:preview>
-				</td>
-				<td>
-					${fns:getDictLabel(cdbooChannel.themeType, 'theme_type', '')}
-				</td>
-				<td>
-					<c:if test="${cdbooChannel.themeType eq Constants.THEMETYPE_THEME }">
-						${fns:getDictLabel(cdbooChannel.themeConcreteType,'season_type', '')}
-					</c:if>
-					<c:if test="${cdbooChannel.themeType eq Constants.THEMETYPE_HOLIDAY }">
-						${fns:getDictLabel(cdbooChannel.themeConcreteType,'holiday_type', '')}
-					</c:if>
-					<c:if test="${cdbooChannel.themeType eq Constants.THEMETYPE_STYLE }">
-						${fns:getDictLabel(cdbooChannel.themeConcreteType,'style_type', '')}
-					</c:if>
-				</td>
-				<td>
-					${cdbooChannel.channelVersion}
-				</td>
-				<c:if test="${not empty sortElementName}">
-					<td>
-						<input type="text" name="${sortElementName }" value="${cdbooChannel.sort}" class="input-small">
-					</td>
-				</c:if>
-				<td>
-					<fmt:formatDate value="${cdbooChannel.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
-				</td>
-				<td><a href="#" onclick="deleteRow(this)">删除</a></td>
-			</tr>
-		</c:forEach>
-	</tbody>
-</table>	
+<div class="form-actions">
+	<input id="assignButton" class="btn btn-primary" type="button" value="分配频道" onclick="openMappingWin()"/>
+</div>
+
+<div class="control-group">
+	<label class="control-label">子频道列表：</label>
+	<div class="controls">
+		<table id="contentTable" class="table table-striped table-bordered table-condensed">
+			<thead>
+				<tr>
+					<th style="width: 10%">频道编号</th>
+					<th style="width: 15%">频道名称</th>
+					<th style="width: 10%">频道图片</th>
+					<th style="width: 10%">风格类型</th>
+					<th style="width: 10%">风格类型明细</th>
+					<th style="width: 10%">频道版本</th>
+					<c:if test="${not empty sortElementName }">
+						<th style="width: 10%">排序</th>
+					</c:if>	
+					<th style="width: 15%">创建时间</th>
+					<th style="width: 10%">操作</th>
+				</tr>
+			</thead>					
+			<tbody id="tb">
+				<c:forEach items="${channelList}" var="cdbooChannel" varStatus="status">
+					<tr>
+						<td>
+							${cdbooChannel.channelNo}<input type="hidden" id="${channelElementName }" name = '${channelElementName }' value="${cdbooChannel.id }">
+						</td>
+						<td>
+							${cdbooChannel.channelName}
+						</td>
+						<td>
+							<pic:preview path="${cdbooChannel.photoPath}"></pic:preview>
+						</td>
+						<td>
+							${fns:getDictLabel(cdbooChannel.themeType, 'theme_type', '')}
+						</td>
+						<td>
+							<c:if test="${cdbooChannel.themeType eq Constants.THEMETYPE_THEME }">
+								${fns:getDictLabel(cdbooChannel.themeConcreteType,'season_type', '')}
+							</c:if>
+							<c:if test="${cdbooChannel.themeType eq Constants.THEMETYPE_HOLIDAY }">
+								${fns:getDictLabel(cdbooChannel.themeConcreteType,'holiday_type', '')}
+							</c:if>
+							<c:if test="${cdbooChannel.themeType eq Constants.THEMETYPE_STYLE }">
+								${fns:getDictLabel(cdbooChannel.themeConcreteType,'style_type', '')}
+							</c:if>
+						</td>
+						<td>
+							${cdbooChannel.channelVersion}
+						</td>
+						<c:if test="${not empty sortElementName}">
+							<td>
+								<input type="text" name="${sortElementName }" value="${cdbooChannel.sort}" class="input-small">
+							</td>
+						</c:if>
+						<td>
+							<fmt:formatDate value="${cdbooChannel.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+						</td>
+						<td><a href="#" onclick="deleteRow(this)">删除</a></td>
+					</tr>
+				</c:forEach>
+			</tbody>
+		</table>
+	</div>
+</div>
 
 <c:if test="${not empty sortElementName}">
 	<script type="text/template" id="channelTpl">//<!--

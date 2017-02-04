@@ -6,6 +6,8 @@ package com.cdboo.usertimestep.entity;
 import com.thinkgem.jeesite.modules.sys.entity.User;
 import jersey.repackaged.com.google.common.collect.Lists;
 import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.Length;
 
 import com.cdboo.timestep.entity.Timestep;
@@ -24,6 +26,10 @@ public class CdbooUserTimestep extends DataEntity<CdbooUserTimestep> {
 	private String startTime;		// 开始时间
 	private String endTime;		// 结束时间
 	private String lastTimeStepId;//最后选择的时段id，为了配合页面使用，没有存到数据库，备用
+	
+	private String ids;
+	private String userId;
+	private List<String> notIncludeIds;
 	
 	private List<CdbooUserTimestep> timestepList = Lists.newArrayList();
 	private List<Timestep> timestepEntityList = Lists.newArrayList();
@@ -91,6 +97,34 @@ public class CdbooUserTimestep extends DataEntity<CdbooUserTimestep> {
 
 	public void setLastTimeStepId(String lastTimeStepId) {
 		this.lastTimeStepId = lastTimeStepId;
+	}
+
+	public String getIds() {
+		return ids;
+	}
+
+	public void setIds(String ids) {
+		this.ids = ids;
+
+		if (StringUtils.isNotBlank(ids)) {
+			notIncludeIds = Lists.newArrayList();
+			String[] idsArray = StringUtils.split(ids, ",");
+			for (int i = 0; i < idsArray.length; i++) {
+				notIncludeIds.add("'" + idsArray[i] + "'");
+			}
+		}
+	}
+
+	public List<String> getNotIncludeIds() {
+		return notIncludeIds;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
 }

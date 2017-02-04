@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.cdboo.channel.dao.CdbooChannelDao;
 import com.cdboo.channel.entity.CdbooChannel;
-import com.cdboo.music.entity.CdbooMusic;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
 
