@@ -77,36 +77,14 @@ public class UserChannelController extends BaseController {
 		User user = UserUtils.getUser();
 		cdbooUserChannel.setUser(user);
 		
-		CdbooChannel channel = cdbooUserChannel.getChannel();
-
 		/************************
 		 * 根据用户检索绑定频道信息列表 Start
 		 ***********************/
 		List<CdbooChannel> userChannels = cdbooUserChannelService.getChannelListByUser(user,Constants.CHANNEL_TYPE_CHILD);
-		model.addAttribute("channelList", userChannels);
+		cdbooUserChannel.setChannelList(userChannels);
 		/************************
 		 * 根据用户检索绑定频道信息列表 End
 		 ***********************/
-
-		if (channel != null && StringUtils.isNotBlank(channel.getId())) {
-			/************************
-			 * 根据用户和频道检索绑定音乐信息列表 Start
-			 ***********************/
-			List<CdbooMusic> musicList = cdbooUserChannelService.getMusicListByUserAndChannel(user, channel);
-			model.addAttribute("musicList", musicList);
-			/************************
-			 * 根据用户和频道检索绑定音乐信息列表 End
-			 ***********************/
-		} else {
-			/************************
-			 * 新增时查询所有频道列表信息返回 Start
-			 ***********************/
-			List<CdbooChannel> channels = cdbooChannelService.findList(new CdbooChannel());
-			model.addAttribute("channelList", channels);
-			/************************
-			 * 新增时查询所有频道列表信息返回 End
-			 ***********************/
-		}
 
 		return "cdboo/userchannel/user/cdbooUserChannelForm";
 	}

@@ -34,7 +34,6 @@ public class CdbooGroupChild extends DataEntity<CdbooGroupChild> {
 	private Integer childChannelSize; //子频道数量
 	private List<CdbooChannel> channelList = Lists.newArrayList();//组合频道集合
 	private List<CdbooChannel> childChannelList = Lists.newArrayList();//子频道集合
-	private List<CdbooGroupChild> groupChildChannelList = Lists.newArrayList();//子频道集合
 	
 	private List<String> channelIds = Lists.newArrayList();
 	private List<Integer> sorts = Lists.newArrayList();
@@ -120,14 +119,6 @@ public class CdbooGroupChild extends DataEntity<CdbooGroupChild> {
 
 	public void setSort(Integer sort) {
 		this.sort = sort;
-	}
-
-	public List<CdbooGroupChild> getGroupChildChannelList() {
-		return groupChildChannelList;
-	}
-
-	public void setGroupChildChannelList(List<CdbooGroupChild> groupChildChannelList) {
-		this.groupChildChannelList = groupChildChannelList;
 	}
 
 	public List<Integer> getSorts() {

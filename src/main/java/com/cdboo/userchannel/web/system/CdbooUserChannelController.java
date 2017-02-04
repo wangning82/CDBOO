@@ -83,25 +83,17 @@ public class CdbooUserChannelController extends BaseController {
 			 * 根据用户检索绑定子频道信息列表 Start
 			 ***********************/
 			List<CdbooChannel> userChannels = cdbooUserChannelService.getChannelListByUser(user,Constants.CHANNEL_TYPE_CHILD);
-			model.addAttribute("channelList", userChannels);
+			cdbooUserChannel.setChannelList(userChannels);
 			/************************
 			 * 根据用户检索绑定频道信息列表 End
-			 ***********************/
-
-			/************************
-			 * 根据用户和频道检索绑定音乐信息列表 Start
-			 ***********************/
-			List<CdbooMusic> musicList = cdbooUserChannelService.getMusicListByUserAndChannel(user, channel);
-			model.addAttribute("musicList", musicList);
-			/************************
-			 * 根据用户和频道检索绑定音乐信息列表 End
 			 ***********************/
 		} else {
 			/************************
 			 * 新增时查询所有子频道列表信息返回 Start
 			 ***********************/
 			List<CdbooChannel> channels = cdbooChannelService.findChildChannelList();
-			model.addAttribute("channelList", channels);
+			cdbooUserChannel.setChannelList(channels);
+//			model.addAttribute("channelList", channels);
 			/************************
 			 * 新增时查询所有频道列表信息返回 End
 			 ***********************/

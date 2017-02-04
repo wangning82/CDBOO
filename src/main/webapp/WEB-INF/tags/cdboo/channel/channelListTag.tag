@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <%@ attribute name="channelList" type="java.util.List" required="true" description="频道集合"%>
 <%@ attribute name="channelElementName" type="java.lang.String" required="true" description="频道隐藏域id名称"%>
-<%@ attribute name="sortElementName" type="java.lang.String" required="true" description="排序隐藏域id名称"%>
+<%@ attribute name="sortElementName" type="java.lang.String" required="false" description="排序隐藏域id名称"%>
 <%@ attribute name="userElementId" type="java.lang.String" required="false" description="查询对应用户id所关联的频道,不传查询所有"%>
 <%@ attribute name="channelType" type="java.lang.String" required="false" description="指定频道类型"%>
 <script type="text/javascript">
@@ -69,7 +69,7 @@
 		return flag;
 	}
 </script>
-				
+
 <table id="contentTable" class="table table-striped table-bordered table-condensed">
 	<thead>
 		<tr>
@@ -79,14 +79,15 @@
 			<th style="width: 10%">风格类型</th>
 			<th style="width: 10%">风格类型明细</th>
 			<th style="width: 10%">频道版本</th>
-			<th style="width: 10%">排序</th>
+			<c:if test="${not empty sortElementName }">
+				<th style="width: 10%">排序</th>
+			</c:if>	
 			<th style="width: 15%">创建时间</th>
 			<th style="width: 10%">操作</th>
 		</tr>
 	</thead>					
 	<tbody id="tb">
-		<c:forEach items="${channelList}" var="groupChildChannel" varStatus="status">
-			<c:set value="${groupChildChannel.childChannelId }" var="cdbooChannel"></c:set>
+		<c:forEach items="${channelList}" var="cdbooChannel" varStatus="status">
 			<tr>
 				<td>
 					${cdbooChannel.channelNo}<input type="hidden" id="${channelElementName }" name = '${channelElementName }' value="${cdbooChannel.id }">
@@ -114,9 +115,11 @@
 				<td>
 					${cdbooChannel.channelVersion}
 				</td>
-				<td>
-					<input type="text" name="${sortElementName }" value="${groupChildChannel.sort}" class="input-small">
-				</td>
+				<c:if test="${not empty sortElementName}">
+					<td>
+						<input type="text" name="${sortElementName }" value="${cdbooChannel.sort}" class="input-small">
+					</td>
+				</c:if>
 				<td>
 					<fmt:formatDate value="${cdbooChannel.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
@@ -126,7 +129,8 @@
 	</tbody>
 </table>	
 
-<script type="text/template" id="channelTpl">//<!--
+<c:if test="${not empty sortElementName}">
+	<script type="text/template" id="channelTpl">//<!--
 		<tr>
 			<td>{{row.channelNo}}<input type="hidden" name = '${channelElementName }' value='{{row.id}}'></td>
 			<td>{{row.channelName}}</td>
@@ -138,4 +142,20 @@
 			<td>{{row.createDate}}</td>
 			<td><a href="#" onclick="deleteRow(this)">删除</a></td>
 		</tr>//-->
-</script>				
+	</script>	
+</c:if>
+<c:if test="${empty sortElementName}">
+	<script type="text/template" id="channelTpl">//<!--
+		<tr>
+			<td>{{row.channelNo}}<input type="hidden" name = '${channelElementName }' value='{{row.id}}'></td>
+			<td>{{row.channelName}}</td>
+			<td><img src="{{row.photoPath}}" width="${Constants.IMG_WIDTH}" height="${Constants.IMG_HEIGHT}" onclick="disPic('{{row.photoPath}}')"/></td>
+			<td>{{row.themeType}}</td>
+			<td>{{row.themeConcreteType}}</td>
+			<td>{{row.channelVersion}}</td>
+			<td>{{row.createDate}}</td>
+			<td><a href="#" onclick="deleteRow(this)">删除</a></td>
+		</tr>//-->
+	</script>	
+</c:if>
+			

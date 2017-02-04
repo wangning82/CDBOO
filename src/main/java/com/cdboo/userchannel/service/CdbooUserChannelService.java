@@ -3,14 +3,13 @@
  */
 package com.cdboo.userchannel.service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.cdboo.channel.entity.CdbooChannel;
 import com.cdboo.channel.service.CdbooChannelService;
 import com.cdboo.channelmusic.entity.CdbooChannelMusic;
@@ -64,30 +63,34 @@ public class CdbooUserChannelService extends CrudService<CdbooUserChannelDao, Cd
 	public void saveUserChannel(CdbooUserChannel cdbooUserChannel) {
 		// 用户
 		User user = cdbooUserChannel.getUser();
-		// 频道
-		CdbooChannel channel = cdbooUserChannel.getChannel();
 
-		dao.removeByUserAndChannel(cdbooUserChannel);
+		dao.removeByUser(cdbooUserChannel);
 
-		CdbooChannelMusic cdbooChannelMusic = new CdbooChannelMusic();
-		cdbooChannelMusic.setChannel(channel);
-		List<CdbooChannelMusic> musicList = channelMusicService.findList(cdbooChannelMusic);
+		List<String> channelIds = cdbooUserChannel.getChannelIds();
 
-		List<CdbooUserChannel> saveList = Lists.newArrayList();
+		for (String channelId : channelIds) {
 
-		if (CollectionUtils.isNotEmpty(musicList)) {
-			for (CdbooChannelMusic channelMusic : musicList) {
-				CdbooUserChannel saveObj = new CdbooUserChannel();
-				saveObj.setChannel(channel);
-				saveObj.setUser(user);
-				saveObj.setMusic(channelMusic.getMusic());
-				saveList.add(saveObj);
+			CdbooChannel cdbooChannel = cdbooChannelService.get(channelId);
+
+			CdbooChannelMusic cdbooChannelMusic = new CdbooChannelMusic();
+			cdbooChannelMusic.setChannel(cdbooChannel);
+			List<CdbooChannelMusic> musicList = channelMusicService.findList(cdbooChannelMusic);
+
+			List<CdbooUserChannel> saveList = Lists.newArrayList();
+			if (CollectionUtils.isNotEmpty(musicList)) {
+				for (CdbooChannelMusic channelMusic : musicList) {
+					CdbooUserChannel saveObj = new CdbooUserChannel();
+					saveObj.setChannel(cdbooChannel);
+					saveObj.setUser(user);
+					saveObj.setMusic(channelMusic.getMusic());
+					saveList.add(saveObj);
+				}
 			}
-		}
 
-		if (CollectionUtils.isNotEmpty(saveList)) {
-			for (CdbooUserChannel saveObj : saveList) {
-				super.save(saveObj);
+			if (CollectionUtils.isNotEmpty(saveList)) {
+				for (CdbooUserChannel saveObj : saveList) {
+					super.save(saveObj);
+				}
 			}
 		}
 	}

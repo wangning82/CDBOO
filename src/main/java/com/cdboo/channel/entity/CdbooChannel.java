@@ -51,6 +51,7 @@ public class CdbooChannel extends DataEntity<CdbooChannel> {
 	private String ids;
 	private String userId;
 	private String volume;
+	private Integer sort;
 	
 	public CdbooChannel() {
 		super();
@@ -345,6 +346,14 @@ public class CdbooChannel extends DataEntity<CdbooChannel> {
 
 	public void setVolume(String volume) {
 		this.volume = volume;
+	}
+
+	public Integer getSort() {
+		return sort;
+	}
+
+	public void setSort(Integer sort) {
+		this.sort = sort;
 	}
 	
 }

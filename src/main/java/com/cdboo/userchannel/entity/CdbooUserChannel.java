@@ -25,6 +25,8 @@ public class CdbooUserChannel extends DataEntity<CdbooUserChannel> {
 	private CdbooMusic music;		// 音乐id
 	private int musicSize;
 	
+	private List<String> channelIds = Lists.newArrayList();
+	
 	private List<CdbooChannel> channelList = Lists.newArrayList();
 	
 	private List<CdbooMusic> musicList = Lists.newArrayList();
@@ -93,6 +95,14 @@ public class CdbooUserChannel extends DataEntity<CdbooUserChannel> {
 
 	public void setMusicIds(List<String> musicIds) {
 		this.musicIds = musicIds;
+	}
+
+	public List<String> getChannelIds() {
+		return channelIds;
+	}
+
+	public void setChannelIds(List<String> channelIds) {
+		this.channelIds = channelIds;
 	}
 
 }

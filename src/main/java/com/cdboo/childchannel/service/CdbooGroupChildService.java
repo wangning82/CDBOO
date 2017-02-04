@@ -72,6 +72,7 @@ public class CdbooGroupChildService extends CrudService<CdbooGroupChildDao, Cdbo
 				CdbooChannel childChannel = cdbooGroupChild2.getChildChannelId();
 				String id = childChannel.getId();
 				CdbooChannel cdbooChannel = cdbooChannelService.get(id);
+				cdbooChannel.setSort(cdbooGroupChild2.getSort());
 				channelList.add(cdbooChannel);
 			}
 		}
