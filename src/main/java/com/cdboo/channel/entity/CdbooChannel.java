@@ -61,7 +61,6 @@ public class CdbooChannel extends DataEntity<CdbooChannel> {
 		super(id);
 	}
 
-	@Length(min = 0, max = 100, message = "频道编号长度必须介于 0 和 100 之间")
 	public Integer getChannelNo() {
 		return channelNo;
 	}

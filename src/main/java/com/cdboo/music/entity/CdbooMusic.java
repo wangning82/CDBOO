@@ -43,7 +43,6 @@ public class CdbooMusic extends DataEntity<CdbooMusic> {
 		super(id);
 	}
 
-	@Length(min=0, max=100, message="音乐编号长度必须介于 0 和 100 之间")
 	@ExcelField(title="音乐编号",type=1,align=2, sort=10)
 	public Integer getMusicNo() {
 		return musicNo;
