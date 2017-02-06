@@ -24,6 +24,7 @@ import com.cdboo.myplan.entity.CdbooMyPlanTimestepChannel;
 import com.cdboo.myplan.service.CdbooMyPlanService;
 import com.cdboo.myplan.service.CdbooMyPlanTimestepChannelService;
 import com.cdboo.myplan.service.CdbooMyPlanTimestepService;
+import com.cdboo.userchannel.entity.CdbooUserChannel;
 import com.cdboo.usertimestep.entity.CdbooUserTimestep;
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
@@ -133,29 +134,35 @@ public class CdbooMyPlanController extends BaseController {
 	
 	@RequiresPermissions("myplan:cdbooMyPlan:edit")
 	@RequestMapping(value = "toEditChannelPage")
-	public String toEditChannelPage(CdbooMyPlanTimestep cdbooMyPlanTimestep, Model model) {
+	public String toEditChannelPage(CdbooMyPlan cdbooMyPlan, Model model) {
+		model.addAttribute("cdbooMyPlan", cdbooMyPlan);
+		
+		CdbooMyPlanTimestep cdbooMyPlanTimestep = new CdbooMyPlanTimestep();
+		cdbooMyPlanTimestep.setPlan(cdbooMyPlan);
+		cdbooMyPlanTimestep.setUserTimestep(new CdbooUserTimestep(cdbooMyPlan.getUserTimeStepId()));
 		List<CdbooMyPlanTimestep> list = cdbooMyPlanTimestepService.findList(cdbooMyPlanTimestep);
 		if(CollectionUtils.isNotEmpty(list)){
 			CdbooMyPlanTimestep myPlanTimestep = list.get(0);
 			CdbooMyPlanTimestepChannel myPlanTimestepChannel = new CdbooMyPlanTimestepChannel();
 			myPlanTimestepChannel.setMyPlanTimestep(myPlanTimestep);
-			cdbooMyPlanTimestepChannelService.findList(myPlanTimestepChannel);
+			List<CdbooUserChannel> cdbooUserChannels = cdbooMyPlanTimestepChannelService.findUserChannelList(myPlanTimestepChannel);
+			cdbooMyPlanTimestep.setCdbooUserChannels(cdbooUserChannels);
 		}
-		return "cdboo/myplan/cdbooMyPlanTimestepForm";
+		return "cdboo/myplan/cdbooMyPlanTimestepChannelForm";
 	}
 	
 	@RequiresPermissions("myplan:cdbooMyPlan:edit")
-	@RequestMapping(value = "saveTimestep")
-	public String saveTimestep(CdbooMyPlan cdbooMyPlan, Model model, RedirectAttributes redirectAttributes) {
+	@RequestMapping(value = "saveTimestepChannel")
+	public String saveTimestepChannel(CdbooMyPlan cdbooMyPlan, Model model, RedirectAttributes redirectAttributes) {
 		try {
-			cdbooMyPlanService.saveUserTimestep(cdbooMyPlan);
-			addMessage(redirectAttributes, "保存时段成功");
+			cdbooMyPlanTimestepChannelService.saveTimestepChannel(cdbooMyPlan);
+			addMessage(redirectAttributes, "保存频道成功");
 		} catch (Exception e) {
-			LogUtils.saveLog(Servlets.getRequest(), null, e, "保存计划时段");
-			addMessage(redirectAttributes, "保存时段失败");
+			LogUtils.saveLog(Servlets.getRequest(), null, e, "保存时段频道");
+			addMessage(redirectAttributes, "保存频道失败");
 		}
 		redirectAttributes.addFlashAttribute("cdbooMyPlan", cdbooMyPlan);
-		return "redirect:"+Global.getAdminPath()+"/myplan/cdbooMyPlan/toEditTimestepPage";
+		return "redirect:"+Global.getAdminPath()+"/myplan/cdbooMyPlan/toEditChannelPage";
 	}
 	
 }

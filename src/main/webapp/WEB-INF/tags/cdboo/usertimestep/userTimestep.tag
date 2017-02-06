@@ -1,9 +1,14 @@
 <%@ tag language="java" pageEncoding="UTF-8" import="com.cdboo.common.Constants"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <%@ attribute name="userTimestepList" type="java.util.List" required="true" description="用户时段集合"%>
+<%@ attribute name="planId" type="java.lang.String" required="true" description="用户"%>
 <%@ attribute name="userTimestepElementName" type="java.lang.String" required="true" description="用户时段隐藏域id名称"%>
 <%@ attribute name="userElementId" type="java.lang.String" required="false" description="查询对应用户id所关联的时段,不传查询所有"%>
 <script type="text/javascript">
+	$(document).ready(function() {
+		
+	});
+	
 	function deleteRow(obj){
 		$(obj).parent().parent().remove();
 	}
@@ -53,40 +58,6 @@
 		});
 	}
 	
-	function appendChannel(){
-		var elementId = '${userElementId}';
-		var userId = '';
-		if(elementId){
-			userId = $('#'+elementId).val();
-		}
-		
-		top.$.jBox.open("iframe:${ctx}/usertimestep/cdbooUserTimestep/openUserTimestepWin?userId="+userId+"&ids="+ids, "分配时段",$(top.document).width()-240,$(top.document).height()-400,{
-			buttons:{"确定分配":"ok", "关闭":true}, bottomText:"通过查询条件选择用户时段，选择后窗口不会关闭，可以连续选择。",submit:function(v, h, f){
-				var checkArray = h.find("iframe")[0].contentWindow.getCheckData();
-				if (v=="ok"){
-					try {
-						var tpl = $("#cdbooUserTimestepTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
-						for (var i = 0; i < checkArray.length; i++) {
-							var entity = checkArray[i];
-							if(checkUserTimestepIdIsExists(entity.id)){
-								continue;
-							}
-							//alert(entity.id+":"+entity.musicName+":"+entity.actor+":"+entity.special+":"+entity.musicOwner+":"+entity.volume)
-							$('#cdbooUserTimestepList').append(Mustache.render(tpl, {row: entity}));
-						}
-						showTip('追加时段成功，请继续选择时段','success');
-					} catch (e) {
-						showTip('追加时段失败，请重新选择时段','error');
-					}
-					
-			    	return false;
-				}
-			}, loaded:function(h){
-				$(".jbox-content", top.document).css("overflow-y","hidden");
-			}
-		});
-	}
-	
 	//检查时段id是否存在
 	function checkUserTimestepIdIsExists(userTimestepId){
 		var flag = false;
@@ -99,6 +70,10 @@
 			}
 		});
 		return flag;
+	}
+	
+	function appendChannel(userTimeStepId,planId){
+		window.location.href = "${ctx}/myplan/cdbooMyPlan/toEditChannelPage?id="+planId+"&userTimeStepId="+userTimeStepId;
 	}
 </script>
 <div class="form-actions">
@@ -132,7 +107,7 @@
 								<td>
 									${userTimestep.endTime }
 								</td>
-								<td class="text-center"><a href="#" onclick="deleteRow(this)">删除</a>&nbsp;<a href="#" onclick="appendChannel(${userTimestep.id })">添加频道</a></td>
+								<td class="text-center"><a href="#" onclick="deleteRow(this)">删除</a>&nbsp;<a href="#" onclick="appendChannel('${userTimestep.id }','${planId }')">添加频道</a></td>
 							</tr>
 						</c:forEach>
 					</tbody>
@@ -151,7 +126,7 @@
 							<td>
 								{{row.endTime}}
 							</td>
-							<td class="text-center" width="10"><a href="#" onclick="deleteRow(this)">删除</a>&nbsp;<a href="#" onclick="appendChannel({{row.id}})">添加频道</a></td>
+							<td class="text-center" width="10"><a href="#" onclick="deleteRow(this)">删除</a>&nbsp;<a href="#" onclick="appendChannel('{{row.id}}','${planId }')">添加频道</a></td>
 					</tr>//-->
 				</script>
 	</div>	

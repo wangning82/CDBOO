@@ -11,10 +11,33 @@
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
 		a.update_by AS "updateBy.id",
-		a.update_date AS "updateDate"
+		a.update_date AS "updateDate",
+		c.channel_no AS "userChannel.channel.channelNo",
+		c.channel_name AS "userChannel.channel.channelName",
+		c.photo_path AS "userChannel.channel.photoPath",
+		c.theme_type AS "userChannel.channel.themeType",
+		c.theme_concrete_type AS "userChannel.channel.themeConcreteType",
+		c.channel_version AS "userChannel.channel.channelVersion",
+		c.music_style AS "userChannel.channel.musicStyle",
+		c.site AS "userChannel.channel.site",
+		c.speed AS "userChannel.channel.speed",
+		c.voice AS "userChannel.channel.voice",
+		c.element AS "userChannel.channel.element",
+		c.emotion AS "userChannel.channel.emotion",
+		c.instrument AS "userChannel.channel.instrument",
+		c.create_by AS "userChannel.channel.createBy.id",
+		c.create_date AS "userChannel.channel.createDate",
+		c.update_by AS "userChannel.channel.updateBy.id",
+		c.update_date AS "userChannel.channel.updateDate",
+		c.remarks AS "userChannel.channel.remarks",
+		c.del_flag AS "userChannel.channel.delFlag",
+		c.status AS "userChannel.channel.status",
+		c.channel_type AS "userChannel.channel.channelType"
 	</sql>
 	
 	<sql id="cdbooMyPlanTimestepChannelJoins">
+		LEFT JOIN cdboo_user_channel b on a.user_channel_id = b.id
+		LEFT JOIN cdboo_child_channel c on c.id = b.channel_id
 	</sql>
     
 	<select id="get" resultType="CdbooMyPlanTimestepChannel">
@@ -31,7 +54,12 @@
 		FROM cdboo_my_plan_timestep_channel a
 		<include refid="cdbooMyPlanTimestepChannelJoins"/>
 		<where>
-			
+			<if test="myPlanTimestep != null and myPlanTimestep.id != null and myPlanTimestep.id != ''">
+				AND a.my_plan_timestep_id = #{myPlanTimestep.id}
+			</if>
+			<if test="userChannel != null and userChannel.id != null and userChannel.id != ''">
+				AND a.user_channel_id = #{userChannel.id}
+			</if>
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
@@ -98,7 +126,13 @@
 	
 	<update id="delete">
 		DELETE FROM cdboo_my_plan_timestep_channel
-		WHERE id = #{id}
+		<where>
+			<if test="myPlanTimestep != null and myPlanTimestep.id != null and myPlanTimestep.id != ''">
+				AND a.my_plan_timestep_id = #{myPlanTimestep.id}
+			</if>
+			<if test="userChannel != null and userChannel.id != null and userChannel.id != ''">
+				AND a.user_channel_id = #{userChannel.id}
+			</if>
+		</where>
 	</update>
-	
 </mapper>

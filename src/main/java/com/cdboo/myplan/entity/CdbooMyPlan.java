@@ -34,6 +34,10 @@ public class CdbooMyPlan extends DataEntity<CdbooMyPlan> {
 	private List<CdbooMyPlanTimestep> cdbooMyPlanTimestepList = Lists.newArrayList();		// 子表列表
 	private List<CdbooUserTimestep> cdbooUserTimestepList = Lists.newArrayList();		// 用户时段中间表列表
 	private List<String> userTimestepIds = Lists.newArrayList();
+	private List<String> userChannelIds = Lists.newArrayList();
+	private List<String> operationTypes = Lists.newArrayList();
+	
+	private String userTimeStepId;
 	
 	public CdbooMyPlan() {
 		super();
@@ -149,4 +153,28 @@ public class CdbooMyPlan extends DataEntity<CdbooMyPlan> {
 		this.week = StringUtils.join(weeks, ",");
 	}
 
+	public String getUserTimeStepId() {
+		return userTimeStepId;
+	}
+
+	public void setUserTimeStepId(String userTimeStepId) {
+		this.userTimeStepId = userTimeStepId;
+	}
+
+	public List<String> getUserChannelIds() {
+		return userChannelIds;
+	}
+
+	public void setUserChannelIds(List<String> userChannelIds) {
+		this.userChannelIds = userChannelIds;
+	}
+
+	public List<String> getOperationTypes() {
+		return operationTypes;
+	}
+
+	public void setOperationTypes(List<String> operationTypes) {
+		this.operationTypes = operationTypes;
+	}
+	
 }

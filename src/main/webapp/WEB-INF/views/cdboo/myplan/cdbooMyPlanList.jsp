@@ -96,7 +96,7 @@
 				<shiro:hasPermission name="myplan:cdbooMyPlan:edit"><td>
     				<a href="${ctx}/myplan/cdbooMyPlan/form?id=${cdbooMyPlan.id}">修改</a>
 					<a href="${ctx}/myplan/cdbooMyPlan/delete?id=${cdbooMyPlan.id}" onclick="return confirmx('确认要删除该计划吗？', this.href)">删除</a>
-					<a href="${ctx}/myplan/cdbooMyPlan/toEditTimestepPage?id=${cdbooMyPlan.id}">编辑时段</a>
+					<a href="${ctx}/myplan/cdbooMyPlan/toEditTimestepPage?id=${cdbooMyPlan.id}&user.id=${cdbooMyPlan.user.id}">编辑时段</a>
 				</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>

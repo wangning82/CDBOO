@@ -3,8 +3,11 @@
  */
 package com.cdboo.myplan.entity;
 
+import java.util.List;
 import org.hibernate.validator.constraints.Length;
+import com.cdboo.userchannel.entity.CdbooUserChannel;
 import com.cdboo.usertimestep.entity.CdbooUserTimestep;
+import com.google.common.collect.Lists;
 import com.thinkgem.jeesite.common.persistence.DataEntity;
 
 /**
@@ -17,7 +20,8 @@ public class CdbooMyPlanTimestep extends DataEntity<CdbooMyPlanTimestep> {
 	private static final long serialVersionUID = 1L;
 	private CdbooMyPlan plan;		// 计划id 父类
 	private CdbooUserTimestep userTimestep;		// 用户时段id
-	
+	List<CdbooUserChannel> cdbooUserChannels = Lists.newArrayList();
+	List<CdbooMyPlanTimestepChannel> cdbooMyPlanTimestepChannels = Lists.newArrayList();
 	public CdbooMyPlanTimestep() {
 		super();
 	}
@@ -45,6 +49,22 @@ public class CdbooMyPlanTimestep extends DataEntity<CdbooMyPlanTimestep> {
 
 	public void setUserTimestep(CdbooUserTimestep userTimestep) {
 		this.userTimestep = userTimestep;
+	}
+
+	public List<CdbooUserChannel> getCdbooUserChannels() {
+		return cdbooUserChannels;
+	}
+
+	public void setCdbooUserChannels(List<CdbooUserChannel> cdbooUserChannels) {
+		this.cdbooUserChannels = cdbooUserChannels;
+	}
+
+	public List<CdbooMyPlanTimestepChannel> getCdbooMyPlanTimestepChannels() {
+		return cdbooMyPlanTimestepChannels;
+	}
+
+	public void setCdbooMyPlanTimestepChannels(List<CdbooMyPlanTimestepChannel> cdbooMyPlanTimestepChannels) {
+		this.cdbooMyPlanTimestepChannels = cdbooMyPlanTimestepChannels;
 	}
 	
 }

@@ -138,4 +138,27 @@ public class CdbooUserChannelController extends BaseController {
 		List<CdbooMusic> musicList = cdbooUserChannelService.getMusicListByUserAndChannel(user, channel);
 		return musicList;
 	}
+	
+	/**
+	 * 导入用户数据
+	 * 
+	 * @param file
+	 * @param redirectAttributes
+	 * @return
+	 */
+	@RequestMapping(value = "openUserChannelWin")
+	public String openUserChannelWin(CdbooUserChannel cdbooUserChannel, HttpServletRequest request,
+			HttpServletResponse response, Model model) {
+		
+		Page<CdbooUserChannel> page = cdbooUserChannelService
+				.findPageForGroupBy(new Page<CdbooUserChannel>(request, response), cdbooUserChannel);
+		model.addAttribute("page", page);
+
+		User user = cdbooUserChannel.getUser();
+		if (user != null && StringUtils.isNotBlank(user.getId())) {
+			List<CdbooChannel> channelList = cdbooUserChannelService.getChannelListByUser(user,Constants.CHANNEL_TYPE_CHILD);
+			cdbooUserChannel.setChannelList(channelList);
+		}
+		return "cdboo/userchannel/cdbooUserChannelOpenWin";
+	}
 }

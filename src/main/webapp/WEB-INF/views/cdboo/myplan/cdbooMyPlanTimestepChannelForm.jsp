@@ -22,8 +22,6 @@
 					}
 				}
 			});
-			
-			themeChanged('${cdbooMyPlan.style}');
 		});
 		
 		function addRow(list, idx, tpl, row){
@@ -59,67 +57,59 @@
 			}
 		}
 		
-		function themeChanged(style) {
-			var themeType = '${Constants.THEMETYPE_THEME}';//0 主题
-			var styleType = '${Constants.THEMETYPE_STYLE}';//2 风格
-			var holidayType = '${Constants.THEMETYPE_HOLIDAY}';//1 节日
-			var spotsType = '${Constants.THEMETYPE_SPOTS}';//3 插播
+		function openUserChannelWin(){
+			var ids = '';
+			var userChannelIdsSize = $("input[name = 'userChannelIds']").size();
+			if(userChannelIdsSize > 0){
+				$("input[name = 'userChannelIds']").each(function(index){
+					var id = $(this).val();
+					ids += id;
+					if(index != userChannelIdsSize-1){
+						ids += ",";
+					}
+				});
+			}
 			
-			if(style){
-				if (style == spotsType) {
-					//如果是插播，默认开启时间段选择，关闭日期选择，开启和插播相关的组件
-					helpChangeDisStatus(true,false,true,true);
-				} else if(style == holidayType){
-					//如果是节日，默认开启时间段选择，关闭日期选择，关闭和插播相关的组件
-					helpChangeDisStatus(true,false,false,false);
+			var userId = '${cdbooMyPlan.user.id}';
+			
+			top.$.jBox.open("iframe:${ctx}/userchannel/cdbooUserChannel/openUserChannelWin?user.id="+userId+"&ids="+ids, "分配频道",$(top.document).width()-240,$(top.document).height()-400,{
+				buttons:{"确定分配":"ok", "关闭":true}, bottomText:"通过查询条件选择用户绑定的频道，选择后窗口不会关闭，可以连续选择。",submit:function(v, h, f){
+					var checkArray = h.find("iframe")[0].contentWindow.getCheckData();
+					if (v=="ok"){
+						try {
+							var tpl = $("#cdbooUserChannelTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
+							for (var i = 0; i < checkArray.length; i++) {
+								var entity = checkArray[i];
+								if(checkUserChannelIdIsExists(entity.id)){
+									continue;
+								}
+								//alert(entity.id+":"+entity.musicName+":"+entity.actor+":"+entity.special+":"+entity.musicOwner+":"+entity.volume)
+								$('#tb').append(Mustache.render(tpl, {row: entity}));
+							}
+							showTip('追加频道成功，请继续选择频道','success');
+						} catch (e) {
+							showTip('追加频道失败，请重新选择频道','error');
+						}
+						
+				    	return false;
+					}
+				}, loaded:function(h){
+					$(".jbox-content", top.document).css("overflow-y","hidden");
 				}
-				else if(style == themeType || style == styleType){
-					//如果是主题和风格，默认开启日期选择，关闭时间段选择，开启业态选择，关闭和插播相关的组件
-					helpChangeDisStatus(false,true,false,false);
-				}
-			}
-			else{
-				helpChangeDisStatus(false,true,false,false);
-			}
+			});
 		}
 		
-		/**
-		切换组件显示帮助方法
-		dateDisFlag:日期段选择显示隐藏控制，true为显示，false为隐藏
-		weekDisFlag:星期选择显示隐藏控制，true为显示，false为隐藏
-		intervalTimeDisFlag:间隔时间选择显示隐藏控制，true为显示，false为隐藏
-		cycleIndexDisFlag:循环次数选择显示隐藏控制，true为显示，false为隐藏
-		*/
-		function helpChangeDisStatus(dateDisFlag,weekDisFlag,intervalTimeDisFlag,cycleIndexDisFlag){
-			if(dateDisFlag){
-				$("#startDateDiv").show();
-				$("#endDateDiv").show();
-			}
-			else{
-				$("#startDateDiv").hide();
-				$("#endDateDiv").hide();
-			}
-			
-			if(weekDisFlag){
-				$("#weekDiv").show();
-			}
-			else{
-				$("#weekDiv").hide();
-			}
-			
-			if(intervalTimeDisFlag){
-				$("#intervalTimeDiv").show();
-			}
-			else{
-				$("#intervalTimeDiv").hide();
-			}
-			
-			if(cycleIndexDisFlag){
-				$("#cycleIndexDiv").show();
-			}
-			else{
-				$("#cycleIndexDiv").hide();
-			}
+		function checkUserChannelIdIsExists(userChannelId){
+			var flag = false;
+			$("input[name = 'userChannelIds']").each(function(index){
+				var id = $(this).val();
+				//alert("["+id+"]:["+musicId+"]["+(id == musicId)+"]")
+				if(id == userChannelId){
+					flag = true;
+					return false;
+				}
+			});
+			return flag;
 		}
 	</script>
 </head>
@@ -127,92 +117,82 @@
 	<ul class="nav nav-tabs">
 		<li><a href="${ctx}/myplan/cdbooMyPlan/">计划列表</a></li>
 		<li><a href="${ctx}/myplan/cdbooMyPlan/form?id=${cdbooMyPlan.id}">计划<shiro:hasPermission name="myplan:cdbooMyPlan:edit">${not empty cdbooMyPlan.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="myplan:cdbooMyPlan:edit">查看</shiro:lacksPermission></a></li>
-		<li><a href="#">时段编辑</a></li>
+		<li><a href="${ctx}/myplan/cdbooMyPlan/toEditTimestepPage?id=${cdbooMyPlan.id}&user.id=${cdbooMyPlan.user.id}">时段编辑</a></li>
 		<li class="active"><a href="#">频道编辑</a></li>
 	</ul><br/>
-	<form:form id="inputForm" modelAttribute="cdbooMyPlan" action="${ctx}/myplan/cdbooMyPlan/save" method="post" class="form-horizontal">
+	<form:form id="inputForm" modelAttribute="cdbooMyPlan" action="${ctx}/myplan/cdbooMyPlan/saveTimestepChannel" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
-		<sys:message content="${message}"/>		
-		<div class="control-group">
-			<label class="control-label">用户：</label>
-			<div class="controls">
-				<sys:treeselect id="user" name="user.id" value="${cdbooMyPlan.user.id}" labelName="user.name" labelValue="${cdbooMyPlan.user.name}"
-					title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true" notAllowSelectParent="true"/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">计划名称：</label>
-			<div class="controls">
-				<form:input path="planName" htmlEscape="false" maxlength="100" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">风格：</label>
-			<div class="controls">
-				<form:select path="style" class="input-xlarge " onchange="themeChanged(this.value)">
-					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('theme_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
-			</div>
-		</div>
-		<div class="control-group" id="weekDiv">
-			<label class="control-label">周属性：</label>
-			<div class="controls">
-				<form:checkboxes path="weeks" items="${fns:getDictList('week')}" itemLabel="label" itemValue="value" htmlEscape="false" class="required"/>
-			</div>
-		</div>
-		
-		<div class="control-group" id="startDateDiv">
-			<label class="control-label">开始日期：</label>
-			<div class="controls">
-				<input name="startDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
-					value="<fmt:formatDate value="${cdbooMyPlan.startDate}" pattern="yyyy-MM-dd"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
-			</div>
-		</div>
-		<div class="control-group" id="endDateDiv">
-			<label class="control-label">结束日期：</label>
-			<div class="controls">
-				<input name="endDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
-					value="<fmt:formatDate value="${cdbooMyPlan.endDate}" pattern="yyyy-MM-dd"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
-			</div>
-		</div>
-		<div class="control-group" id="cycleIndexDiv">
-			<label class="control-label">循环次数：</label>
-			<div class="controls">
-				<select id="cycleIndex" name="cycleIndex" class="input-small ">
-                  <option value="">请选择</option>
-				  <c:forEach begin="1" end="20" step="1" var="rate">
-					<option value="${rate}" <c:if test="${cdbooMyPlan.cycleIndex eq rate }">selected</c:if> >${rate}</option>
-				  </c:forEach>
-                </select>
-			</div>
-		</div>
-		<div class="control-group" id="intervalTimeDiv">
-			<label class="control-label">重复时间：</label>
-			<div class="controls">
-				<select id="intervalTime" name="intervalTime" class="input-small ">
-                	<option value="">请选择</option>
-					<c:forEach begin="1" end="60" step="1" var="minute">
-						<option value="${minute}" <c:if test="${cdbooMyPlan.intervalTime eq minute }">selected</c:if> >${minute}</option>
-					</c:forEach>
-                </select>													                    	
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">备注：</label>
-			<div class="controls">
-				<form:textarea path="remarks" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
-			</div>
-		</div>
-		
-		<userTimestep:userTimestep userElementId="userId" userTimestepElementName="userTimestepIds" userTimestepList="${cdbooMyPlan.cdbooUserTimestepList }"></userTimestep:userTimestep>
-		
-		<div class="form-actions">
-			<shiro:hasPermission name="myplan:cdbooMyPlan:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
-			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
-		</div>
+		<form:hidden path="userTimeStepId"/>
+		<sys:message content="${message}"/>
+		<table id="contentTable" class="table table-striped table-bordered table-condensed">
+			<thead>
+				<tr>
+					<th class="hide"></th>
+					<th style="width: 10%">用户名称</th>
+					<th style="width: 5%">频道编号</th>
+					<th style="width: 10%">频道名称</th>
+					<th style="width: 10%">频道图片</th>
+					<th style="width: 5%">风格类型</th>
+					<th style="width: 5%">风格类型明细</th>
+					<th style="width: 5%">频道版本</th>
+					<th style="width: 10%">创建时间</th>
+					<th style="width: 5%">频道类型</th>
+				</tr>
+			</thead>
+			<tbody id="tb">
+			<c:forEach items="${cdbooMyPlan.cdbooUserChannels}" var="cdbooUserChannel">
+				<tr>
+					<td class="hide"><input type="hidden" name="userChannelIds" value="${cdbooUserChannel.id }"/></td>
+					<td>${cdbooUserChannel.user.name}</td>
+					<td>${cdbooUserChannel.channel.channelNo}</td>
+					<td>${cdbooUserChannel.channel.channelName}</td>		
+					<td><pic:preview path="${cdbooUserChannel.channel.photoPath}"></pic:preview></td>
+					<td>${fns:getDictLabel(cdbooUserChannel.channel.themeType, 'theme_type', '')}</td>
+					<td><theme:themeDetail themeConcreteType="${cdbooUserChannel.channel.themeConcreteType }" themeType="${cdbooUserChannel.channel.themeType }"></theme:themeDetail></td>
+					<td>${cdbooUserChannel.channel.channelVersion}</td>
+					<td><fmt:formatDate value="${cdbooUserChannel.channel.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+					<td>${fns:getDictLabel(cdbooUserChannel.channel.channelType, 'channel_type', '')}</td>
+					<td><a href="#" onclick="deleteRow(this)">删除</a></td>
+				</tr>
+			</c:forEach>
+			</tbody>
+		</table>
+		<script type="text/template" id="cdbooUserChannelTpl">//<!--
+					<tr>
+							<td class="hide">
+								<input name="userChannelIds" type="hidden" value="{{row.id}}"/>
+							</td>
+							<td>
+								{{row.channelNo}}
+							</td>
+							<td>
+								{{row.channelName}}
+							</td>
+							<td>
+								{{row.photoPath}}
+							</td>
+							<td>
+								{{row.themeType}}
+							</td>
+							<td>
+								{{row.themeConcreteType}}
+							</td>
+							<td>
+								{{row.channelVersion}}
+							</td>
+							<td>
+								{{row.photoPath}}
+							</td>
+							<td>
+								{{row.createDate}}
+							</td>
+							<td>
+								{{row.channelType}}
+							</td>
+
+							<td class="text-center" width="10"><a href="#" onclick="deleteRow(this)">删除</a></td>
+					</tr>//-->
+		</script>
 	</form:form>
 </body>
 </html>

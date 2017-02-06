@@ -35,6 +35,7 @@
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="cdbooMyPlan" action="${ctx}/myplan/cdbooMyPlan/saveTimestep" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
+		<input type="hidden" id="userId" value="${cdbooMyPlan.user.id }">
 		<sys:message content="${message}"/>		
 		
 		<userTimestep:userTimestep userElementId="userId" userTimestepElementName="userTimestepIds" userTimestepList="${cdbooMyPlan.cdbooUserTimestepList }"></userTimestep:userTimestep>
