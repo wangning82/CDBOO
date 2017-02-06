@@ -53,6 +53,40 @@
 		});
 	}
 	
+	function appendChannel(){
+		var elementId = '${userElementId}';
+		var userId = '';
+		if(elementId){
+			userId = $('#'+elementId).val();
+		}
+		
+		top.$.jBox.open("iframe:${ctx}/usertimestep/cdbooUserTimestep/openUserTimestepWin?userId="+userId+"&ids="+ids, "分配时段",$(top.document).width()-240,$(top.document).height()-400,{
+			buttons:{"确定分配":"ok", "关闭":true}, bottomText:"通过查询条件选择用户时段，选择后窗口不会关闭，可以连续选择。",submit:function(v, h, f){
+				var checkArray = h.find("iframe")[0].contentWindow.getCheckData();
+				if (v=="ok"){
+					try {
+						var tpl = $("#cdbooUserTimestepTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
+						for (var i = 0; i < checkArray.length; i++) {
+							var entity = checkArray[i];
+							if(checkUserTimestepIdIsExists(entity.id)){
+								continue;
+							}
+							//alert(entity.id+":"+entity.musicName+":"+entity.actor+":"+entity.special+":"+entity.musicOwner+":"+entity.volume)
+							$('#cdbooUserTimestepList').append(Mustache.render(tpl, {row: entity}));
+						}
+						showTip('追加时段成功，请继续选择时段','success');
+					} catch (e) {
+						showTip('追加时段失败，请重新选择时段','error');
+					}
+					
+			    	return false;
+				}
+			}, loaded:function(h){
+				$(".jbox-content", top.document).css("overflow-y","hidden");
+			}
+		});
+	}
+	
 	//检查时段id是否存在
 	function checkUserTimestepIdIsExists(userTimestepId){
 		var flag = false;
@@ -77,10 +111,10 @@
 					<thead>
 						<tr>
 							<th class="hide"></th>
-							<th>时段名称</th>
-							<th>开始时间</th>
-							<th>结束时间</th>
-							<th>操作</th>
+							<th style="width: 30%">时段名称</th>
+							<th style="width: 30%">开始时间</th>
+							<th style="width: 30%">结束时间</th>
+							<th style="width: 10%">操作</th>
 						</tr>
 					</thead>
 					<tbody id="cdbooUserTimestepList">
@@ -98,7 +132,7 @@
 								<td>
 									${userTimestep.endTime }
 								</td>
-								<td class="text-center" width="10"><td><a href="#" onclick="deleteRow(this)">删除</a></td></td>
+								<td class="text-center"><a href="#" onclick="deleteRow(this)">删除</a>&nbsp;<a href="#" onclick="appendChannel(${userTimestep.id })">添加频道</a></td>
 							</tr>
 						</c:forEach>
 					</tbody>
@@ -117,7 +151,7 @@
 							<td>
 								{{row.endTime}}
 							</td>
-							<td class="text-center" width="10"><td><a href="#" onclick="deleteRow(this)">删除</a></td></td>
+							<td class="text-center" width="10"><a href="#" onclick="deleteRow(this)">删除</a>&nbsp;<a href="#" onclick="appendChannel({{row.id}})">添加频道</a></td>
 					</tr>//-->
 				</script>
 	</div>	

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdboo.myplan.dao.CdbooMyPlanTimestepChannelDao">
+    
+	<sql id="cdbooMyPlanTimestepChannelColumns">
+		a.id AS "id",
+		a.my_plan_timestep_id AS "myPlanTimestep.id",
+		a.user_channel_id AS "userChannel.id",
+		a.channel_type AS "channelType",
+		a.operation_type AS "operationType",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate"
+	</sql>
+	
+	<sql id="cdbooMyPlanTimestepChannelJoins">
+	</sql>
+    
+	<select id="get" resultType="CdbooMyPlanTimestepChannel">
+		SELECT 
+			<include refid="cdbooMyPlanTimestepChannelColumns"/>
+		FROM cdboo_my_plan_timestep_channel a
+		<include refid="cdbooMyPlanTimestepChannelJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="CdbooMyPlanTimestepChannel">
+		SELECT 
+			<include refid="cdbooMyPlanTimestepChannelColumns"/>
+		FROM cdboo_my_plan_timestep_channel a
+		<include refid="cdbooMyPlanTimestepChannelJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="CdbooMyPlanTimestepChannel">
+		SELECT 
+			<include refid="cdbooMyPlanTimestepChannelColumns"/>
+		FROM cdboo_my_plan_timestep_channel a
+		<include refid="cdbooMyPlanTimestepChannelJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO cdboo_my_plan_timestep_channel(
+			id,
+			my_plan_timestep_id,
+			user_channel_id,
+			channel_type,
+			operation_type,
+			create_by,
+			create_date,
+			update_by,
+			update_date
+		) VALUES (
+			#{id},
+			#{myPlanTimestep.id},
+			#{userChannel.id},
+			#{channelType},
+			#{operationType},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cdboo_my_plan_timestep_channel SET 	
+			my_plan_timestep_id = #{myPlanTimestep.id},
+			user_channel_id = #{userChannel.id},
+			channel_type = #{channelType},
+			operation_type = #{operationType},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM cdboo_my_plan_timestep_channel
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

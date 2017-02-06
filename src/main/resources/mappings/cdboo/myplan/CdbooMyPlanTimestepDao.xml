@@ -6,15 +6,12 @@
 		a.id AS "id",
 		a.plan_id AS "plan.id",
 		a.user_timestep_id AS "userTimestep.id",
-		a.user_channel_id AS "userChannel.id",
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
 		a.update_by AS "updateBy.id",
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
-		a.del_flag AS "delFlag",
-		a.channel_type AS "channelType",
-		a.operation_type AS "operationType"
+		a.del_flag AS "delFlag"
 	</sql>
 	
 	<sql id="cdbooMyPlanTimestepJoins">
@@ -73,28 +70,22 @@
 			id,
 			plan_id,
 			user_timestep_id,
-			user_channel_id,
 			create_by,
 			create_date,
 			update_by,
 			update_date,
 			remarks,
-			del_flag,
-			channel_type,
-			operation_type
+			del_flag
 		) VALUES (
 			#{id},
 			#{plan.id},
 			#{userTimestep.id},
-			#{userChannel.id},
 			#{createBy.id},
 			#{createDate},
 			#{updateBy.id},
 			#{updateDate},
 			#{remarks},
-			#{delFlag},
-			#{channelType},
-			#{operationType}
+			#{delFlag}
 		)
 	</insert>
 	
@@ -102,12 +93,9 @@
 		UPDATE cdboo_my_plan_timestep SET 	
 			plan_id = #{plan.id},
 			user_timestep_id = #{userTimestep.id},
-			user_channel_id = #{userChannel.id},
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
-			remarks = #{remarks},
-			channel_type = #{channelType},
-			operation_type = #{operationType}
+			remarks = #{remarks}
 		WHERE id = #{id}
 	</update>
 	

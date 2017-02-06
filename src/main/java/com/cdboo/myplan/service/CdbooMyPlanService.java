@@ -48,12 +48,16 @@ public class CdbooMyPlanService extends CrudService<CdbooMyPlanDao, CdbooMyPlan>
 	@Transactional(readOnly = false)
 	public void save(CdbooMyPlan cdbooMyPlan) {
 		super.save(cdbooMyPlan);
+	}
+	
+	@Transactional(readOnly = false)
+	public void saveUserTimestep(CdbooMyPlan cdbooMyPlan) {
 		List<String> userTimestepIds = cdbooMyPlan.getUserTimestepIds();
 
 		if (CollectionUtils.isNotEmpty(userTimestepIds)) {
 
 			List<CdbooMyPlanTimestep> saveList = Lists.newArrayList();
-			
+
 			CdbooMyPlanTimestep removeObj = new CdbooMyPlanTimestep();
 			removeObj.setPlan(cdbooMyPlan);
 			cdbooMyPlanTimestepService.remove(removeObj);
@@ -64,7 +68,7 @@ public class CdbooMyPlanService extends CrudService<CdbooMyPlanDao, CdbooMyPlan>
 				cdbooMyPlanTimestep.setUserTimestep(cdbooUserTimestepService.get(userTimestepId));
 				saveList.add(cdbooMyPlanTimestep);
 			}
-			
+
 			for (CdbooMyPlanTimestep cdbooMyPlanTimestep : saveList) {
 				cdbooMyPlanTimestepService.save(cdbooMyPlanTimestep);
 			}
