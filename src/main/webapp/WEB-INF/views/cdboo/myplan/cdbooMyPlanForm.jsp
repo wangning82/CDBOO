@@ -75,11 +75,11 @@
 				}
 				else if(style == themeType || style == styleType){
 					//如果是主题和风格，默认开启日期选择，关闭时间段选择，开启业态选择，关闭和插播相关的组件
-					helpChangeDisStatus(false,true,false,false);
+					helpChangeDisStatus(true,true,false,false);
 				}
 			}
 			else{
-				helpChangeDisStatus(false,true,false,false);
+				helpChangeDisStatus(true,true,false,false);
 			}
 		}
 		

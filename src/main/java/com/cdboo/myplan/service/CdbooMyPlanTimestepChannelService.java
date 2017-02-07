@@ -39,7 +39,9 @@ public class CdbooMyPlanTimestepChannelService
 		List<CdbooUserChannel> userChannelList = Lists.newArrayList();
 		if (CollectionUtils.isNotEmpty(list)) {
 			for (CdbooMyPlanTimestepChannel cdbooMyPlanTimestepChannel : list) {
-				userChannelList.add(cdbooMyPlanTimestepChannel.getUserChannel());
+				CdbooUserChannel userChannel = cdbooMyPlanTimestepChannel.getUserChannel();
+				userChannel.setOperationType(cdbooMyPlanTimestepChannel.getOperationType());
+				userChannelList.add(userChannel);
 			}
 		}
 		return userChannelList;
