@@ -52,21 +52,21 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/channel/groupChannel/user/">频道信息列表</a></li>
-		<li class="active"><a><c:if test = "${not empty cdbooUserGroup.user.id && not empty cdbooUserGroup.cdbooChannel.id}">组合频道信息查看</c:if><c:if test = "${empty cdbooUserGroup.user.id && empty cdbooUserGroup.cdbooChannel.id}">组合频道信息添加</c:if></a></li>
+		<li><a href="${ctx}/channel/groupChannel/user/">用户组合频道信息列表</a></li>
+		<li class="active"><a><c:if test = "${not empty userChannel.id}">用户组合频道信息查看</c:if><c:if test = "${empty userChannel.id}">用户组合频道信息添加</c:if></a></li>
 	</ul><br/>
-	<form:form id="inputForm" modelAttribute="cdbooUserGroup" action="${ctx}/channel/groupChannel/user/save" method="post" class="form-horizontal">
+	<form:form id="inputForm" modelAttribute="userChannel" action="${ctx}/channel/groupChannel/user/save" method="post" class="form-horizontal">
 		<sys:message content="${message}"/>		
 		<div class="control-group">
 			<label class="control-label">用户：</label>
 			<div class="controls">
 				<!-- 如果是修改，则用户锁定，不能编辑 -->
-				<c:if test = "${not empty cdbooUserGroup.user.id && not empty cdbooUserGroup.cdbooChannel.id}">
-					${cdbooUserGroup.user.name}
+				<c:if test = "${not empty userChannel.id}">
+					${userChannel.user.name}
 				</c:if>
 				<!-- 如果是新增，则用户不锁定，允许编辑 -->
-				<c:if test = "${empty cdbooUserGroup.user.id && empty cdbooUserGroup.cdbooChannel.id}">
-					<sys:treeselect id="user" name="user.id" value="${cdbooUserChannel.user.id}" labelName="user.name" labelValue="${cdbooUserChannel.user.name}"
+				<c:if test = "${empty userChannel.id}">
+					<sys:treeselect id="user" name="user.id" value="${userChannel.user.id}" labelName="user.name" labelValue="${userChannel.user.name}"
 						title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true" notAllowSelectParent="true" />
 				</c:if>
 			</div>
@@ -75,14 +75,14 @@
 		<div class="control-group">
 			<label class="control-label">组合频道：</label>
 			<div class="controls">
-				<c:if test = "${empty cdbooUserGroup.user.id && empty cdbooUserGroup.cdbooChannel.id}">
-					<form:select id="channelId" path="cdbooChannel.id" class="input-xlarge " onchange="linkChannelInfo(this.value)">
+				<c:if test = "${empty userChannel.id}">
+					<form:select id="channelId" path="channel.id" class="input-xlarge " onchange="linkChannelInfo(this.value)">
 						<form:option value="" label="请选择"/>
-						<form:options items="${cdbooUserGroup.channelList}" itemLabel="channelName" itemValue="id" htmlEscape="false"/>
+						<form:options items="${userChannel.channelList}" itemLabel="channelName" itemValue="id" htmlEscape="false"/>
 					</form:select>
 				</c:if>
-				<c:if test = "${not empty cdbooUserGroup.user.id && not empty cdbooUserGroup.cdbooChannel.id}">
-					${cdbooUserGroup.cdbooChannel.channelName}
+				<c:if test = "${not empty userChannel.id}">
+					${userChannel.channel.channelName}
 				</c:if>
 			</div>
 		</div>
@@ -104,7 +104,7 @@
 						</tr>
 					</thead>					
 					<tbody id="tb">
-						<c:forEach items="${cdbooUserGroup.groupChildChannelList}" var="cdbooGroupChildChannel" varStatus="status">
+						<c:forEach items="${userChannel.groupChildChannelList}" var="cdbooGroupChildChannel" varStatus="status">
 							<c:set value="${cdbooGroupChildChannel.childChannelId }" var="cdbooChannel"></c:set>
 							<tr>
 								<td>
@@ -139,7 +139,7 @@
 		</div>
 		
 		<div class="form-actions">
-			<c:if test = "${empty cdbooUserGroup.user.id && empty cdbooUserGroup.cdbooChannel.id}">
+			<c:if test = "${empty userChannel.id}">
 				<shiro:hasPermission name="channel:groupChannel:user:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
 			</c:if>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>

@@ -81,11 +81,13 @@ public class CdbooGroupChildService extends CrudService<CdbooGroupChildDao, Cdbo
 	}
 
 	@Transactional(readOnly = false)
-	public void delete(CdbooGroupChild cdbooGroupChild) {
-		CdbooChannel groupChannel = cdbooGroupChild.getGroupChannelId();
+	public void delete(CdbooChannel groupChannel) {
 		cdbooChannelService.delete(groupChannel);
-
-		List<CdbooGroupChild> list = super.findList(cdbooGroupChild);
+		
+		CdbooGroupChild cdbooGroupChild2 = new CdbooGroupChild();
+		cdbooGroupChild2.setGroupChannelId(groupChannel);
+		
+		List<CdbooGroupChild> list = super.findList(cdbooGroupChild2);
 		if (CollectionUtils.isNotEmpty(list)) {
 			for (CdbooGroupChild removeObj : list) {
 				dao.remove(removeObj);
@@ -94,12 +96,11 @@ public class CdbooGroupChildService extends CrudService<CdbooGroupChildDao, Cdbo
 	}
 
 	@Transactional(readOnly = false)
-	public void save(CdbooGroupChild cdbooGroupChild) {
-		CdbooChannel groupChannel = cdbooGroupChild.getGroupChannelId();
+	public void save(CdbooChannel groupChannel) {
 		cdbooChannelService.save(groupChannel);
 
-		List<String> channelIds = cdbooGroupChild.getChannelIds();
-		List<Integer> sorts = cdbooGroupChild.getSorts();
+		List<String> channelIds = groupChannel.getChannelIds();
+		List<Integer> sorts = groupChannel.getSorts();
 
 		CdbooGroupChild cdbooGroupChild2 = new CdbooGroupChild();
 		cdbooGroupChild2.setGroupChannelId(groupChannel);

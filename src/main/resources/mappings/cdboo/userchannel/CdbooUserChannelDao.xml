@@ -6,7 +6,7 @@
 		a.id AS "id",
 		a.user_id AS "user.id",
 		a.channel_id AS "channel.id",
-		a.music_id AS "music.id",
+		a.channel_type AS "channelType",
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
 		a.update_by AS "updateBy.id",
@@ -41,8 +41,8 @@
 			<if test="channel != null and channel.id != null and channel.id != ''">
 				AND a.channel_id = #{channel.id}
 			</if>
-			<if test="music != null and music.id != null and music.id != ''">
-				AND a.music_id = #{music.id}
+			<if test="channelType != null and channelType != ''">
+				AND a.channel_type = #{channelType}
 			</if>
 		</where>
 		<choose>
@@ -53,50 +53,6 @@
 				ORDER BY a.create_date DESC
 			</otherwise>
 		</choose>
-	</select>
-	
-	<select id="findGroupByList" resultType="CdbooUserChannel">
-		SELECT 
-			a.user_id AS "user.id",a.channel_id AS "channel.id",COUNT(a.music_id) AS "musicSize"
-		FROM cdboo_user_channel a
-		<where>
-			a.del_flag = #{DEL_FLAG_NORMAL}
-			<if test="user != null and user.id != null and user.id != ''">
-				AND a.user_id = #{user.id}
-			</if>
-			<if test="channel != null">
-				<if test="channel.id != null and channel.id != ''">
-					AND a.channel_id = #{channel.id}
-				</if>
-				<if test="channel.channelType != null and channel.channelType != ''">
-					AND exists(select 1 from cdboo_child_channel b where a.channel_id = b.id and b.channel_type = #{channel.channelType})
-				</if>
-			</if>
-			<if test="music != null and music.id != null and music.id != ''">
-				AND a.music_id = #{music.id}
-			</if>
-		</where>
-		group by a.user_id,a.channel_id
-	</select>
-	
-	<select id="findChannelByUser" resultType="CdbooUserChannel">
-		SELECT a.channel_id AS "channel.id"
-		FROM cdboo_user_channel a
-		<where>
-			a.del_flag = #{DEL_FLAG_NORMAL}
-			<if test="user != null and user.id != null and user.id != ''">
-				AND a.user_id = #{user.id}
-			</if>
-			<if test="channel != null">
-				<if test="channel.id != null and channel.id != ''">
-					AND a.channel_id = #{channel.id}
-				</if>
-				<if test="channel.channelType != null and channel.channelType != ''">
-					AND exists(select 1 from cdboo_child_channel b where a.channel_id = b.id and b.channel_type = #{channel.channelType})
-				</if>
-			</if>
-		</where>
-		group by a.channel_id
 	</select>
 	
 	<select id="findAllList" resultType="CdbooUserChannel">
@@ -122,7 +78,7 @@
 			id,
 			user_id,
 			channel_id,
-			music_id,
+			channel_type,
 			create_by,
 			create_date,
 			update_by,
@@ -133,7 +89,7 @@
 			#{id},
 			#{user.id},
 			#{channel.id},
-			#{music.id},
+			#{channelType},
 			#{createBy.id},
 			#{createDate},
 			#{updateBy.id},
@@ -147,7 +103,7 @@
 		UPDATE cdboo_user_channel SET 	
 			user_id = #{user.id},
 			channel_id = #{channel.id},
-			music_id = #{music.id},
+			channel_type = #{channelType},
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
 			remarks = #{remarks}
@@ -161,15 +117,20 @@
 	</update>
 	
 	<update id="remove">
-		DELETE FROM cdboo_user_channel WHERE id = #{id}
+		DELETE FROM cdboo_user_channel 
+		<where>
+			<if test="id != null and id != ''">
+				AND id = #{id}
+			</if>
+			<if test="user != null and user.id != null and user.id != ''">
+				AND user_id = #{user.id}
+			</if>
+			<if test="channel != null and channel.id != null and channel.id != ''">
+				AND channel_id = #{channel.id}
+			</if>
+			<if test="channelType != null and channelType != ''">
+				AND channel_type = #{channelType}
+			</if>
+		</where>
 	</update>
-	
-	<update id="removeByUserAndChannel">
-		DELETE FROM cdboo_user_channel WHERE user_id = #{user.id} and channel_id = #{channel.id}
-	</update>
-	
-	<update id="removeByUser">
-		DELETE FROM cdboo_user_channel WHERE user_id = #{user.id}
-	</update>
-	
 </mapper>

@@ -4,8 +4,10 @@
 package com.cdboo.userchannel.web.system;
 
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.cdboo.channel.entity.CdbooChannel;
 import com.cdboo.channel.service.CdbooChannelService;
 import com.cdboo.common.Constants;
-import com.cdboo.music.entity.CdbooMusic;
 import com.cdboo.userchannel.entity.CdbooUserChannel;
 import com.cdboo.userchannel.service.CdbooUserChannelService;
 import com.thinkgem.jeesite.common.config.Global;
@@ -59,6 +61,7 @@ public class CdbooUserChannelController extends BaseController {
 	@RequestMapping(value = { "list", "" })
 	public String list(CdbooUserChannel cdbooUserChannel, HttpServletRequest request, HttpServletResponse response,
 			Model model) {
+		cdbooUserChannel.setChannelType(Constants.CHANNEL_TYPE_CHILD);
 		Page<CdbooUserChannel> page = cdbooUserChannelService
 				.findPageForGroupBy(new Page<CdbooUserChannel>(request, response), cdbooUserChannel);
 		model.addAttribute("page", page);
@@ -93,7 +96,6 @@ public class CdbooUserChannelController extends BaseController {
 			 ***********************/
 			List<CdbooChannel> channels = cdbooChannelService.findChildChannelList();
 			cdbooUserChannel.setChannelList(channels);
-//			model.addAttribute("channelList", channels);
 			/************************
 			 * 新增时查询所有频道列表信息返回 End
 			 ***********************/
@@ -129,21 +131,9 @@ public class CdbooUserChannelController extends BaseController {
 		return channel;
 	}
 
-	@ResponseBody
-	@RequestMapping(value = "getMusicList")
-	public List<CdbooMusic> getMusicList(@RequestParam(required = false) String userId,
-			@RequestParam(required = false) String channelId, HttpServletResponse response) {
-		User user = new User(userId);
-		CdbooChannel channel = new CdbooChannel(channelId);
-		List<CdbooMusic> musicList = cdbooUserChannelService.getMusicListByUserAndChannel(user, channel);
-		return musicList;
-	}
-	
 	/**
-	 * 导入用户数据
+	 * 查询用户全部频道信息，子频道和组合频道全部检索出来
 	 * 
-	 * @param file
-	 * @param redirectAttributes
 	 * @return
 	 */
 	@RequestMapping(value = "openUserChannelWin")
@@ -156,7 +146,7 @@ public class CdbooUserChannelController extends BaseController {
 
 		User user = cdbooUserChannel.getUser();
 		if (user != null && StringUtils.isNotBlank(user.getId())) {
-			List<CdbooChannel> channelList = cdbooUserChannelService.getChannelListByUser(user,Constants.CHANNEL_TYPE_CHILD);
+			List<CdbooChannel> channelList = cdbooUserChannelService.getChannelListByUser(user,null);
 			cdbooUserChannel.setChannelList(channelList);
 		}
 		return "cdboo/userchannel/cdbooUserChannelOpenWin";

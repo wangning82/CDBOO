@@ -3,14 +3,13 @@
  */
 package com.cdboo.userchannel.entity;
 
-import com.thinkgem.jeesite.modules.sys.entity.User;
-
 import java.util.List;
-
 import com.cdboo.channel.entity.CdbooChannel;
+import com.cdboo.childchannel.entity.CdbooGroupChild;
 import com.cdboo.music.entity.CdbooMusic;
 import com.google.common.collect.Lists;
 import com.thinkgem.jeesite.common.persistence.DataEntity;
+import com.thinkgem.jeesite.modules.sys.entity.User;
 
 /**
  * 用户频道表Entity
@@ -22,10 +21,15 @@ public class CdbooUserChannel extends DataEntity<CdbooUserChannel> {
 	private static final long serialVersionUID = 1L;
 	private User user;		// 用户id
 	private CdbooChannel channel;		// 频道id
-	private CdbooMusic music;		// 音乐id
+	private String channelType;		//频道类型，0子频道，1组合频道
+	
+	private int childChannelSize;
+	
 	private int musicSize;
 	
-	private String operationType;//yetai
+	private String operationType;//业态
+	
+	private String ids;//id集合字符串，用逗号分隔
 	
 	private List<String> channelIds = Lists.newArrayList();
 	
@@ -34,6 +38,8 @@ public class CdbooUserChannel extends DataEntity<CdbooUserChannel> {
 	private List<CdbooMusic> musicList = Lists.newArrayList();
 	
 	private List<String> musicIds = Lists.newArrayList();
+	
+	private List<CdbooGroupChild> groupChildChannelList = Lists.newArrayList();
 	
 	public CdbooUserChannel() {
 		super();
@@ -57,14 +63,6 @@ public class CdbooUserChannel extends DataEntity<CdbooUserChannel> {
 
 	public void setChannel(CdbooChannel channel) {
 		this.channel = channel;
-	}
-	
-	public CdbooMusic getMusic() {
-		return music;
-	}
-
-	public void setMusic(CdbooMusic music) {
-		this.music = music;
 	}
 
 	public int getMusicSize() {
@@ -113,6 +111,38 @@ public class CdbooUserChannel extends DataEntity<CdbooUserChannel> {
 
 	public void setOperationType(String operationType) {
 		this.operationType = operationType;
+	}
+
+	public String getIds() {
+		return ids;
+	}
+
+	public void setIds(String ids) {
+		this.ids = ids;
+	}
+
+	public String getChannelType() {
+		return channelType;
+	}
+
+	public void setChannelType(String channelType) {
+		this.channelType = channelType;
+	}
+
+	public int getChildChannelSize() {
+		return childChannelSize;
+	}
+
+	public void setChildChannelSize(int childChannelSize) {
+		this.childChannelSize = childChannelSize;
+	}
+
+	public List<CdbooGroupChild> getGroupChildChannelList() {
+		return groupChildChannelList;
+	}
+
+	public void setGroupChildChannelList(List<CdbooGroupChild> groupChildChannelList) {
+		this.groupChildChannelList = groupChildChannelList;
 	}
 
 }

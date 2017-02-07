@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
@@ -23,8 +24,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.cdboo.channel.dao.CdbooChannelDao;
 import com.cdboo.channel.entity.CdbooChannel;
-import com.cdboo.channel.service.CdbooChannelService;
 import com.cdboo.channelmusic.entity.CdbooChannelMusic;
 import com.cdboo.channelmusic.service.CdbooChannelMusicService;
 import com.cdboo.common.Constants;
@@ -49,7 +51,7 @@ import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 public class CdbooMusicService extends CrudService<CdbooMusicDao, CdbooMusic> {
 
 	@Autowired
-	private CdbooChannelService cdbooChannelService;
+	private CdbooChannelDao cdbooChannelDao;
 	
 	@Autowired
 	private CdbooChannelMusicService cdbooChannelMusicService;
@@ -224,7 +226,7 @@ public class CdbooMusicService extends CrudService<CdbooMusicDao, CdbooMusic> {
 							/******************
 							 * 创建音乐文件记录并保存到数据库后需要跟频道进行关联，这样就直接放到对应的频道列表里了 Start
 							 *******************/
-							CdbooChannel cdbooChannel = cdbooChannelService.get(channelId);
+							CdbooChannel cdbooChannel = cdbooChannelDao.get(channelId);
 							CdbooChannelMusic cdbooChannelMusic = new CdbooChannelMusic();
 							cdbooChannelMusic.setChannel(cdbooChannel);
 							cdbooChannelMusic.setMusic(cdbooMusic);

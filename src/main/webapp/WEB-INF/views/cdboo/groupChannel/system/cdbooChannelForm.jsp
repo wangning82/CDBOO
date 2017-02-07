@@ -56,43 +56,43 @@
 		<li><a href="${ctx}/channel/groupChannel/">频道信息列表</a></li>
 		<li class="active"><a href="${ctx}/channel/groupChannel/form?id=${cdbooChannel.id}">频道信息<shiro:hasPermission name="channel:groupChannel:edit">${not empty cdbooChannel.id?'修改':'添加'}</shiro:hasPermission></a></li>
 	</ul><br/>
-	<form:form id="inputForm" modelAttribute="cdbooGroupChild" action="${ctx}/channel/groupChannel/save" method="post" class="form-horizontal">
-		<form:hidden path="groupChannelId.id"/>
-		<input type="hidden" id="channelType" name="groupChannelId.channelType" value="${Constants.CHANNEL_TYPE_GROUP }">
+	<form:form id="inputForm" modelAttribute="cdbooChannel" action="${ctx}/channel/groupChannel/save" method="post" class="form-horizontal">
+		<form:hidden path="id"/>
+		<input type="hidden" id="channelType" name="channelType" value="${Constants.CHANNEL_TYPE_GROUP }">
 		<sys:message content="${message}"/>		
 		<div class="control-group">
 			<label class="control-label">频道编号：</label>
 			<div class="controls">
-				<form:input path="groupChannelId.channelNo" htmlEscape="false" maxlength="100" class="input-xlarge "/>
+				<form:input path="channelNo" htmlEscape="false" maxlength="100" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">频道名称：</label>
 			<div class="controls">
-				<form:input path="groupChannelId.channelName" htmlEscape="false" maxlength="200" class="input-xlarge "/>
+				<form:input path="channelName" htmlEscape="false" maxlength="200" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">频道版本：</label>
 			<div class="controls">
-				<form:input path="groupChannelId.channelVersion" htmlEscape="false" maxlength="100" class="input-xlarge "/>
+				<form:input path="channelVersion" htmlEscape="false" maxlength="100" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">频道图片：</label>
 			<div class="controls">
-				<input type="hidden" id="photoPath" name="groupChannelId.photoPath" value="${cdbooGroupChild.groupChannelId.photoPath }" required>
+				<input type="hidden" id="photoPath" name="photoPath" value="${cdbooChannel.photoPath }" required>
 				<sys:ckfinder input="photoPath" type="images"  uploadPath="/images" selectMultiple="false" maxWidth="100" maxHeight="100"/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">备注信息：</label>
 			<div class="controls">
-				<form:textarea path="groupChannelId.remarks" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
+				<form:textarea path="remarks" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
 			</div>
 		</div>
 		
-		<channel:channelListTag channelElementName="channelIds" sortElementName="sorts" channelList="${cdbooGroupChild.childChannelList }" channelType="0"></channel:channelListTag>
+		<channel:channelListTag channelElementName="channelIds" sortElementName="sorts" channelList="${cdbooChannel.childChannelList }" channelType="0"></channel:channelListTag>
 		
 		<div class="form-actions">
 			<shiro:hasPermission name="channel:groupChannel:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>

@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.cdboo.channel.entity.CdbooChannel;
-import com.cdboo.channel.service.CdbooChannelService;
 import com.cdboo.common.Constants;
-import com.cdboo.music.entity.CdbooMusic;
 import com.cdboo.userchannel.entity.CdbooUserChannel;
 import com.cdboo.userchannel.service.CdbooUserChannelService;
 import com.thinkgem.jeesite.common.config.Global;
@@ -34,9 +32,6 @@ public class UserChannelController extends BaseController {
 	
 	@Autowired
 	private CdbooUserChannelService cdbooUserChannelService;
-
-	@Autowired
-	private CdbooChannelService cdbooChannelService;
 
 	@ModelAttribute
 	public CdbooUserChannel get(@RequestParam(required = false) String id) {
@@ -115,15 +110,5 @@ public class UserChannelController extends BaseController {
 		User user = new User(userId);
 		List<CdbooChannel> channel = cdbooUserChannelService.getChannelListByUser(user,Constants.CHANNEL_TYPE_CHILD);
 		return channel;
-	}
-
-	@ResponseBody
-	@RequestMapping(value = "getMusicList")
-	public List<CdbooMusic> getMusicList(@RequestParam(required = false) String userId,
-			@RequestParam(required = false) String channelId, HttpServletResponse response) {
-		User user = new User(userId);
-		CdbooChannel channel = new CdbooChannel(channelId);
-		List<CdbooMusic> musicList = cdbooUserChannelService.getMusicListByUserAndChannel(user, channel);
-		return musicList;
 	}
 }

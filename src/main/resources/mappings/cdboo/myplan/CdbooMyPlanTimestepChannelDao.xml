@@ -128,10 +128,10 @@
 		DELETE FROM cdboo_my_plan_timestep_channel
 		<where>
 			<if test="myPlanTimestep != null and myPlanTimestep.id != null and myPlanTimestep.id != ''">
-				AND a.my_plan_timestep_id = #{myPlanTimestep.id}
+				AND my_plan_timestep_id = #{myPlanTimestep.id}
 			</if>
 			<if test="userChannel != null and userChannel.id != null and userChannel.id != ''">
-				AND a.user_channel_id = #{userChannel.id}
+				AND user_channel_id = #{userChannel.id}
 			</if>
 		</where>
 	</update>

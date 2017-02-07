@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" import="com.cdboo.common.Constants"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
@@ -52,7 +52,7 @@
 				var channelVersion = $('#channelVersion_'+rowIndex).val();
 				var createDate = $('#createDate_'+rowIndex).val();
 				var channelType = $('#channelType_'+rowIndex).val();
-				
+				//alert("rowIndex:"+rowIndex+";id:"+id+";channelNo:"+channelNo+";channelName:"+channelName+";photoPath:"+photoPath+";themeType:"+themeType+";themeConcreteType:"+themeConcreteType+";channelVersion:"+channelVersion+";createDate:"+createDate+";channelType:"+channelType)
 				var channelEntity = new ChannelEntity(id,channelNo,channelName,photoPath,themeType,themeConcreteType,channelVersion,createDate,channelType);
 				checkArray.push(channelEntity);
 			});
@@ -67,13 +67,13 @@
 		<shiro:hasPermission name="userchannel:cdbooUserChannel:edit"><li><a href="${ctx}/userchannel/cdbooUserChannel/form">用户频道添加</a></li></shiro:hasPermission>
 	</ul>
 	
-	<form:form id="searchForm" modelAttribute="cdbooUserChannel" action="${ctx}/userchannel/cdbooUserChannel/" method="post" class="breadcrumb form-search">
+	<form:form id="searchForm" modelAttribute="cdbooUserChannel" action="${ctx}/userchannel/cdbooUserChannel/openUserChannelWin" method="post" class="breadcrumb form-search">
 		<input id="pageNo"  name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
+		<form:hidden path="user.id"/>
 		<ul class="ul-form">
 			<li><label>用户：</label>
-				<sys:treeselect id="user" name="user.id" value="${cdbooUserChannel.user.id}" labelName="user.name" labelValue="${cdbooUserChannel.user.name}"
-					title="用户" url="/sys/office/treeData?type=3" cssClass="input-small" allowClear="true" notAllowSelectParent="true"/>
+				${fns:getUserById(cdbooUserChannel.user.id).name}
 			</li>
 			<li><label>频道：</label>
 				<form:select id="channelId" path="channel.id" class="input-medium">
@@ -104,7 +104,7 @@
 			</tr>
 		</thead>
 		<tbody>
-		<c:forEach items="${page.list}" var="cdbooUserChannel">
+		<c:forEach items="${page.list}" var="cdbooUserChannel" varStatus="status">
 			<tr>
 				<td>
 					<input type="checkbox" id="id_${status.index }" name="userChannelIds" value="${cdbooUserChannel.id }"/>
@@ -124,7 +124,7 @@
 					<input type="hidden" id="channelVersion_${status.index }" value = "${cdbooUserChannel.channel.channelVersion}"/>
 					<fmt:formatDate value="${cdbooUserChannel.channel.createDate}" pattern="yyyy-MM-dd HH:mm:ss" var="formatCreateDate"/>
 					<input type="hidden" id="createDate_${status.index }" value = "${formatCreateDate}"/>
-					<input type="hidden" id="channelType_${status.index }" value = "${cdbooUserChannel.channel.channelType}"/>
+					<input type="hidden" id="channelType_${status.index }" value = "${fns:getDictLabel(cdbooUserChannel.channel.channelType, 'channel_type', '')}"/>
 				</td>
 				<td>
 					${cdbooUserChannel.user.name}

@@ -198,29 +198,33 @@ public class CdbooRestController {
 		}
 	}
 
+//	private List<RestMusic> getMusicList(User user, CdbooChannel channel) {
+//		CdbooUserChannel cdbooUserChannel = new CdbooUserChannel();
+//		cdbooUserChannel.setUser(user);
+//		cdbooUserChannel.setChannel(channel);
+//		List<CdbooUserChannel> userChannels = cdbooUserChannelService.findList(cdbooUserChannel);
+//
+//		List<RestMusic> musicList = Lists.newArrayList();
+//		for (CdbooUserChannel channelObj : userChannels) {
+//			RestMusic restMusic = new RestMusic();
+//			CdbooMusic cdbooMusic = cdbooMusicService.get(channelObj.getMusic().getId());
+//			try {
+//				BeanUtils.copyProperties(restMusic, cdbooMusic);
+//				File musicFile = new File(cdbooMusicService.getMusicPath(cdbooMusic.getPath()));
+//				if (musicFile.exists()) {
+//					restMusic.setLength(musicFile.length());
+//				}
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//			musicList.add(restMusic);
+//		}
+//
+//		return musicList;
+//	}
+
 	private List<RestMusic> getMusicList(User user, CdbooChannel channel) {
-		CdbooUserChannel cdbooUserChannel = new CdbooUserChannel();
-		cdbooUserChannel.setUser(user);
-		cdbooUserChannel.setChannel(channel);
-		List<CdbooUserChannel> userChannels = cdbooUserChannelService.findList(cdbooUserChannel);
-
-		List<RestMusic> musicList = Lists.newArrayList();
-		for (CdbooUserChannel channelObj : userChannels) {
-			RestMusic restMusic = new RestMusic();
-			CdbooMusic cdbooMusic = cdbooMusicService.get(channelObj.getMusic().getId());
-			try {
-				BeanUtils.copyProperties(restMusic, cdbooMusic);
-				File musicFile = new File(cdbooMusicService.getMusicPath(cdbooMusic.getPath()));
-				if (musicFile.exists()) {
-					restMusic.setLength(musicFile.length());
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			musicList.add(restMusic);
-		}
-
-		return musicList;
+		return null;
+		
 	}
-
 }

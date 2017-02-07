@@ -38,7 +38,7 @@
 		<input type="hidden" id="userId" value="${cdbooMyPlan.user.id }">
 		<sys:message content="${message}"/>		
 		
-		<userTimestep:userTimestep userElementId="userId" userTimestepElementName="userTimestepIds" userTimestepList="${cdbooMyPlan.cdbooUserTimestepList }"></userTimestep:userTimestep>
+		<userTimestep:userTimestep planId="${cdbooMyPlan.id }" userElementId="userId" userTimestepElementName="userTimestepIds" userTimestepList="${cdbooMyPlan.cdbooUserTimestepList }"></userTimestep:userTimestep>
 		
 		<div class="form-actions">
 			<shiro:hasPermission name="myplan:cdbooMyPlan:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>

@@ -9,10 +9,12 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.Length;
 
+import com.cdboo.userchannel.entity.CdbooUserChannel;
 import com.cdboo.usertimestep.entity.CdbooUserTimestep;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.common.collect.Lists;
 import com.thinkgem.jeesite.common.persistence.DataEntity;
+import com.thinkgem.jeesite.modules.sys.entity.Office;
 import com.thinkgem.jeesite.modules.sys.entity.User;
 
 /**
@@ -36,7 +38,8 @@ public class CdbooMyPlan extends DataEntity<CdbooMyPlan> {
 	private List<String> userTimestepIds = Lists.newArrayList();
 	private List<String> userChannelIds = Lists.newArrayList();
 	private List<String> operationTypes = Lists.newArrayList();
-	
+	private List<Office> cdbooConditionList = Lists.newArrayList();
+	private List<CdbooUserChannel> cdbooUserChannels = Lists.newArrayList();
 	private String userTimeStepId;
 	
 	public CdbooMyPlan() {
@@ -175,6 +178,22 @@ public class CdbooMyPlan extends DataEntity<CdbooMyPlan> {
 
 	public void setOperationTypes(List<String> operationTypes) {
 		this.operationTypes = operationTypes;
+	}
+
+	public List<Office> getCdbooConditionList() {
+		return cdbooConditionList;
+	}
+
+	public void setCdbooConditionList(List<Office> cdbooConditionList) {
+		this.cdbooConditionList = cdbooConditionList;
+	}
+
+	public List<CdbooUserChannel> getCdbooUserChannels() {
+		return cdbooUserChannels;
+	}
+
+	public void setCdbooUserChannels(List<CdbooUserChannel> cdbooUserChannels) {
+		this.cdbooUserChannels = cdbooUserChannels;
 	}
 	
 }

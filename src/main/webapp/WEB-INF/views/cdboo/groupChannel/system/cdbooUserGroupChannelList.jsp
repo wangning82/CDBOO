@@ -19,21 +19,21 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/channel/groupChannel/user/">组合频道信息列表</a></li>
-		<shiro:hasPermission name="channel:groupChannel:user:edit"><li><a href="${ctx}/channel/groupChannel/user/form">组合频道信息添加</a></li></shiro:hasPermission>
+		<li class="active"><a href="${ctx}/channel/groupChannel/user/">用户组合频道信息列表</a></li>
+		<shiro:hasPermission name="channel:groupChannel:user:edit"><li><a href="${ctx}/channel/groupChannel/user/form">用户组合频道信息添加</a></li></shiro:hasPermission>
 	</ul>
-	<form:form id="searchForm" modelAttribute="cdbooUserGroup" action="${ctx}/channel/groupChannel/user/" method="post" class="breadcrumb form-search">
+	<form:form id="searchForm" modelAttribute="cdbooUserChannel" action="${ctx}/channel/groupChannel/user/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
 			<li><label>用户：</label>
-				<sys:treeselect id="user" name="user.id" value="${cdbooUserGroup.user.id}" labelName="user.name" labelValue="${cdbooUserGroup.user.name}"
+				<sys:treeselect id="user" name="user.id" value="${cdbooUserChannel.user.id}" labelName="user.name" labelValue="${cdbooUserChannel.user.name}"
 					title="用户" url="/sys/office/treeData?type=3" cssClass="input-small" allowClear="true" notAllowSelectParent="true"/>
 			</li>
 			<li><label>组合频道：</label>
-				<form:select id="groupId" path="cdbooChannel.id" class="input-medium">
+				<form:select id="groupId" path="channel.id" class="input-medium">
 					<form:option value="" label="请选择"/>
-					<form:options items="${cdbooUserGroup.channelList }" itemLabel="channelName" itemValue="id"/>
+					<form:options items="${cdbooUserChannel.channelList }" itemLabel="channelName" itemValue="id"/>
 				</form:select>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
@@ -55,32 +55,32 @@
 			</tr>
 		</thead>
 		<tbody>
-		<c:forEach items="${page.list}" var="userGroup">
+		<c:forEach items="${page.list}" var="userChannel">
 			<tr>
 				<td>
-					${userGroup.user.name}
+					${userChannel.user.name}
 				</td>
-				<td><a href="${ctx}/channel/groupChannel/user/form?cdbooChannel.id=${userGroup.cdbooChannel.id}&user.id=${userGroup.user.id}">
-					${userGroup.cdbooChannel.channelNo}
+				<td><a href="${ctx}/channel/groupChannel/user/form?id=${userChannel.id}">
+					${userChannel.channel.channelNo}
 				</a></td>
 				<td>
-					${userGroup.cdbooChannel.channelName}
+					${userChannel.channel.channelName}
 				</td>
 				<td>
-					<pic:preview path="${userGroup.cdbooChannel.photoPath}" ></pic:preview>
+					<pic:preview path="${userChannel.channel.photoPath}" ></pic:preview>
 				</td>
 				<td>
-					${userGroup.cdbooChannel.channelVersion}
+					${userChannel.channel.channelVersion}
 				</td>
 				<td>
-					${userGroup.childChannelSize}
+					${userChannel.childChannelSize}
 				</td>
 				<td>
-					<fmt:formatDate value="${userGroup.cdbooChannel.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+					<fmt:formatDate value="${userChannel.channel.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<shiro:hasPermission name="channel:groupChannel:user:edit"><td>
-    				<a href="${ctx}/channel/groupChannel/user/form?cdbooChannel.id=${userGroup.cdbooChannel.id}&user.id=${userGroup.user.id}">修改</a>
-					<a href="${ctx}/channel/groupChannel/user/delete?cdbooChannel.id=${userGroup.cdbooChannel.id}&user.id=${userGroup.user.id}" onclick="return confirmx('确认要删除该频道信息吗？', this.href)">删除</a>
+    				<a href="${ctx}/channel/groupChannel/user/form?id=${userChannel.id}">修改</a>
+					<a href="${ctx}/channel/groupChannel/user/delete?id=${userChannel.id}" onclick="return confirmx('确认要删除该频道信息吗？', this.href)">删除</a>
 				</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>

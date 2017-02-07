@@ -36,6 +36,9 @@
 			<if test="plan != null and plan.id != null and plan.id != ''">
 				AND a.plan_id = #{plan.id}
 			</if>
+			<if test="userTimestep != null and userTimestep.id != null and userTimestep.id != ''">
+				AND a.user_timestep_id = #{userTimestep.id}
+			</if>
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">

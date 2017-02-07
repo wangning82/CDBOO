@@ -10,19 +10,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cdboo.channel.dao.CdbooChannelDao;
 import com.cdboo.channel.entity.CdbooChannel;
-import com.cdboo.channel.service.CdbooChannelService;
 import com.cdboo.common.Constants;
 import com.cdboo.timestep.entity.Timestep;
+import com.cdboo.userchannel.dao.CdbooUserChannelDao;
 import com.cdboo.userchannel.entity.CdbooUserChannel;
-import com.cdboo.userchannel.service.CdbooUserChannelService;
+import com.cdboo.usergroup.dao.CdbooUserGroupDao;
 import com.cdboo.usergroup.entity.CdbooUserGroup;
-import com.cdboo.usergroup.service.CdbooUserGroupService;
 import com.cdboo.userplan.dao.CdbooPlanDao;
 import com.cdboo.userplan.entity.CdbooPlan;
 import com.cdboo.userplan.model.PlanModel;
+import com.cdboo.usertimestep.dao.CdbooUserTimestepDao;
 import com.cdboo.usertimestep.entity.CdbooUserTimestep;
-import com.cdboo.usertimestep.service.CdbooUserTimestepService;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.common.utils.StringUtils;
@@ -39,16 +39,16 @@ import com.thinkgem.jeesite.modules.sys.entity.User;
 public class CdbooPlanService extends CrudService<CdbooPlanDao, CdbooPlan> {
 
 	@Autowired
-	private CdbooChannelService channelService;
+	private CdbooChannelDao cdbooChannelDao;
 
 	@Autowired
-	private CdbooUserChannelService userChannelService;
+	private CdbooUserChannelDao cdbooUserChannelDao;
 
 	@Autowired
-	private CdbooUserGroupService cdbooUserGroupService;
+	private CdbooUserGroupDao cdbooUserGroupDao;
 
 	@Autowired
-	private CdbooUserTimestepService cdbooUserTimestepService;
+	private CdbooUserTimestepDao cdbooUserTimestepDao;
 
 	public CdbooPlan get(String id) {
 		return super.get(id);
@@ -84,19 +84,19 @@ public class CdbooPlanService extends CrudService<CdbooPlanDao, CdbooPlan> {
 				if (StringUtils.isNotBlank(userChannelId)) {
 					String channelType = tempObj.getChannelType();
 					if (StringUtils.equals(Constants.CHANNEL_TYPE_CHILD, channelType)) {
-						CdbooUserChannel cdbooUserChannel = userChannelService.get(userChannelId);
+						CdbooUserChannel cdbooUserChannel = cdbooUserChannelDao.get(userChannelId);
 						if (cdbooUserChannel != null) {
 							CdbooChannel channel = cdbooUserChannel.getChannel();
-							CdbooChannel viewChannel = channelService.get(channel);
+							CdbooChannel viewChannel = cdbooChannelDao.get(channel);
 							tempObj.setChannel(viewChannel);
 						}
 					}
 					if (StringUtils.equals(Constants.CHANNEL_TYPE_GROUP, channelType)) {
-						CdbooUserGroup cdbooUserGroup = cdbooUserGroupService.get(userChannelId);
+						CdbooUserGroup cdbooUserGroup = cdbooUserGroupDao.get(userChannelId);
 						if (cdbooUserGroup != null) {
 							CdbooChannel channel = cdbooUserGroup.getCdbooChannel();
 							if (channel != null) {
-								CdbooChannel viewChannel = channelService.get(channel);
+								CdbooChannel viewChannel = cdbooChannelDao.get(channel);
 								tempObj.setChannel(viewChannel);
 							}
 						}
@@ -104,7 +104,7 @@ public class CdbooPlanService extends CrudService<CdbooPlanDao, CdbooPlan> {
 				}
 
 				if (StringUtils.isNotBlank(userTimestepId)) {
-					CdbooUserTimestep userTimestep = cdbooUserTimestepService.get(userTimestepId);
+					CdbooUserTimestep userTimestep = cdbooUserTimestepDao.get(userTimestepId);
 					if (userTimestep != null) {
 						Timestep timestep = new Timestep(userTimestep.getName(), userTimestep.getStartTime(),
 								userTimestep.getEndTime());
@@ -144,7 +144,7 @@ public class CdbooPlanService extends CrudService<CdbooPlanDao, CdbooPlan> {
 			
 			if (StringUtils.equals(Constants.CHANNEL_TYPE_CHILD, channelType)) {
 				cdbooChannel.setId(channelId);
-				List<CdbooUserChannel> list = userChannelService.findList(cdbooUserChannel);
+				List<CdbooUserChannel> list = cdbooUserChannelDao.findList(cdbooUserChannel);
 				if (CollectionUtils.isEmpty(list)) {
 					continue;
 				}
@@ -153,7 +153,7 @@ public class CdbooPlanService extends CrudService<CdbooPlanDao, CdbooPlan> {
 			}
 			if (StringUtils.equals(Constants.CHANNEL_TYPE_GROUP, channelType)) {
 				groupChannel.setId(channelId);
-				List<CdbooUserGroup> list = cdbooUserGroupService.findList(userGroup);
+				List<CdbooUserGroup> list = cdbooUserGroupDao.findList(userGroup);
 				if (CollectionUtils.isEmpty(list)) {
 					continue;
 				}
@@ -177,15 +177,15 @@ public class CdbooPlanService extends CrudService<CdbooPlanDao, CdbooPlan> {
 
 	public CdbooChannel getChannelByUserChannelIdAndChannelType(String userChannelId, String channelType) {
 		if (StringUtils.equals(Constants.CHANNEL_TYPE_CHILD, channelType)) {
-			CdbooUserChannel cdbooUserChannel = userChannelService.get(userChannelId);
+			CdbooUserChannel cdbooUserChannel = cdbooUserChannelDao.get(userChannelId);
 			CdbooChannel channel = cdbooUserChannel.getChannel();
-			CdbooChannel cdbooChannel = channelService.get(channel);
+			CdbooChannel cdbooChannel = cdbooChannelDao.get(channel);
 			return cdbooChannel;
 		}
 		if (StringUtils.equals(Constants.CHANNEL_TYPE_GROUP, channelType)) {
-			CdbooUserGroup cdbooUserGroup = cdbooUserGroupService.get(userChannelId);
+			CdbooUserGroup cdbooUserGroup = cdbooUserGroupDao.get(userChannelId);
 			CdbooChannel channel = cdbooUserGroup.getCdbooChannel();
-			CdbooChannel cdbooChannel = channelService.get(channel);
+			CdbooChannel cdbooChannel = cdbooChannelDao.get(channel);
 			return cdbooChannel;
 		}
 		return new CdbooChannel();

@@ -57,17 +57,15 @@ public class CdbooGroupChannelController extends BaseController {
 
 	@RequiresPermissions("channel:groupChannel:view")
 	@RequestMapping(value = { "list", "" })
-	public String list(CdbooGroupChild cdbooGroupChild, HttpServletRequest request, HttpServletResponse response,
+	public String list(CdbooChannel cdbooChannel, HttpServletRequest request, HttpServletResponse response,
 			Model model) {
-		Page<CdbooGroupChild> page = cdbooGroupChildService.findGroupList(new Page<CdbooGroupChild>(request, response),
-				cdbooGroupChild);
+		cdbooChannel.setChannelType(Constants.CHANNEL_TYPE_GROUP);
+		Page<CdbooChannel> page = cdbooChannelService.findPage(new Page<CdbooChannel>(request, response), cdbooChannel);
 		model.addAttribute("page", page);
 
 		/**************** 组合频道下拉列表集合查询 Start ******************/
-		CdbooChannel cdbooChannel = new CdbooChannel();
-		cdbooChannel.setChannelType(Constants.CHANNEL_TYPE_GROUP);
 		List<CdbooChannel> groupList = cdbooChannelService.findList(cdbooChannel);
-		cdbooGroupChild.setChannelList(groupList);
+		cdbooChannel.setChildChannelList(groupList);
 		/**************** 组合频道下拉列表集合查询 End ******************/
 		
 		return "cdboo/groupChannel/system/cdbooChannelList";
@@ -75,32 +73,19 @@ public class CdbooGroupChannelController extends BaseController {
 
 	@RequiresPermissions("channel:groupChannel:view")
 	@RequestMapping(value = "form")
-	public String form(CdbooGroupChild cdbooGroupChild, Model model, HttpServletRequest request) {
-		model.addAttribute("cdbooGroupChild", cdbooGroupChild);
+	public String form(CdbooChannel cdbooChannel, Model model, HttpServletRequest request) {
+		model.addAttribute("cdbooChannel", cdbooChannel);
 
-		CdbooChannel groupChannel = cdbooGroupChild.getGroupChannelId();
-		if (groupChannel != null && StringUtils.isNotBlank(groupChannel.getId())) {
-			
-			/**************** 查询组合频道 Start ******************/
-			CdbooChannel cdbooChannel = cdbooChannelService.get(groupChannel.getId());
-			cdbooGroupChild.setGroupChannelId(cdbooChannel);
-			/**************** 查询组合频道 End ******************/
-			
-			/**************** 查询组合频道下子频道列表 Start ******************/
-//			CdbooGroupChild cdbooGroupChild2 = new CdbooGroupChild();
-//			cdbooGroupChild2.setGroupChannelId(groupChannel);
-//			List<CdbooGroupChild> groupChildList = cdbooGroupChildService.findList(cdbooGroupChild2);
-//			cdbooGroupChild.setGroupChildChannelList(groupChildList);
-//			/**************** 查询组合频道下子频道列表 End ******************/
+		if (cdbooChannel != null && StringUtils.isNotBlank(cdbooChannel.getId())) {
 			
 			/**************** 转换组合频道子频道中间表列表为频道列表 Start ******************/
 			CdbooGroupChild cdbooGroupChild2 = new CdbooGroupChild();
-			cdbooGroupChild2.setGroupChannelId(groupChannel);
+			cdbooGroupChild2.setGroupChannelId(cdbooChannel);
 			List<CdbooGroupChild> groupChildList = cdbooGroupChildService.findList(cdbooGroupChild2);
 			List<CdbooChannel> groupChildChannelList = cdbooGroupChildService
 					.convertGroupChannelToChannel(groupChildList);
 			/**************** 转换组合频道子频道中间表列表为频道列表 End ******************/
-			cdbooGroupChild.setChildChannelList(groupChildChannelList);
+			cdbooChannel.setChildChannelList(groupChildChannelList);
 		}
 
 		return "cdboo/groupChannel/system/cdbooChannelForm";
@@ -116,12 +101,12 @@ public class CdbooGroupChannelController extends BaseController {
 	 */
 	@RequiresPermissions("channel:groupChannel:edit")
 	@RequestMapping(value = "save")
-	public String save(CdbooGroupChild cdbooGroupChild, Model model, RedirectAttributes redirectAttributes,
+	public String save(CdbooChannel cdbooChannel, Model model, RedirectAttributes redirectAttributes,
 			HttpServletRequest request) {
-		if (!beanValidator(model, cdbooGroupChild)) {
-			return form(cdbooGroupChild, model, request);
+		if (!beanValidator(model, cdbooChannel)) {
+			return form(cdbooChannel, model, request);
 		}
-		cdbooGroupChildService.save(cdbooGroupChild);
+		cdbooGroupChildService.save(cdbooChannel);
 		addMessage(redirectAttributes, "保存频道信息成功");
 		return "redirect:" + Global.getAdminPath() + "/channel/groupChannel/?repage";
 	}
@@ -136,9 +121,9 @@ public class CdbooGroupChannelController extends BaseController {
 	 */
 	@RequiresPermissions("channel:groupChannel:edit")
 	@RequestMapping(value = "delete")
-	public String delete(CdbooGroupChild cdbooGroupChild, Model model, RedirectAttributes redirectAttributes,
+	public String delete(CdbooChannel cdbooChannel, Model model, RedirectAttributes redirectAttributes,
 			HttpServletRequest request) {
-		cdbooGroupChildService.delete(cdbooGroupChild);
+		cdbooGroupChildService.delete(cdbooChannel);
 		addMessage(redirectAttributes, "删除频道信息成功");
 		return "redirect:" + Global.getAdminPath() + "/channel/groupChannel/?repage";
 	}

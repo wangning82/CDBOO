@@ -9,6 +9,7 @@ import com.cdboo.channel.entity.CdbooChannel;
 import com.cdboo.channel.service.CdbooChannelService;
 import com.cdboo.childchannel.entity.CdbooGroupChild;
 import com.cdboo.childchannel.service.CdbooGroupChildService;
+import com.cdboo.common.Constants;
 import com.cdboo.userchannel.entity.CdbooUserChannel;
 import com.cdboo.userchannel.service.CdbooUserChannelService;
 import com.cdboo.usergroup.dao.CdbooUserGroupDao;
@@ -86,88 +87,21 @@ public class CdbooUserGroupService extends CrudService<CdbooUserGroupDao, CdbooU
 		return page;
 	}
 
+	/**
+	 * 保存用户和组合频道的关联关系，这里只跟组合频道关联，而不关心他下面的子频道，如果用的话去groupchild表取即可
+	 * @param userChannel
+	 */
 	@Transactional(readOnly = false)
-	public void saveUserGroup(CdbooUserGroup cdbooUserGroup) {
-		User user = cdbooUserGroup.getUser();
-		CdbooChannel cdbooChannel = cdbooUserGroup.getCdbooChannel();
-
-		List<CdbooUserGroup> userGroupList = super.findList(cdbooUserGroup);
-		if (CollectionUtils.isEmpty(userGroupList)) {
-			super.save(cdbooUserGroup);
-		}
-
-		/***** 根据组合频道查询子频道列表 Start *****/
-		CdbooGroupChild cdbooGroupChild = new CdbooGroupChild();
-		cdbooGroupChild.setGroupChannelId(cdbooChannel);
-		List<CdbooGroupChild> list = groupChildService.findList(cdbooGroupChild);
-		/***** 根据组合频道查询子频道列表 End *****/
-
-		if (CollectionUtils.isNotEmpty(list)) {
-
-			/***** 为查询用户是否存在子频道关联创建查询对象 Start *****/
-			CdbooUserChannel cdbooUserChannel = new CdbooUserChannel();
-			cdbooUserChannel.setUser(user);
-			/***** 为查询用户是否存在子频道关联创建查询对象 End *****/
-
-			for (CdbooGroupChild child : list) {
-
-				/***** 查询用户和子频道关联对象 Start *****/
-				CdbooChannel childChannel = child.getChildChannelId();
-				cdbooUserChannel.setChannel(childChannel);
-				List<CdbooUserChannel> userChannelList = cdbooUserChannelService.findList(cdbooUserChannel);
-				/***** 查询用户和子频道关联对象 End *****/
-
-				if (CollectionUtils.isEmpty(userChannelList)) {
-					/***** 查询用户和子频道关联对象，如果不存在关联，则创建关联 Start *****/
-					CdbooUserChannel saveUserChannel = new CdbooUserChannel();
-					saveUserChannel.setChannel(childChannel);
-					saveUserChannel.setUser(user);
-					cdbooUserChannelService.save(saveUserChannel);
-					/***** 查询用户和子频道关联对象，如果不存在关联，则创建关联 End *****/
-				}
-			}
+	public void saveUserGroup(CdbooUserChannel userChannel) {
+		List<CdbooUserChannel> userChannelList = cdbooUserChannelService.findList(userChannel);
+		if(CollectionUtils.isEmpty(userChannelList)){
+			userChannel.setChannelType(Constants.CHANNEL_TYPE_GROUP);
+			cdbooUserChannelService.save(userChannel);
 		}
 	}
 
 	@Transactional(readOnly = false)
-	public void deleteUserGroup(CdbooUserGroup cdbooUserGroup) {
-		User user = cdbooUserGroup.getUser();
-		CdbooChannel cdbooChannel = cdbooUserGroup.getCdbooChannel();
-
-		List<CdbooUserGroup> userGroupList = super.findList(cdbooUserGroup);
-		if (CollectionUtils.isNotEmpty(userGroupList)) {
-			for (CdbooUserGroup delUserGroup : userGroupList) {
-				dao.remove(delUserGroup);
-			}
-		}
-
-		/***** 根据组合频道查询子频道列表 Start *****/
-		CdbooGroupChild cdbooGroupChild = new CdbooGroupChild();
-		cdbooGroupChild.setGroupChannelId(cdbooChannel);
-		List<CdbooGroupChild> list = groupChildService.findList(cdbooGroupChild);
-		/***** 根据组合频道查询子频道列表 End *****/
-
-		if (CollectionUtils.isNotEmpty(list)) {
-
-			/***** 为查询用户是否存在子频道关联创建查询对象 Start *****/
-			CdbooUserChannel cdbooUserChannel = new CdbooUserChannel();
-			cdbooUserChannel.setUser(user);
-			/***** 为查询用户是否存在子频道关联创建查询对象 End *****/
-
-			for (CdbooGroupChild child : list) {
-
-				/***** 查询用户和子频道关联对象 Start *****/
-				CdbooChannel childChannel = child.getChildChannelId();
-				cdbooUserChannel.setChannel(childChannel);
-				List<CdbooUserChannel> userChannelList = cdbooUserChannelService.findList(cdbooUserChannel);
-				/***** 查询用户和子频道关联对象 End *****/
-
-				if (CollectionUtils.isNotEmpty(userChannelList)) {
-					for (CdbooUserChannel delUserChannelObj : userChannelList) {
-						cdbooUserChannelService.remove(delUserChannelObj);
-					}
-				}
-			}
-		}
+	public void deleteUserGroup(CdbooUserChannel userChannel) {
+		cdbooUserChannelService.remove(userChannel);
 	}
 }

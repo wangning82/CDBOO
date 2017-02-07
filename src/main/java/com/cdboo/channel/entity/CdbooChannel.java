@@ -41,11 +41,14 @@ public class CdbooChannel extends DataEntity<CdbooChannel> {
 	private Date beginCreateDate; // 开始 创建时间
 	private Date endCreateDate; // 结束 创建时间
 	private List<String> musicIds = Lists.newArrayList();
+	
 	//子频道列表
 	private List<CdbooChannel> childChannelList = Lists.newArrayList();
 	private List<CdbooChannelMusic> cdbooChannelMusics = Lists.newArrayList();
 	private List<String> sortArray = Lists.newArrayList();
-	
+	private List<Integer> sorts = Lists.newArrayList();
+	private List<String> channelIds = Lists.newArrayList();
+	private Integer childChannelSize; //子频道数量
 	private List<String> idArray;
 	private List<String> inIdArray;
 	private String ids;
@@ -353,6 +356,30 @@ public class CdbooChannel extends DataEntity<CdbooChannel> {
 
 	public void setSort(Integer sort) {
 		this.sort = sort;
+	}
+
+	public List<Integer> getSorts() {
+		return sorts;
+	}
+
+	public void setSorts(List<Integer> sorts) {
+		this.sorts = sorts;
+	}
+
+	public List<String> getChannelIds() {
+		return channelIds;
+	}
+
+	public void setChannelIds(List<String> channelIds) {
+		this.channelIds = channelIds;
+	}
+
+	public Integer getChildChannelSize() {
+		return childChannelSize;
+	}
+
+	public void setChildChannelSize(Integer childChannelSize) {
+		this.childChannelSize = childChannelSize;
 	}
 	
 }
