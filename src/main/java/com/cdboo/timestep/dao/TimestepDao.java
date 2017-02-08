@@ -3,12 +3,12 @@
  */
 package com.cdboo.timestep.dao;
 
-import com.cdboo.business.entity.BusinessTimestep;
+import java.util.List;
+
+import com.cdboo.music.entity.CdbooMusic;
+import com.cdboo.timestep.entity.Timestep;
 import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
-import com.cdboo.timestep.entity.Timestep;
-
-import java.util.List;
 
 /**
  * 时段管理DAO接口
@@ -17,4 +17,5 @@ import java.util.List;
  */
 @MyBatisDao
 public interface TimestepDao extends CrudDao<Timestep> {
+	public List<Timestep> getMaxTimestepNo(Timestep timestep);
 }

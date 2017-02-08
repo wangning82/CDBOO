@@ -15,7 +15,7 @@ import com.thinkgem.jeesite.common.persistence.DataEntity;
 public class Timestep extends DataEntity<Timestep> {
 	
 	private static final long serialVersionUID = 1L;
-	private String timestepNo;		// 时段编号
+	private Integer timestepNo;		// 时段编号
 	private String timestepName;		// 时段名称
 	private String starttime;		// 开始时间
 	private String endtime;		// 结束时间
@@ -40,12 +40,11 @@ public class Timestep extends DataEntity<Timestep> {
 		this.endtime = endtime;
 	}
 
-	@Length(min=0, max=100, message="时段编号长度必须介于 0 和 100 之间")
-	public String getTimestepNo() {
+	public Integer getTimestepNo() {
 		return timestepNo;
 	}
 
-	public void setTimestepNo(String timestepNo) {
+	public void setTimestepNo(Integer timestepNo) {
 		this.timestepNo = timestepNo;
 	}
 	

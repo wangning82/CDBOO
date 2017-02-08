@@ -23,7 +23,7 @@ import com.thinkgem.jeesite.common.persistence.DataEntity;
 public class CdbooChannel extends DataEntity<CdbooChannel> {
 
 	private static final long serialVersionUID = 1L;
-	private Integer channelNo; // 频道编号
+	private int channelNo; // 频道编号
 	private String channelName; // 频道名称
 	private String photoPath; // 频道图片
 	private String themeType; // 风格类型
@@ -64,11 +64,11 @@ public class CdbooChannel extends DataEntity<CdbooChannel> {
 		super(id);
 	}
 
-	public Integer getChannelNo() {
+	public int getChannelNo() {
 		return channelNo;
 	}
 
-	public void setChannelNo(Integer channelNo) {
+	public void setChannelNo(int channelNo) {
 		this.channelNo = channelNo;
 	}
 

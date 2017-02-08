@@ -62,11 +62,6 @@
 	</script>
 </head>
 <body>
-	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/userchannel/cdbooUserChannel/">用户频道列表</a></li>
-		<shiro:hasPermission name="userchannel:cdbooUserChannel:edit"><li><a href="${ctx}/userchannel/cdbooUserChannel/form">用户频道添加</a></li></shiro:hasPermission>
-	</ul>
-	
 	<form:form id="searchForm" modelAttribute="cdbooUserChannel" action="${ctx}/userchannel/cdbooUserChannel/openUserChannelWin" method="post" class="breadcrumb form-search">
 		<input id="pageNo"  name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
@@ -89,18 +84,17 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th><input type="checkbox" onclick="changeCB(this.checked,'userChannelIds')" /></th>
+				<th style="width: 5%"><input type="checkbox" onclick="changeCB(this.checked,'userChannelIds')" /></th>
 				<th style="width: 10%">用户名称</th>
-				<th style="width: 5%">频道编号</th>
+				<th style="width: 10%">频道编号</th>
 				<th style="width: 10%">频道名称</th>
 				<th style="width: 10%">频道图片</th>
-				<th style="width: 5%">风格类型</th>
-				<th style="width: 5%">风格类型明细</th>
+				<th style="width: 10%">风格类型</th>
+				<th style="width: 10%">风格类型明细</th>
 				<th style="width: 5%">频道版本</th>
 				<th style="width: 10%">创建时间</th>
-				<th style="width: 5%">频道类型</th>
-				<th style="width: 5%">歌曲数量</th>
-				<shiro:hasPermission name="userchannel:cdbooUserChannel:edit"><th style="width: 20%">操作</th></shiro:hasPermission>
+				<th style="width: 10%">频道类型</th>
+				<shiro:hasPermission name="userchannel:cdbooUserChannel:edit"><th style="width: 10%">操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
 		<tbody>
@@ -152,9 +146,6 @@
 						</td>
 						<td>
 							${fns:getDictLabel(cdbooUserChannel.channel.channelType, 'channel_type', '')}
-						</td>
-						<td>
-							${cdbooUserChannel.musicSize}
 						</td>
 						<shiro:hasPermission name="userchannel:cdbooUserChannel:edit"><td>
 		    				<a href="${ctx}/userchannel/cdbooUserChannel/form?user.id=${cdbooUserChannel.user.id}&&channel.id=${cdbooUserChannel.channel.id}&&user.name=${cdbooUserChannel.user.name}&&channel.channelName=${cdbooUserChannel.channel.channelName}">修改</a>

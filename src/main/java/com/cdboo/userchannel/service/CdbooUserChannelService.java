@@ -56,21 +56,22 @@ public class CdbooUserChannelService extends CrudService<CdbooUserChannelDao, Cd
 	public void saveUserChannel(CdbooUserChannel cdbooUserChannel) {
 		// 用户
 		User user = cdbooUserChannel.getUser();
-
-		CdbooUserChannel delObj = new CdbooUserChannel();
-		delObj.setChannelType(Constants.CHANNEL_TYPE_CHILD);
-		delObj.setUser(user);
-		dao.remove(delObj);
-
 		List<String> channelIds = cdbooUserChannel.getChannelIds();
 
+		CdbooUserChannel checkObj = new CdbooUserChannel();
+		checkObj.setUser(user);
+
 		for (String channelId : channelIds) {
-			CdbooChannel cdbooChannel = cdbooChannelDao.get(channelId);
-			CdbooUserChannel saveObj = new CdbooUserChannel();
-			saveObj.setChannel(cdbooChannel);
-			saveObj.setUser(user);
-			saveObj.setChannelType(Constants.CHANNEL_TYPE_CHILD);
-			super.save(saveObj);
+			CdbooChannel cdbooChannel = new CdbooChannel(channelId);
+			checkObj.setChannel(cdbooChannel);
+			List<CdbooUserChannel> userChannels = super.findList(checkObj);
+			if (CollectionUtils.isEmpty(userChannels)) {
+				CdbooUserChannel saveObj = new CdbooUserChannel();
+				saveObj.setChannel(cdbooChannel);
+				saveObj.setUser(user);
+				saveObj.setChannelType(Constants.CHANNEL_TYPE_CHILD);
+				super.save(saveObj);
+			}
 		}
 	}
 	
@@ -117,9 +118,7 @@ public class CdbooUserChannelService extends CrudService<CdbooUserChannelDao, Cd
 		// 组装查询对象
 		CdbooUserChannel cdbooUserChannel = new CdbooUserChannel();
 		if(StringUtils.isNotBlank(channelType)){
-			CdbooChannel cdbooChannel2 = new CdbooChannel();
-			cdbooChannel2.setChannelType(channelType);
-			cdbooUserChannel.setChannel(cdbooChannel2);
+			cdbooUserChannel.setChannelType(channelType);
 		}
 		cdbooUserChannel.setUser(user);
 
@@ -128,9 +127,7 @@ public class CdbooUserChannelService extends CrudService<CdbooUserChannelDao, Cd
 		if (CollectionUtils.isNotEmpty(cdbooUserChannels)) {
 			for (CdbooUserChannel queryChannel : cdbooUserChannels) {
 				CdbooChannel channel = queryChannel.getChannel();
-				String id = channel.getId();
-				CdbooChannel cdbooChannel = cdbooChannelDao.get(id);
-				cdbooChannels.add(cdbooChannel);
+				cdbooChannels.add(channel);
 			}
 		}
 		/******************* 查询用户对应的频道信息返回 End ********************/

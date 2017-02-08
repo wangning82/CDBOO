@@ -13,11 +13,33 @@
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
-		u2.name AS "user.name"
+		u2.name AS "user.name",
+
+		c.channel_no AS "channel.channelNo",
+		c.channel_name AS "channel.channelName",
+		c.photo_path AS "channel.photoPath",
+		c.theme_type AS "channel.themeType",
+		c.theme_concrete_type AS "channel.themeConcreteType",
+		c.channel_version AS "channel.channelVersion",
+		c.music_style AS "channel.musicStyle",
+		c.site AS "channel.site",
+		c.speed AS "channel.speed",
+		c.voice AS "channel.voice",
+		c.element AS "channel.element",
+		c.emotion AS "channel.emotion",
+		c.instrument AS "channel.instrument",
+		c.create_by AS "channel.createBy.id",
+		c.create_date AS "channel.createDate",
+		c.update_by AS "channel.updateBy.id",
+		c.update_date AS "channel.updateDate",
+		c.remarks AS "channel.remarks",
+		c.del_flag AS "channel.delFlag",
+		c.status AS "channel.status"
 	</sql>
 	
 	<sql id="cdbooUserChannelJoins">
 		LEFT JOIN sys_user u2 ON u2.id = a.user_id
+		LEFT JOIN cdboo_child_channel c ON c.id = a.channel_id
 	</sql>
     
 	<select id="get" resultType="CdbooUserChannel">

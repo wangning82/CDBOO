@@ -42,7 +42,12 @@
 		SELECT 
 			max(a.channel_no) AS "channelNo"
 		FROM cdboo_child_channel a
-		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="channelType != null and channelType != ''">
+				AND a.channel_type = #{channelType}
+			</if>
+		</where>
 	</select>
 	
 	<select id="findList" resultType="CdbooChannel">

@@ -19,5 +19,5 @@ import com.cdboo.music.entity.CdbooMusic;
 public interface CdbooMusicDao extends CrudDao<CdbooMusic> {
 	public List<CdbooMusic> findListFromUserId(CdbooMusic cdbooMusic);
 	
-	public List<CdbooMusic> getMaxMusicNo();
+	public List<CdbooMusic> getMaxMusicNo(CdbooMusic cdbooMusic);
 }

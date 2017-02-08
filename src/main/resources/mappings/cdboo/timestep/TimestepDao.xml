@@ -76,6 +76,13 @@
 		</choose>
 	</select>
 	
+	<select id="getMaxTimestepNo" resultType="Timestep">
+		SELECT 
+			max(a.timestep_no) AS "timestepNo"
+		FROM cdboo_timestep a
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+	</select>
+	
 	<insert id="insert">
 		INSERT INTO cdboo_timestep(
 			id,

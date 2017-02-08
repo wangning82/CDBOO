@@ -34,12 +34,6 @@
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>		
 		<div class="control-group">
-			<label class="control-label">时段编号：</label>
-			<div class="controls">
-				<form:input path="timestepNo" htmlEscape="false" maxlength="100" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
 			<label class="control-label">时段名称：</label>
 			<div class="controls">
 				<form:input path="timestepName" htmlEscape="false" maxlength="100" class="input-xlarge "/>

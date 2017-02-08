@@ -47,8 +47,10 @@ public class CdbooChannelService extends CrudService<CdbooChannelDao, CdbooChann
 		return super.findPage(page, cdbooChannel);
 	}
 	
-	public synchronized int getMaxChannelNo(){
-		List<CdbooChannel> maxNo = dao.getMaxChannelNo();
+	public synchronized int getMaxChannelNo(String channelType){
+		CdbooChannel queryChannel = new CdbooChannel();
+		queryChannel.setChannelType(channelType);
+		List<CdbooChannel> maxNo = dao.getMaxChannelNo(queryChannel);
 		if(CollectionUtils.isNotEmpty(maxNo)){
 			CdbooChannel cdbooChannel = maxNo.get(0);
 			if(cdbooChannel!=null){
@@ -63,7 +65,8 @@ public class CdbooChannelService extends CrudService<CdbooChannelDao, CdbooChann
 	
 	@Transactional(readOnly = false)
 	public void save(CdbooChannel cdbooChannel) {
-		cdbooChannel.setChannelNo(getMaxChannelNo());
+		String channelType = cdbooChannel.getChannelType();
+		cdbooChannel.setChannelNo(getMaxChannelNo(channelType));
 		super.save(cdbooChannel);
 	}
 	

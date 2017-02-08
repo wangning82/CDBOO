@@ -119,7 +119,7 @@ public class CdbooMusicService extends CrudService<CdbooMusicDao, CdbooMusic> {
 	}
 	
 	public synchronized int getMaxMusicNo(){
-		List<CdbooMusic> maxMusicNo = dao.getMaxMusicNo();
+		List<CdbooMusic> maxMusicNo = dao.getMaxMusicNo(new CdbooMusic());
 		if(CollectionUtils.isNotEmpty(maxMusicNo)){
 			CdbooMusic cdbooMusic = maxMusicNo.get(0);
 			if(cdbooMusic!=null){

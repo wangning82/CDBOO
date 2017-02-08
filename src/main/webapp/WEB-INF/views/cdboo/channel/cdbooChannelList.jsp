@@ -88,6 +88,10 @@
 	</script>
 </head>
 <body>
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="${ctx}/channel/cdbooChannel/">频道信息列表</a></li>
+		<shiro:hasPermission name="channel:cdbooChannel:edit"><li><a href="${ctx}/channel/cdbooChannel/form">频道信息添加</a></li></shiro:hasPermission>
+	</ul>
 	<div id="importBox" class="hide">
 		<form id="importForm" action="${ctx}/channel/cdbooChannel/import" method="post" enctype="multipart/form-data"
 			class="form-search" style="padding-left:20px;text-align:center;" onsubmit="loading('正在导入，请稍等...');"><br/>
@@ -100,18 +104,11 @@
 		<input type="hidden" name="id" id="channelId"/>	
 		<input type="hidden" name="volume" id="volumeId"/>	
 	</form>
-	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/channel/cdbooChannel/">频道信息列表</a></li>
-		<shiro:hasPermission name="channel:cdbooChannel:edit"><li><a href="${ctx}/channel/cdbooChannel/form">频道信息添加</a></li></shiro:hasPermission>
-	</ul>
 	<form:form id="searchForm" modelAttribute="cdbooChannel" action="${ctx}/channel/cdbooChannel/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<input type="hidden" name="channelType" value="${Constants.CHANNEL_TYPE_CHILD }"/>
 		<ul class="ul-form">
-			<li><label>频道编号：</label>
-				<form:input path="channelNo" htmlEscape="false" maxlength="100" class="input-medium"/>
-			</li>
 			<li><label>频道名称：</label>
 				<form:input path="channelName" htmlEscape="false" maxlength="200" class="input-medium"/>
 			</li>

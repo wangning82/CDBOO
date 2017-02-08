@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.cdboo.channel.entity.CdbooChannel;
-import com.cdboo.channel.service.CdbooChannelService;
 import com.cdboo.common.Constants;
 import com.cdboo.userchannel.entity.CdbooUserChannel;
 import com.cdboo.userchannel.service.CdbooUserChannelService;
@@ -41,9 +40,6 @@ public class CdbooUserChannelController extends BaseController {
 
 	@Autowired
 	private CdbooUserChannelService cdbooUserChannelService;
-
-	@Autowired
-	private CdbooChannelService cdbooChannelService;
 
 	@ModelAttribute
 	public CdbooUserChannel get(@RequestParam(required = false) String id) {
@@ -78,10 +74,9 @@ public class CdbooUserChannelController extends BaseController {
 	@RequestMapping(value = "form")
 	public String form(CdbooUserChannel cdbooUserChannel, Model model) {
 		model.addAttribute("cdbooUserChannel", cdbooUserChannel);
-		User user = cdbooUserChannel.getUser();
-		CdbooChannel channel = cdbooUserChannel.getChannel();
-		if (user != null && StringUtils.isNotBlank(user.getId()) && channel != null
-				&& StringUtils.isNotBlank(channel.getId())) {
+		
+		if (cdbooUserChannel!=null && StringUtils.isNotBlank(cdbooUserChannel.getId())) {
+			User user = cdbooUserChannel.getUser();
 			/************************
 			 * 根据用户检索绑定子频道信息列表 Start
 			 ***********************/
@@ -89,15 +84,6 @@ public class CdbooUserChannelController extends BaseController {
 			cdbooUserChannel.setChannelList(userChannels);
 			/************************
 			 * 根据用户检索绑定频道信息列表 End
-			 ***********************/
-		} else {
-			/************************
-			 * 新增时查询所有子频道列表信息返回 Start
-			 ***********************/
-			List<CdbooChannel> channels = cdbooChannelService.findChildChannelList();
-			cdbooUserChannel.setChannelList(channels);
-			/************************
-			 * 新增时查询所有频道列表信息返回 End
 			 ***********************/
 		}
 		return "cdboo/userchannel/system/cdbooUserChannelForm";
@@ -122,7 +108,7 @@ public class CdbooUserChannelController extends BaseController {
 		return "redirect:" + Global.getAdminPath() + "/userchannel/cdbooUserChannel/?repage";
 	}
 
-	@ResponseBody
+	@ResponseBody	
 	@RequestMapping(value = "getChannelList")
 	public List<CdbooChannel> getChannelList(@RequestParam(required = false) String userId,
 			HttpServletResponse response) {
