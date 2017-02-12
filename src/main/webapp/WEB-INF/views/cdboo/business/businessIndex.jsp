@@ -20,14 +20,14 @@
     </div>
     <div id="openClose" class="close">&nbsp;</div>
     <div id="right">
-        <iframe id="timestepContent" src="${ctx}/business/business/listTimestep" width="100%" height="91%" frameborder="0"></iframe>
+        <iframe id="timestepContent" src="${ctx}/businessplan/plan/listTimestep" width="100%" height="91%" frameborder="0"></iframe>
     </div>
 </div>
 <script type="text/javascript">
     var setting = {data:{simpleData:{enable:true,idKey:"id",pIdKey:"pId",rootPId:'0'}},
         callback:{onClick:function(event, treeId, treeNode){
             var id = treeNode.id == '0' ? '' :treeNode.id;
-            $('#timestepContent').attr("src","${ctx}/business/business/listTimestep?business.id="+id+"&business.name="+treeNode.name);
+            $('#timestepContent').attr("src","${ctx}/businessplan/plan/listTimestep?business.id="+id+"&business.name="+treeNode.name);
         }
         }
     };

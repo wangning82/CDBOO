@@ -59,6 +59,10 @@
 		<dict value="com.cdboo.userchannel.entity.CdbooUserChannel" label="UserChannel"/>
 		<dict value="com.cdboo.myplan.entity.CdbooMyPlanTimestep" label="myPlanTimeStep"/>
 		
+		<dict value="com.cdboo.business.entity.Business" label="business"/>
+		<dict value="com.cdboo.businessplan.entity.CdbooBusinessPlan" label="busiplan"/>
+		<dict value="com.cdboo.businessplantimestep.entity.CdbooBusinessPlanTimestep" label="bpt"/>
+		
 		<dict value="This" label="ThisObj" description="生成当前对象"/>
 		<dict value="Custom" label="Custom" description="自定义对象，生成后手动设置"/>
 		

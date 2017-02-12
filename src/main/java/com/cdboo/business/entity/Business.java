@@ -3,15 +3,9 @@
  */
 package com.cdboo.business.entity;
 
-import com.cdboo.timestep.entity.Timestep;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.google.common.collect.Lists;
-import com.thinkgem.jeesite.modules.sys.entity.Role;
 import org.hibernate.validator.constraints.Length;
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.thinkgem.jeesite.common.persistence.TreeEntity;
-
-import java.util.List;
 
 /**
  * 行业Entity
