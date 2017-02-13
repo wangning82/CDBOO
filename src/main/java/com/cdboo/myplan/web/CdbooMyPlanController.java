@@ -132,7 +132,7 @@ public class CdbooMyPlanController extends BaseController {
 			LogUtils.saveLog(Servlets.getRequest(), null, e, "保存计划时段");
 			addMessage(redirectAttributes, "保存时段失败");
 		}
-		redirectAttributes.addFlashAttribute("cdbooMyPlan", cdbooMyPlan);
+		redirectAttributes.addFlashAttribute(cdbooMyPlan);
 		return "redirect:"+Global.getAdminPath()+"/myplan/cdbooMyPlan/toEditTimestepPage";
 	}
 	
@@ -172,7 +172,7 @@ public class CdbooMyPlanController extends BaseController {
 			LogUtils.saveLog(Servlets.getRequest(), null, e, "保存时段频道");
 			addMessage(redirectAttributes, "保存频道失败");
 		}
-		redirectAttributes.addFlashAttribute("cdbooMyPlan", cdbooMyPlan);
+		redirectAttributes.addFlashAttribute(cdbooMyPlan);
 		return "redirect:"+Global.getAdminPath()+"/myplan/cdbooMyPlan/toEditChannelPage";
 	}
 	

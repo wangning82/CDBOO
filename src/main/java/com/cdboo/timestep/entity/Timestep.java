@@ -3,9 +3,14 @@
  */
 package com.cdboo.timestep.entity;
 
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.Length;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
+
+import jersey.repackaged.com.google.common.collect.Lists;
 
 /**
  * 时段管理Entity
@@ -24,7 +29,8 @@ public class Timestep extends DataEntity<Timestep> {
 	private String endStarttime;		// 结束 开始时间
 	private String beginEndtime;		// 开始 结束时间
 	private String endEndtime;		// 结束 结束时间
-
+	private String ids;
+	private List<String> notIncludeIds;
 	public Timestep() {
 		super();
 	}
@@ -114,4 +120,19 @@ public class Timestep extends DataEntity<Timestep> {
 		this.endEndtime = endEndtime;
 	}
 
+	public String getIds() {
+		return ids;
+	}
+
+	public void setIds(String ids) {
+		this.ids = ids;
+
+		if (StringUtils.isNotBlank(ids)) {
+			notIncludeIds = Lists.newArrayList();
+			String[] idsArray = StringUtils.split(ids, ",");
+			for (int i = 0; i < idsArray.length; i++) {
+				notIncludeIds.add("'" + idsArray[i] + "'");
+			}
+		}
+	}
 }

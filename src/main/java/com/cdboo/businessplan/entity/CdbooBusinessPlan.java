@@ -6,6 +6,8 @@ package com.cdboo.businessplan.entity;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.Length;
 import com.cdboo.business.entity.Business;
+import com.cdboo.timestep.entity.Timestep;
+
 import java.util.Date;
 import java.util.List;
 
@@ -30,7 +32,8 @@ public class CdbooBusinessPlan extends DataEntity<CdbooBusinessPlan> {
 	private String cycleIndex;		// 循环次数
 	private String intervalTime;		// 重复时间
 	private String businessId;
-	
+	private List<Timestep> timesteps = Lists.newArrayList();
+	private List<String> timeStepIds = Lists.newArrayList();
 	public String getBusinessId() {
 		return businessId;
 	}
@@ -129,4 +132,21 @@ public class CdbooBusinessPlan extends DataEntity<CdbooBusinessPlan> {
 	public void setWeeks(List<String> weeks) {
 		this.week = StringUtils.join(weeks, ",");
 	}
+
+	public List<Timestep> getTimesteps() {
+		return timesteps;
+	}
+
+	public void setTimesteps(List<Timestep> timesteps) {
+		this.timesteps = timesteps;
+	}
+
+	public List<String> getTimeStepIds() {
+		return timeStepIds;
+	}
+
+	public void setTimeStepIds(List<String> timeStepIds) {
+		this.timeStepIds = timeStepIds;
+	}
+	
 }

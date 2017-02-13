@@ -1,5 +1,7 @@
 package com.cdboo.businessplan.web;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,6 +16,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.cdboo.businessplan.entity.CdbooBusinessPlan;
 import com.cdboo.businessplan.service.CdbooBusinessPlanService;
+import com.cdboo.businessplantimestep.entity.CdbooBusinessPlanTimestep;
+import com.cdboo.businessplantimestep.service.CdbooBusinessPlanTimestepService;
+import com.cdboo.timestep.entity.Timestep;
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.utils.StringUtils;
@@ -26,6 +31,9 @@ import com.thinkgem.jeesite.modules.sys.utils.LogUtils;
 public class CdbooBusinessPlanController extends BaseController{
 	@Autowired
 	private CdbooBusinessPlanService cdbooBusinessPlanService;
+	
+	@Autowired
+	private CdbooBusinessPlanTimestepService cdbooBusinessPlanTimestepService;
 	
 	@ModelAttribute
 	public CdbooBusinessPlan get(@RequestParam(required=false) String id) {
@@ -52,14 +60,14 @@ public class CdbooBusinessPlanController extends BaseController{
 		Page<CdbooBusinessPlan> page = cdbooBusinessPlanService.findPage(new Page<>(request, response), businessPlan);
 		model.addAttribute("page", page);
 		model.addAttribute("businessPlan", businessPlan);
-		return "cdboo/business/businessTimestepList";
+		return "cdboo/business/businessPlanList";
 	}
 	
 	@RequiresPermissions("businessplan:plan:edit")
 	@RequestMapping(value = "form")
 	public String form(CdbooBusinessPlan businessPlan, Model model) {
 		model.addAttribute("businessPlan", businessPlan);
-		return "cdboo/business/businessTimestepForm";
+		return "cdboo/business/businessPlanForm";
 	}
 
 	@RequiresPermissions("businessplan:plan:edit")
@@ -75,4 +83,31 @@ public class CdbooBusinessPlanController extends BaseController{
 		redirectAttributes.addFlashAttribute(businessPlan);
 		return "redirect:"+Global.getAdminPath()+"/businessplan/plan/listTimestep?repage";
 	}
+	
+	@RequiresPermissions("businessplan:plan:edit")
+	@RequestMapping(value = "toEditTimestepPage")
+	public String toEditTimestepPage(CdbooBusinessPlan businessPlan, Model model) {
+		model.addAttribute("businessPlan", businessPlan);
+		
+		CdbooBusinessPlanTimestep planTimestep = new CdbooBusinessPlanTimestep();
+		planTimestep.setBusinessPlan(businessPlan);
+		List<Timestep> timesteps = cdbooBusinessPlanTimestepService.findTimeStepsByConditions(planTimestep);
+		businessPlan.setTimesteps(timesteps);
+		return "cdboo/business/businessTimestepForm";
+	}
+	
+	@RequiresPermissions("businessplan:plan:edit")
+	@RequestMapping(value = "saveTimestep")
+	public String saveTimestep(CdbooBusinessPlan businessPlan, Model model, RedirectAttributes redirectAttributes) {
+		try {
+			cdbooBusinessPlanTimestepService.saveTimeStep(businessPlan);
+			addMessage(redirectAttributes, "保存行业时段成功");
+		} catch (Exception e) {
+			LogUtils.saveLog(Servlets.getRequest(), null, e, "保存行业时段");
+			addMessage(redirectAttributes, "保存行业时段失败");
+		}
+		redirectAttributes.addFlashAttribute(businessPlan);
+		return "redirect:"+Global.getAdminPath()+"/businessplan/plan/toEditTimestepPage";
+	}
+	
 }

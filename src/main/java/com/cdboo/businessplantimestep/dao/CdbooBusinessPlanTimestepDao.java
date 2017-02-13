@@ -14,5 +14,5 @@ import com.cdboo.businessplantimestep.entity.CdbooBusinessPlanTimestep;
  */
 @MyBatisDao
 public interface CdbooBusinessPlanTimestepDao extends CrudDao<CdbooBusinessPlanTimestep> {
-	
+	public void remove(CdbooBusinessPlanTimestep businessPlanTimestep);
 }

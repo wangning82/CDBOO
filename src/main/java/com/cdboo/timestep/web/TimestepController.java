@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.thinkgem.jeesite.common.config.Global;
-import com.thinkgem.jeesite.common.persistence.Page;
-import com.thinkgem.jeesite.common.web.BaseController;
-import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.cdboo.timestep.entity.Timestep;
 import com.cdboo.timestep.service.TimestepService;
+import com.thinkgem.jeesite.common.config.Global;
+import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.common.web.BaseController;
 
 /**
  * 时段管理Controller
@@ -80,4 +80,18 @@ public class TimestepController extends BaseController {
 		return "redirect:"+Global.getAdminPath()+"/timestep/timestep/?repage";
 	}
 
+	/**
+	 * 打开时段弹出窗口
+	 * 
+	 * @param file
+	 * @param redirectAttributes
+	 * @return
+	 */
+	@RequestMapping(value = "openTimestepWin")
+	public String openTimestepWin(Timestep timestep, HttpServletRequest request,
+			HttpServletResponse response, Model model) {
+		Page<Timestep> page = timestepService.findPage(new Page<Timestep>(request, response), timestep); 
+		model.addAttribute("page", page);
+		return "cdboo/timestep/timeStepOpenWin";
+	}
 }

@@ -32,6 +32,12 @@
 		<include refid="cdbooBusinessPlanTimestepJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="businessPlan != null and businessPlan.id != null and businessPlan.id != ''">
+				AND business_plan_id = #{businessPlan.id}
+			</if>
+			<if test="timestep != null and timestep.id != null and timestep.id != ''">
+				AND timestep_id = #{timestep.id}
+			</if>
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
@@ -101,4 +107,15 @@
 		WHERE id = #{id}
 	</update>
 	
+	<update id="remove">
+		DELETE FROM cdboo_business_plan_timestep
+		<where>
+			<if test="businessPlan != null and businessPlan.id != null and businessPlan.id != ''">
+				AND business_plan_id = #{businessPlan.id}
+			</if>
+			<if test="timestep != null and timestep.id != null and timestep.id != ''">
+				AND timestep_id = #{timestep.id}
+			</if>
+		</where>
+	</update>
 </mapper>

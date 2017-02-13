@@ -22,7 +22,7 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/businessplan/plan/listTimestep">行业计划列表</a></li>
-		<c:if test="${not empty businessPlan.business && not empty businessPlan.business.id}">${businessPlan.business.id}
+		<c:if test="${not empty businessPlan.business && not empty businessPlan.business.id}">
 			<shiro:hasPermission name="businessplan:plan:edit"><li><a href="#" onclick="redirect()">行业计划添加</a></li></shiro:hasPermission>
 		</c:if>
 	</ul>

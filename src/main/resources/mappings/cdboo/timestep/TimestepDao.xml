@@ -41,11 +41,11 @@
 			<if test="timestepName != null and timestepName != ''">
 				AND a.timestep_name LIKE concat('%',#{timestepName},'%')
 			</if>
-			<if test="beginStarttime != null and endStarttime != null and beginStarttime != '' and endStarttime != ''">
-				AND a.starttime BETWEEN #{beginStarttime} AND #{endStarttime}
-			</if>
-			<if test="beginEndtime != null and endEndtime != null and beginEndtime != '' and endEndtime != ''">
-				AND a.endtime BETWEEN #{beginEndtime} AND #{endEndtime}
+			<if test="notIncludeIds != null">
+				AND a.id not in
+				<foreach item="item" index="index" collection="notIncludeIds" open="(" separator="," close=")">  
+  					${item}  
+ 				</foreach>  
 			</if>
 		</where>
 		<choose>
