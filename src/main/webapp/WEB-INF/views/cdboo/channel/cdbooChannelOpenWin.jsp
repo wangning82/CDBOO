@@ -43,7 +43,7 @@
 			}
 		}
 		
-		function ChannelEntity(id,channelNo,channelName,photoPath,themeType,themeConcreteType,channelVersion,createDate){
+		function ChannelEntity(id,channelNo,channelName,photoPath,themeType,themeConcreteType,channelVersion,createDate,channelType){
 			this.id = id;
 			this.channelNo = channelNo;
 			this.channelName = channelName;
@@ -52,6 +52,7 @@
 			this.themeConcreteType = themeConcreteType;
 			this.channelVersion = channelVersion;
 			this.createDate = createDate;
+			this.channelType = channelType;
 		}
 		
 		function getCheckData(){
@@ -68,8 +69,9 @@
 				var themeConcreteType = $('#themeConcreteType_'+rowIndex).val();
 				var channelVersion = $('#channelVersion_'+rowIndex).val();
 				var createDate = $('#createDate_'+rowIndex).val();
+				var channelType = $('#channelType_'+rowIndex).val();
 				
-				var channelEntity = new ChannelEntity(id,channelNo,channelName,photoPath,themeType,themeConcreteType,channelVersion,createDate);
+				var channelEntity = new ChannelEntity(id,channelNo,channelName,photoPath,themeType,themeConcreteType,channelVersion,createDate,channelType);
 				checkArray.push(channelEntity);
 			});
 			return checkArray;
@@ -120,6 +122,7 @@
 				<th>风格类型</th>
 				<th>风格类型明细</th>
 				<th>频道版本</th>
+				<th>频道类型</th>
 				<th>创建时间</th>
 			</tr>
 		</thead>
@@ -143,6 +146,7 @@
 					<input type="hidden" id="channelVersion_${status.index }" value = "${cdbooChannel.channelVersion}"/>
 					<fmt:formatDate value="${cdbooChannel.createDate}" pattern="yyyy-MM-dd HH:mm:ss" var="formatCreateDate"/>
 					<input type="hidden" id="createDate_${status.index }" value = "${formatCreateDate}"/>
+					<input type="hidden" id="channelType_${status.index }" value = "${fns:getDictLabel(cdbooChannel.channelType, 'channel_type', '')}"/>
 				</td>
 				<td>
 					${cdbooChannel.channelNo}
@@ -161,6 +165,9 @@
 				</td>
 				<td>
 					${cdbooChannel.channelVersion}
+				</td>
+				<td>
+					${fns:getDictLabel(cdbooChannel.channelType, 'channel_type', '')}
 				</td>
 				<td>
 					<fmt:formatDate value="${cdbooChannel.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>

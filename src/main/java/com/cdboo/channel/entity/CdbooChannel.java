@@ -42,19 +42,19 @@ public class CdbooChannel extends DataEntity<CdbooChannel> {
 	private Date endCreateDate; // 结束 创建时间
 	private List<String> musicIds = Lists.newArrayList();
 	
-	//子频道列表
-	private List<CdbooChannel> childChannelList = Lists.newArrayList();
-	private List<CdbooChannelMusic> cdbooChannelMusics = Lists.newArrayList();
+	private List<CdbooChannel> childChannelList = Lists.newArrayList();//子频道列表
+	private List<CdbooChannelMusic> cdbooChannelMusics = Lists.newArrayList();//频道下关联音乐列表
 	private List<String> sortArray = Lists.newArrayList();
-	private List<Integer> sorts = Lists.newArrayList();
-	private List<String> channelIds = Lists.newArrayList();
+	private List<Integer> sorts = Lists.newArrayList();//歌曲排序数字集合
+	private List<String> channelIds = Lists.newArrayList();//频道id集合
 	private Integer childChannelSize; //子频道数量
 	private List<String> idArray;
 	private List<String> inIdArray;
 	private String ids;
-	private String userId;
-	private String volume;
-	private Integer sort;
+	private String userId;//用户id
+	private String volume;//音量
+	private Integer sort;//排序数字
+	private String operationType;//业态
 	
 	public CdbooChannel() {
 		super();
@@ -220,6 +220,11 @@ public class CdbooChannel extends DataEntity<CdbooChannel> {
 	}
 
 	@JsonIgnore
+	public List<String> getSiteTypeList() {// 场所
+		return getTypeList(this.site);
+	}
+	
+	@JsonIgnore
 	public List<String> getElementTypeList() {// 元素
 		return getTypeList(this.element);
 	}
@@ -246,6 +251,10 @@ public class CdbooChannel extends DataEntity<CdbooChannel> {
 		return elementTypeList;
 	}
 
+	public void setSiteTypeList(List<String> siteStyleList) {// 场所
+		this.site = StringUtils.join(siteStyleList, ",");
+	}
+	
 	public void setMusicStyleList(List<String> musicStyleList) {// 音乐风格
 		this.musicStyle = StringUtils.join(musicStyleList, ",");
 	}
@@ -380,6 +389,14 @@ public class CdbooChannel extends DataEntity<CdbooChannel> {
 
 	public void setChildChannelSize(Integer childChannelSize) {
 		this.childChannelSize = childChannelSize;
+	}
+
+	public String getOperationType() {
+		return operationType;
+	}
+
+	public void setOperationType(String operationType) {
+		this.operationType = operationType;
 	}
 	
 }

@@ -18,7 +18,7 @@
         }
 		
 		function openMusicListWin(channelId){
-			top.$.jBox.open("iframe:${ctx}/channel/cdbooChannel/openChannelMusicWin?id="+channelId, "音乐列表",$(top.document).width()-240,$(top.document).height()-400,{
+			top.$.jBox.open("iframe:${ctx}/channel/cdbooChannel/openChannelMusicWin?id="+channelId, "音乐列表",$(top.document).width()-240,$(top.document).height()-240,{
 				buttons:{"关闭":true}, loaded:function(h){
 					$(".jbox-content", top.document).css("overflow-y","hidden");
 				}

@@ -36,7 +36,7 @@
 		<input type="hidden" value="${businessPlan.business.id }" name="business.id">
 		<sys:message content="${message}"/>		
 		
-		<timestep:timestep timestepElementName="timeStepIds" businessId="${businessPlan.id }" timestepList="${businessPlan.timesteps }"></timestep:timestep>
+		<timestep:timestep redirectURL="${ctx }/businessplan/plan/toEditChannelPage" timestepElementName="timeStepIds" businessId="${businessPlan.id }" timestepList="${businessPlan.timesteps }"></timestep:timestep>
 		
 		<div class="form-actions">
 			<shiro:hasPermission name="businessplan:plan:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>

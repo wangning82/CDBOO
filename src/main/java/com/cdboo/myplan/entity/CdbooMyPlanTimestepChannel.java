@@ -26,6 +26,15 @@ public class CdbooMyPlanTimestepChannel extends DataEntity<CdbooMyPlanTimestepCh
 		super();
 	}
 
+	public CdbooMyPlanTimestepChannel(CdbooMyPlanTimestep myPlanTimestep, CdbooUserChannel userChannel,
+			String channelType, String operationType) {
+		super();
+		this.myPlanTimestep = myPlanTimestep;
+		this.userChannel = userChannel;
+		this.channelType = channelType;
+		this.operationType = operationType;
+	}
+
 	public CdbooMyPlanTimestepChannel(String id){
 		super(id);
 	}

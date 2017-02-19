@@ -11,10 +11,22 @@
 		a.update_by AS "updateBy.id",
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
-		a.del_flag AS "delFlag"
+		a.del_flag AS "delFlag",
+		b.timestep_no AS "timestep.timestepNo",
+		b.timestep_name AS "timestep.timestepName",
+		b.starttime AS "timestep.starttime",
+		b.endtime AS "timestep.endtime",
+		b.create_by AS "timestep.createBy.id",
+		b.create_date AS "timestep.createDate",
+		b.update_by AS "timestep.updateBy.id",
+		b.update_date AS "timestep.updateDate",
+		b.remarks AS "timestep.remarks",
+		b.del_flag AS "timestep.delFlag",
+		b.status AS "timestep.status"
 	</sql>
 	
 	<sql id="cdbooBusinessPlanTimestepJoins">
+		left join cdboo_timestep b on b.del_flag = '0' and a.timestep_id = b.id
 	</sql>
     
 	<select id="get" resultType="CdbooBusinessPlanTimestep">

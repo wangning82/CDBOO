@@ -58,7 +58,7 @@
 						${fns:getDictLabel(cdbooMusic.musicOwner, 'owner_type', '')}
 					</td>
 					<td>
-						${cdbooMusic.volume}
+						<input type="text" name="cdbooChannelMusics[${status.index }].music.volume" value="${cdbooMusic.volume}">
 					</td>
 					<td>
 						<input type="text" name="cdbooChannelMusics[${status.index }].sort" value="${cdbooChannelMusic.sort}">

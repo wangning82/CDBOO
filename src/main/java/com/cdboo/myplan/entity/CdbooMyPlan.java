@@ -49,6 +49,20 @@ public class CdbooMyPlan extends DataEntity<CdbooMyPlan> {
 	public CdbooMyPlan(String id){
 		super(id);
 	}
+	
+	
+
+	public CdbooMyPlan(String planName, User user, String week, String style, Date startDate, Date endDate,
+			String cycleIndex, String intervalTime) {
+		this.planName = planName;
+		this.user = user;
+		this.week = week;
+		this.style = style;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.cycleIndex = cycleIndex;
+		this.intervalTime = intervalTime;
+	}
 
 	@Length(min=0, max=100, message="计划名称长度必须介于 0 和 100 之间")
 	public String getPlanName() {

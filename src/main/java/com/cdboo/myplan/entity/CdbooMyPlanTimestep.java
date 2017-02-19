@@ -26,6 +26,12 @@ public class CdbooMyPlanTimestep extends DataEntity<CdbooMyPlanTimestep> {
 		super();
 	}
 
+	public CdbooMyPlanTimestep(CdbooMyPlan plan, CdbooUserTimestep userTimestep) {
+		super();
+		this.plan = plan;
+		this.userTimestep = userTimestep;
+	}
+
 	public CdbooMyPlanTimestep(String id){
 		super(id);
 	}

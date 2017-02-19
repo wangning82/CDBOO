@@ -31,7 +31,7 @@
 			userId = $('#'+elementId).val();
 		}
 		
-		top.$.jBox.open("iframe:${ctx}/usertimestep/cdbooUserTimestep/openUserTimestepWin?userId="+userId+"&ids="+ids, "分配时段",$(top.document).width()-240,$(top.document).height()-400,{
+		top.$.jBox.open("iframe:${ctx}/usertimestep/cdbooUserTimestep/openUserTimestepWin?userId="+userId+"&ids="+ids, "分配时段",$(top.document).width()-240,$(top.document).height()-240,{
 			buttons:{"确定分配":"ok", "关闭":true}, bottomText:"通过查询条件选择用户时段，选择后窗口不会关闭，可以连续选择。",submit:function(v, h, f){
 				var checkArray = h.find("iframe")[0].contentWindow.getCheckData();
 				if (v=="ok"){

@@ -11,6 +11,7 @@ import com.cdboo.timestep.dao.TimestepDao;
 import com.cdboo.timestep.entity.Timestep;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
+import com.thinkgem.jeesite.common.utils.StringUtils;
 
 /**
  * 时段管理Service
@@ -49,7 +50,10 @@ public class TimestepService extends CrudService<TimestepDao, Timestep> {
 	
 	@Transactional(readOnly = false)
 	public void save(Timestep timestep) {
-		timestep.setTimestepNo(getMaxTimestepNo());
+		String id = timestep.getId();
+		if(StringUtils.isBlank(id)){
+			timestep.setTimestepNo(getMaxTimestepNo());
+		}
 		super.save(timestep);
 	}
 	

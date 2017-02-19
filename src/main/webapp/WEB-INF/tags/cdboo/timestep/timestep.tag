@@ -3,6 +3,8 @@
 <%@ attribute name="timestepList" type="java.util.List" required="true" description="时段集合"%>
 <%@ attribute name="businessId" type="java.lang.String" required="true" description="行业id"%>
 <%@ attribute name="timestepElementName" type="java.lang.String" required="true" description="时段隐藏域id名称"%>
+<%@ attribute name="redirectURL" type="java.lang.String" required="true" description="添加频道跳转url前缀"%>
+
 <script type="text/javascript">
 	$(document).ready(function() {
 		
@@ -25,7 +27,7 @@
 			});
 		}
 		
-		top.$.jBox.open("iframe:${ctx}/timestep/timestep/openTimestepWin?ids="+ids, "分配时段",$(top.document).width()-240,$(top.document).height()-400,{
+		top.$.jBox.open("iframe:${ctx}/timestep/timestep/openTimestepWin?ids="+ids, "分配时段",$(top.document).width()-240,$(top.document).height()-240,{
 			buttons:{"确定分配":"ok", "关闭":true}, bottomText:"通过查询条件选择时段，选择后窗口不会关闭，可以连续选择。",submit:function(v, h, f){
 				var checkArray = h.find("iframe")[0].contentWindow.getCheckData();
 				if (v=="ok"){
@@ -68,7 +70,7 @@
 	}
 	
 	function appendChannel(timeStepId,businessId){
-		window.location.href = "${ctx}/myplan/cdbooMyPlan/toEditChannelPage?id="+businessId+"&timeStepId="+timeStepId;
+		window.location.href = "${redirectURL}?id="+businessId+"&timeStepId="+timeStepId;
 	}
 </script>
 <div class="form-actions">

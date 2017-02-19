@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cdboo.myplan.dao.CdbooMyPlanDao;
 import com.cdboo.myplan.entity.CdbooMyPlan;
 import com.cdboo.myplan.entity.CdbooMyPlanTimestep;
+import com.cdboo.myplan.entity.CdbooMyPlanTimestepChannel;
 import com.cdboo.usertimestep.service.CdbooUserTimestepService;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
@@ -27,6 +28,9 @@ public class CdbooMyPlanService extends CrudService<CdbooMyPlanDao, CdbooMyPlan>
 
 	@Autowired
 	private CdbooMyPlanTimestepService cdbooMyPlanTimestepService;
+	
+	@Autowired
+	private CdbooMyPlanTimestepChannelService cdbooMyPlanTimestepChannelService;
 	
 	@Autowired
 	private CdbooUserTimestepService cdbooUserTimestepService;
@@ -50,6 +54,23 @@ public class CdbooMyPlanService extends CrudService<CdbooMyPlanDao, CdbooMyPlan>
 		super.save(cdbooMyPlan);
 	}
 	
+	@Transactional(readOnly=false)
+	public void removeMyPlanTimestep(CdbooMyPlan cdbooMyPlan) {
+		CdbooMyPlanTimestep obj = new CdbooMyPlanTimestep();
+		obj.setPlan(cdbooMyPlan);
+		List<CdbooMyPlanTimestep> timeSteps = cdbooMyPlanTimestepService.findList(obj);
+		if (CollectionUtils.isNotEmpty(timeSteps)) {
+			CdbooMyPlanTimestepChannel findObj = new CdbooMyPlanTimestepChannel();
+			for (CdbooMyPlanTimestep cdbooMyPlanTimestep : timeSteps) {
+				findObj.setMyPlanTimestep(cdbooMyPlanTimestep);
+				cdbooMyPlanTimestepChannelService.delete(findObj);
+			}
+		}
+		CdbooMyPlanTimestep removeObj = new CdbooMyPlanTimestep();
+		removeObj.setPlan(cdbooMyPlan);
+		cdbooMyPlanTimestepService.remove(removeObj);
+	}
+
 	@Transactional(readOnly = false)
 	public void saveUserTimestep(CdbooMyPlan cdbooMyPlan) {
 		List<String> userTimestepIds = cdbooMyPlan.getUserTimestepIds();
@@ -58,10 +79,8 @@ public class CdbooMyPlanService extends CrudService<CdbooMyPlanDao, CdbooMyPlan>
 
 			List<CdbooMyPlanTimestep> saveList = Lists.newArrayList();
 
-			CdbooMyPlanTimestep removeObj = new CdbooMyPlanTimestep();
-			removeObj.setPlan(cdbooMyPlan);
-			cdbooMyPlanTimestepService.remove(removeObj);
-
+			removeMyPlanTimestep(cdbooMyPlan);
+			
 			for (String userTimestepId : userTimestepIds) {
 				CdbooMyPlanTimestep cdbooMyPlanTimestep = new CdbooMyPlanTimestep();
 				cdbooMyPlanTimestep.setPlan(cdbooMyPlan);
@@ -72,6 +91,9 @@ public class CdbooMyPlanService extends CrudService<CdbooMyPlanDao, CdbooMyPlan>
 			for (CdbooMyPlanTimestep cdbooMyPlanTimestep : saveList) {
 				cdbooMyPlanTimestepService.save(cdbooMyPlanTimestep);
 			}
+		}
+		else{
+			removeMyPlanTimestep(cdbooMyPlan);
 		}
 	}
 	

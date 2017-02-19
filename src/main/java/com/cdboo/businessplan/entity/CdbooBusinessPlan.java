@@ -3,17 +3,19 @@
  */
 package com.cdboo.businessplan.entity;
 
-import org.apache.commons.lang3.StringUtils;
-import org.hibernate.validator.constraints.Length;
-import com.cdboo.business.entity.Business;
-import com.cdboo.timestep.entity.Timestep;
-
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.validator.constraints.Length;
+
+import com.cdboo.business.entity.Business;
+import com.cdboo.channel.entity.CdbooChannel;
+import com.cdboo.timestep.entity.Timestep;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.common.collect.Lists;
 import com.thinkgem.jeesite.common.persistence.DataEntity;
+import com.thinkgem.jeesite.modules.sys.entity.Office;
 
 /**
  * 行业计划模板表Entity
@@ -32,8 +34,18 @@ public class CdbooBusinessPlan extends DataEntity<CdbooBusinessPlan> {
 	private String cycleIndex;		// 循环次数
 	private String intervalTime;		// 重复时间
 	private String businessId;
+	
+	/******************页面使用 Start*******************/
 	private List<Timestep> timesteps = Lists.newArrayList();
 	private List<String> timeStepIds = Lists.newArrayList();
+	private String timeStepId;
+	private List<Office> cdbooConditionList = Lists.newArrayList();
+	
+	private List<String> channelIds = Lists.newArrayList();
+	private List<String> operationTypes = Lists.newArrayList();
+	private List<CdbooChannel> cdbooChannels = Lists.newArrayList();
+	/******************页面使用 End*******************/
+	
 	public String getBusinessId() {
 		return businessId;
 	}
@@ -147,6 +159,46 @@ public class CdbooBusinessPlan extends DataEntity<CdbooBusinessPlan> {
 
 	public void setTimeStepIds(List<String> timeStepIds) {
 		this.timeStepIds = timeStepIds;
+	}
+
+	public String getTimeStepId() {
+		return timeStepId;
+	}
+
+	public void setTimeStepId(String timeStepId) {
+		this.timeStepId = timeStepId;
+	}
+
+	public List<Office> getCdbooConditionList() {
+		return cdbooConditionList;
+	}
+
+	public void setCdbooConditionList(List<Office> cdbooConditionList) {
+		this.cdbooConditionList = cdbooConditionList;
+	}
+
+	public List<String> getChannelIds() {
+		return channelIds;
+	}
+
+	public void setChannelIds(List<String> channelIds) {
+		this.channelIds = channelIds;
+	}
+
+	public List<String> getOperationTypes() {
+		return operationTypes;
+	}
+
+	public void setOperationTypes(List<String> operationTypes) {
+		this.operationTypes = operationTypes;
+	}
+
+	public List<CdbooChannel> getCdbooChannels() {
+		return cdbooChannels;
+	}
+
+	public void setCdbooChannels(List<CdbooChannel> cdbooChannels) {
+		this.cdbooChannels = cdbooChannels;
 	}
 	
 }

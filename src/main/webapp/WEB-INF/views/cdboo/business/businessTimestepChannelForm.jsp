@@ -6,21 +6,22 @@
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
 		$(document).ready(function() {
-
+			var message = '${message}';
+			if(message){
+				top.$.jBox.tip(message,"提示");
+			}
 		});
 		
-		function openUserChannelWin(){
-			var userId = '${cdbooMyPlan.user.id}';
-			
-			top.$.jBox.open("iframe:${ctx}/userchannel/cdbooUserChannel/openUserChannelWin?user.id="+userId, "分配频道",$(top.document).width()-240,$(top.document).height()-240,{
-				buttons:{"确定分配":"ok", "关闭":true}, bottomText:"通过查询条件选择用户绑定的频道，选择后窗口不会关闭，可以连续选择。",submit:function(v, h, f){
+		function openChannelWin(){
+			top.$.jBox.open("iframe:${ctx}/channel/cdbooChannel/openChannelWin", "分配频道",$(top.document).width()-240,$(top.document).height()-240,{
+				buttons:{"确定分配":"ok", "关闭":true}, bottomText:"通过查询条件选择频道，选择后窗口不会关闭，可以连续选择。",submit:function(v, h, f){
 					var checkArray = h.find("iframe")[0].contentWindow.getCheckData();
 					if (v=="ok"){
 						try {
-							var tpl = $("#cdbooUserChannelTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
+							var tpl = $("#cdbooChannelTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
 							for (var i = 0; i < checkArray.length; i++) {
 								var entity = checkArray[i];
-								if(checkUserChannelIdIsExists(entity.id)){
+								if(checkChannelIdIsExists(entity.id)){
 									continue;
 								}
 								//alert(entity.id+":"+entity.musicName+":"+entity.actor+":"+entity.special+":"+entity.musicOwner+":"+entity.volume)
@@ -39,12 +40,12 @@
 			});
 		}
 		
-		function checkUserChannelIdIsExists(userChannelId){
+		function checkChannelIdIsExists(channelId){
 			var flag = false;
-			$("input[name = 'userChannelIds']").each(function(index){
+			$("input[name = 'channelIds']").each(function(index){
 				var id = $(this).val();
 				//alert("["+id+"]:["+musicId+"]["+(id == musicId)+"]")
-				if(id == userChannelId){
+				if(id == channelId){
 					flag = true;
 					return false;
 				}
@@ -59,17 +60,15 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/myplan/cdbooMyPlan/">计划列表</a></li>
-		<li><a href="${ctx}/myplan/cdbooMyPlan/form?id=${cdbooMyPlan.id}">计划<shiro:hasPermission name="myplan:cdbooMyPlan:edit">${not empty cdbooMyPlan.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="myplan:cdbooMyPlan:edit">查看</shiro:lacksPermission></a></li>
-		<li><a href="${ctx}/myplan/cdbooMyPlan/toEditTimestepPage?id=${cdbooMyPlan.id}&user.id=${cdbooMyPlan.user.id}">时段编辑</a></li>
+		<li><a href="${ctx}/businessplan/plan/listTimestep">行业计划列表</a></li>
+		<li><a href="${ctx}/businessplan/plan/form?id=${businessPlan.id}">时段编辑</a></li>
 		<li class="active"><a href="#">频道编辑</a></li>
 	</ul><br/>
-	<form:form id="inputForm" modelAttribute="cdbooMyPlan" action="${ctx}/myplan/cdbooMyPlan/saveTimestepChannel" method="post" class="form-horizontal">
+	<form:form id="inputForm" modelAttribute="businessPlan" action="${ctx}/businessplan/plan/saveTimestepChannel" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
-		<form:hidden path="userTimeStepId"/>
-		<sys:message content="${message}"/>
+		<form:hidden path="timeStepId"/>
 			<div class="form-actions">
-				<input id="btnSubmit" class="btn btn-primary" type="button" value="分配频道" onclick="openUserChannelWin()"/>&nbsp;
+				<input id="btnSubmit" class="btn btn-primary" type="button" value="分配频道" onclick="openChannelWin()"/>&nbsp;
 				<input id="btnSubmit" class="btn btn-primary" type="submit" value="保存"/>&nbsp;
 				<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
 			</div>
@@ -90,35 +89,35 @@
 					</tr>
 				</thead>
 				<tbody id="tb">
-				<c:forEach items="${cdbooMyPlan.cdbooUserChannels}" var="cdbooUserChannel">
+				<c:forEach items="${businessPlan.cdbooChannels}" var="channel" varStatus="status">
 					<tr>
-						<td class="hide"><input type="hidden" name="userChannelIds" value="${cdbooUserChannel.id }"/></td>
-						<td>${cdbooUserChannel.channel.channelNo}</td>
-						<td>${cdbooUserChannel.channel.channelName}</td>		
-						<td><pic:preview path="${cdbooUserChannel.channel.photoPath}"></pic:preview></td>
-						<td>${fns:getDictLabel(cdbooUserChannel.channel.themeType, 'theme_type', '')}</td>
-						<td><theme:themeDetail themeConcreteType="${cdbooUserChannel.channel.themeConcreteType }" themeType="${cdbooUserChannel.channel.themeType }"></theme:themeDetail></td>
-						<td>${cdbooUserChannel.channel.channelVersion}</td>
-						<td>${fns:getDictLabel(cdbooUserChannel.channel.channelType, 'channel_type', '')}</td>
+						<td class="hide"><input type="hidden" name="channelIds" value="${channel.id }"/></td>
+						<td>${channel.channelNo}</td>
+						<td>${channel.channelName}</td>		
+						<td><pic:preview path="${channel.photoPath}"></pic:preview></td>
+						<td>${fns:getDictLabel(channel.themeType, 'theme_type', '')}</td>
+						<td><theme:themeDetail themeConcreteType="${channel.themeConcreteType }" themeType="${channel.themeType }"></theme:themeDetail></td>
+						<td>${channel.channelVersion}</td>
+						<td>${fns:getDictLabel(channel.channelType, 'channel_type', '')}</td>
 						<td>
 							<select name="operationTypes" class="input-small ">
 	                           <option value="">请选择</option>
-							   <c:forEach items="${cdbooMyPlan.cdbooConditionList}" var="condition">
-									<option value="${condition.id}" <c:if test="${cdbooUserChannel.operationType eq condition.id }">selected</c:if> >${condition.name}</option>
+							   <c:forEach items="${businessPlan.cdbooConditionList}" var="condition">
+									<option value="${condition.id}" <c:if test="${channel.operationType eq condition.id }">selected</c:if> >${condition.name}</option>
 							   </c:forEach>
 	                        </select>
 	                    </td>
-	                    <td><fmt:formatDate value="${cdbooUserChannel.channel.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+	                    <td><fmt:formatDate value="${channel.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
 						<td><a href="#" onclick="deleteRow(this)">删除</a></td>
 					</tr>
 				</c:forEach>
 				</tbody>
 			</table>
 			
-		<script type="text/template" id="cdbooUserChannelTpl">//<!--
+		<script type="text/template" id="cdbooChannelTpl">//<!--
 					<tr>
 							<td class="hide">
-								<input name="userChannelIds" type="hidden" value="{{row.id}}"/>
+								<input name="channelIds" type="hidden" value="{{row.id}}"/>
 							</td>
 							<td>
 								{{row.channelNo}}
@@ -144,7 +143,7 @@
 							<td>
 								<select name="operationTypes" class="input-small ">
                            			<option value="">请选择</option>
-						   			<c:forEach items="${cdbooMyPlan.cdbooConditionList}" var="condition">
+						   			<c:forEach items="${businessPlan.cdbooConditionList}" var="condition">
 										<option value="${condition.id}">${condition.name}</option>
 						   			</c:forEach>
                         		</select>

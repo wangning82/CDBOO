@@ -41,6 +41,14 @@ public class CdbooUserChannel extends DataEntity<CdbooUserChannel> {
 	
 	private List<CdbooGroupChild> groupChildChannelList = Lists.newArrayList();
 	
+	
+	public CdbooUserChannel(User user, CdbooChannel channel, String channelType) {
+		super();
+		this.user = user;
+		this.channel = channel;
+		this.channelType = channelType;
+	}
+
 	public CdbooUserChannel() {
 		super();
 	}

@@ -100,10 +100,7 @@
 		<div class="control-group">
 			<label class="control-label">场所：</label>
 			<div class="controls">
-				<form:select path="site" class="input-xlarge ">
-					<form:option value="" label="请选择"/>
-					<form:options items="${fns:getDictList('site_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
+				<form:checkboxes path="siteTypeList" items="${fns:getDictList('site_type')}" itemLabel="label" itemValue="value" htmlEscape="false" class="required"/>
 			</div>
 		</div>
 		<div class="control-group">

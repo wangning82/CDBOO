@@ -263,10 +263,10 @@ public class CdbooChannelController extends BaseController {
 	public String channelMusicSave(CdbooChannel cdbooChannel,RedirectAttributes redirectAttributes){
 		try {
 			cdbooChannelMusicService.editChannelMusicSort(cdbooChannel);
-			addMessage(redirectAttributes, "编辑歌曲顺序成功");
+			addMessage(redirectAttributes, "编辑歌曲信息成功");
 		} catch (Exception e) {
-			LogUtils.saveLog(Servlets.getRequest(), null, e, "编辑歌曲顺序");
-			addMessage(redirectAttributes, "编辑歌曲顺序失败");
+			LogUtils.saveLog(Servlets.getRequest(), null, e, "编辑歌曲顺序和音量");
+			addMessage(redirectAttributes, "编辑歌曲信息失败");
 		}
 		redirectAttributes.addFlashAttribute("cdbooChannel", cdbooChannel);
 		return "redirect:" + Global.getAdminPath() + "/channel/cdbooChannel/openChannelMusicWin";

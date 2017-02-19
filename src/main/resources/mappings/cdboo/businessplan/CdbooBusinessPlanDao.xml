@@ -134,4 +134,7 @@
 		WHERE id = #{id}
 	</update>
 	
+	<update id="remove">
+		DELETE FROM cdboo_business_plan WHERE id = #{id}
+	</update>
 </mapper>

@@ -11,10 +11,33 @@
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
 		a.update_by AS "updateBy.id",
-		a.update_date AS "updateDate"
+		a.update_date AS "updateDate",
+		
+		b.channel_no AS "channel.channelNo",
+		b.channel_name AS "channel.channelName",
+		b.photo_path AS "channel.photoPath",
+		b.theme_type AS "channel.themeType",
+		b.theme_concrete_type AS "channel.themeConcreteType",
+		b.channel_version AS "channel.channelVersion",
+		b.music_style AS "channel.musicStyle",
+		b.site AS "channel.site",
+		b.speed AS "channel.speed",
+		b.voice AS "channel.voice",
+		b.element AS "channel.element",
+		b.emotion AS "channel.emotion",
+		b.instrument AS "channel.instrument",
+		b.create_by AS "channel.createBy.id",
+		b.create_date AS "channel.createDate",
+		b.update_by AS "channel.updateBy.id",
+		b.update_date AS "channel.updateDate",
+		b.remarks AS "channel.remarks",
+		b.del_flag AS "channel.delFlag",
+		b.status AS "channel.status",
+		b.channel_type AS "channel.channelType"
 	</sql>
 	
 	<sql id="cdbooBusinessPlanTimestepChannelJoins">
+		left join cdboo_child_channel b on a.channel_id = b.id
 	</sql>
     
 	<select id="get" resultType="CdbooBusinessPlanTimestepChannel">
@@ -31,7 +54,12 @@
 		FROM cdboo_business_plan_timestep_channel a
 		<include refid="cdbooBusinessPlanTimestepChannelJoins"/>
 		<where>
-			
+			<if test="businessPlanTimestep != null and businessPlanTimestep.id != null and businessPlanTimestep.id != ''">
+				AND a.business_plan_timestep_id = #{businessPlanTimestep.id}
+			</if>
+			<if test="channel != null and channel.id != null and channel.id != ''">
+				AND a.channel_id = #{channel.id}
+			</if>
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
@@ -98,7 +126,17 @@
 	
 	<update id="delete">
 		DELETE FROM cdboo_business_plan_timestep_channel
-		WHERE id = #{id}
+		<where>
+			<if test="id != null and id != ''">
+				AND id = #{id}
+			</if>
+			<if test="businessPlanTimestep != null and businessPlanTimestep.id != null and businessPlanTimestep.id != ''">
+				AND business_plan_timestep_id = #{businessPlanTimestep.id}
+			</if>
+			<if test="channel != null and channel.id != null and channel.id != ''">
+				AND channel_id = #{channel.id}
+			</if>
+		</where>
 	</update>
 	
 </mapper>

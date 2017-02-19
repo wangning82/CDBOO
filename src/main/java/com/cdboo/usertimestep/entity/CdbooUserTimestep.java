@@ -34,6 +34,15 @@ public class CdbooUserTimestep extends DataEntity<CdbooUserTimestep> {
 	private List<CdbooUserTimestep> timestepList = Lists.newArrayList();
 	private List<Timestep> timestepEntityList = Lists.newArrayList();
 	
+	
+	public CdbooUserTimestep(User user, String name, String startTime, String endTime) {
+		super();
+		this.user = user;
+		this.name = name;
+		this.startTime = startTime;
+		this.endTime = endTime;
+	}
+
 	public CdbooUserTimestep() {
 		super();
 	}

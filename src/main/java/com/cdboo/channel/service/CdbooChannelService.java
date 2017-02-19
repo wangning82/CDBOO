@@ -13,6 +13,7 @@ import com.cdboo.channel.dao.CdbooChannelDao;
 import com.cdboo.channel.entity.CdbooChannel;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
+import com.thinkgem.jeesite.common.utils.StringUtils;
 
 /**
  * 频道管理Service
@@ -66,7 +67,10 @@ public class CdbooChannelService extends CrudService<CdbooChannelDao, CdbooChann
 	@Transactional(readOnly = false)
 	public void save(CdbooChannel cdbooChannel) {
 		String channelType = cdbooChannel.getChannelType();
-		cdbooChannel.setChannelNo(getMaxChannelNo(channelType));
+		String id = cdbooChannel.getId();
+		if(StringUtils.isBlank(id)){
+			cdbooChannel.setChannelNo(getMaxChannelNo(channelType));
+		}
 		super.save(cdbooChannel);
 	}
 	
