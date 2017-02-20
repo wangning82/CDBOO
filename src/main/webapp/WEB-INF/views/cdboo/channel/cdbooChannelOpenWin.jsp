@@ -85,6 +85,7 @@
 		<form:hidden path="userId"/>
 		<form:hidden path="ids"/>
 		<form:hidden path="channelType"/>
+		<form:hidden path="includeFlag"/>
 		<ul class="ul-form">
 			<li><label>频道编号：</label>
 				<form:input path="channelNo" htmlEscape="false" maxlength="100" class="input-medium"/>

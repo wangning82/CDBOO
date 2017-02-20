@@ -86,7 +86,7 @@
 			</div>
 		</div>
 		
-		<channel:channelListTag channelElementName="channelIds" sortElementName="sorts" channelList="${cdbooChannel.childChannelList }" channelType="0"></channel:channelListTag>
+		<channel:channelListTag isInclude="0" channelElementName="channelIds" sortElementName="sorts" channelList="${cdbooChannel.childChannelList }" channelType="0"></channel:channelListTag>
 		
 		<div class="form-actions">
 			<shiro:hasPermission name="channel:groupChannel:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>

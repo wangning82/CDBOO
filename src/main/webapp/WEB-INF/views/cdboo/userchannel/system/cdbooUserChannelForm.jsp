@@ -57,7 +57,7 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li><a href="${ctx}/userchannel/cdbooUserChannel/">用户频道列表</a></li>
-		<li class="active"><a href="${ctx}/userchannel/cdbooUserChannel/form?id=${cdbooUserChannel.id}">用户频道<shiro:hasPermission name="userchannel:cdbooUserChannel:edit">${not empty cdbooUserChannel.user.id && not empty cdbooUserChannel.channel.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="userchannel:cdbooUserChannel:edit">查看</shiro:lacksPermission></a></li>
+		<li class="active"><a href="#">用户频道查看</a></li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="cdbooUserChannel" action="${ctx}/userchannel/cdbooUserChannel/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
@@ -68,22 +68,29 @@
 			<label class="control-label">用户：</label>
 			<div class="controls">
 				<!-- 如果是修改，则用户锁定，不能编辑 -->
-				<c:if test = "${not empty cdbooUserChannel.user.id && not empty cdbooUserChannel.channel.id}">
+				<c:if test = "${not empty cdbooUserChannel.id}">
 					<sys:treeselect disabled="disabled" id="user" name="user.id" value="${cdbooUserChannel.user.id}" labelName="user.name" labelValue="${cdbooUserChannel.user.name}"
 						title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true" notAllowSelectParent="true" />
 				</c:if>
 				<!-- 如果是新增，则用户不锁定，允许编辑 -->
-				<c:if test = "${empty cdbooUserChannel.user.id && empty cdbooUserChannel.channel.id}">
+				<c:if test = "${empty cdbooUserChannel.id}">
 					<sys:treeselect id="user" name="user.id" value="${cdbooUserChannel.user.id}" labelName="user.name" labelValue="${cdbooUserChannel.user.name}"
 						title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true" notAllowSelectParent="true" />
 				</c:if>
 			</div>
 		</div>
 
-		<channel:channelListTag channelElementName="channelIds" channelList="${cdbooUserChannel.channelList }" channelType="0"></channel:channelListTag>
+		<c:if test = "${empty cdbooUserChannel.id}">
+			<channel:channelListTag isInclude="1" userElementId="userId" channelElementName="channelIds" channelList="${cdbooUserChannel.channelList }" channelType="${Constants.CHANNEL_TYPE_CHILD }"></channel:channelListTag>
+		</c:if>
+		<c:if test = "${not empty cdbooUserChannel.id}">
+			<channel:channelListTag isReview="1" isInclude="1" userElementId="userId" channelElementName="channelIds" channelList="${cdbooUserChannel.channelList }" channelType="${Constants.CHANNEL_TYPE_CHILD }"></channel:channelListTag>
+		</c:if>
 		
 		<div class="form-actions">
-			<shiro:hasPermission name="userchannel:cdbooUserChannel:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
+			<c:if test = "${empty cdbooUserChannel.id}">
+				<shiro:hasPermission name="userchannel:cdbooUserChannel:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
+			</c:if>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
 		</div>
 	</form:form>

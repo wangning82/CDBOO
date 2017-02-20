@@ -64,7 +64,9 @@ public class CdbooGroupChannelController extends BaseController {
 		model.addAttribute("page", page);
 
 		/**************** 组合频道下拉列表集合查询 Start ******************/
-		List<CdbooChannel> groupList = cdbooChannelService.findList(cdbooChannel);
+		CdbooChannel querySelectObj = new CdbooChannel();
+		querySelectObj.setChannelType(Constants.CHANNEL_TYPE_GROUP);
+		List<CdbooChannel> groupList = cdbooChannelService.findList(querySelectObj);
 		cdbooChannel.setChildChannelList(groupList);
 		/**************** 组合频道下拉列表集合查询 End ******************/
 		

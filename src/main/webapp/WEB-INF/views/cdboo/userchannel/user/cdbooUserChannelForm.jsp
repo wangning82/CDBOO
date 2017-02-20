@@ -67,7 +67,7 @@
 			</div>
 		</div>
 		
-		<channel:channelListTag channelElementName="channelIds" channelList="${cdbooUserChannel.channelList }" channelType="0" userElementId="userId"></channel:channelListTag>
+		<channel:channelListTag isInclude="0" channelElementName="channelIds" channelList="${cdbooUserChannel.channelList }" channelType="0" userElementId="userId"></channel:channelListTag>
 		
 		<div class="form-actions">
 			<shiro:hasPermission name="userchannel:userChannel:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>

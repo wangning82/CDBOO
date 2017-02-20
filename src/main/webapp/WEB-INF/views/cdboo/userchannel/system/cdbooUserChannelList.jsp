@@ -74,7 +74,7 @@
 				<td>
 					${cdbooUserChannel.user.name}
 				</td>
-				<td><a href="${ctx}/userchannel/cdbooUserChannel/form?user.id=${cdbooUserChannel.user.id}&&channel.id=${cdbooUserChannel.channel.id}&&user.name=${cdbooUserChannel.user.name}&&channel.channelName=${cdbooUserChannel.channel.channelName}">
+				<td><a href="${ctx}/userchannel/cdbooUserChannel/form?id=${cdbooUserChannel.id}">
 							${cdbooUserChannel.channel.channelNo}
 						</a></td>
 						<td>
@@ -102,7 +102,7 @@
 							${cdbooUserChannel.musicSize}
 						</td>
 						<shiro:hasPermission name="userchannel:cdbooUserChannel:edit"><td>
-		    				<a href="${ctx}/userchannel/cdbooUserChannel/form?id=${cdbooUserChannel.id}">修改</a>
+		    				<a href="${ctx}/userchannel/cdbooUserChannel/form?id=${cdbooUserChannel.id}">查看</a>
 							<a href="${ctx}/userchannel/cdbooUserChannel/delete?id=${cdbooUserChannel.id}" onclick="return confirmx('确认要删除该用户频道吗？', this.href)">删除</a>
 							<a href="#" onclick="openMusicListWin('${cdbooUserChannel.channel.id}')" >音乐列表</a>
 						</td></shiro:hasPermission>

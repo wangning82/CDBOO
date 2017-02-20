@@ -23,31 +23,6 @@
 				}
 			});
 		});
-		
-		function linkChannelInfo(groupChannelId){
-			$('#tb').empty();
-			$.ajax({
-		        type: "post",
-		        async: false,
-		        url: "${ctx}/channel/cdbooChannel/getGroupChannelInfo",
-		        data: {
-		        	groupChannelId: groupChannelId
-		        },
-		        dataType: "json",
-		        success: function (data) {
-					var dataObj = eval(data);
-					var dataArray = dataObj.groupChildChannelList;
-		        	var tpl = $("#channelTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
-					for (var i = 0; i < dataArray.length; i++) {
-						var entity = dataArray[i].childChannelId;
-						var sort = dataArray[i].sort;
-						//alert(entity.id+":"+entity.name+":"+entity.actor+":"+entity.special+":"+entity.musicOwner+":"+entity.volume)
-						var rowSize = $('#tb tr').size();
-						$('#tb').append(Mustache.render(tpl, {row: entity,sort:sort}));
-					}
-		        }
-		   });
-		}
 	</script>
 </head>
 <body>
@@ -72,71 +47,12 @@
 			</div>
 		</div>
 		
-		<div class="control-group">
-			<label class="control-label">组合频道：</label>
-			<div class="controls">
-				<c:if test = "${empty userChannel.id}">
-					<form:select id="channelId" path="channel.id" class="input-xlarge " onchange="linkChannelInfo(this.value)">
-						<form:option value="" label="请选择"/>
-						<form:options items="${userChannel.channelList}" itemLabel="channelName" itemValue="id" htmlEscape="false"/>
-					</form:select>
-				</c:if>
-				<c:if test = "${not empty userChannel.id}">
-					${userChannel.channel.channelName}
-				</c:if>
-			</div>
-		</div>
-		
-		<div class="control-group">
-			<label class="control-label">子频道列表：</label>
-			<div class="controls">
-				<table id="contentTable" class="table table-striped table-bordered table-condensed">
-					<thead>
-						<tr>
-							<th>频道编号</th>
-							<th>频道名称</th>
-							<th>频道图片</th>
-							<th>风格类型</th>
-							<th>风格类型明细</th>
-							<th>频道版本</th>
-							<th>排序</th>
-							<th>创建时间</th>
-						</tr>
-					</thead>					
-					<tbody id="tb">
-						<c:forEach items="${userChannel.groupChildChannelList}" var="cdbooGroupChildChannel" varStatus="status">
-							<c:set value="${cdbooGroupChildChannel.childChannelId }" var="cdbooChannel"></c:set>
-							<tr>
-								<td>
-									${cdbooChannel.channelNo}
-								</td>
-								<td>
-									${cdbooChannel.channelName}
-								</td>
-								<td>
-									<pic:preview path="${cdbooChannel.photoPath}" ></pic:preview>
-								</td>
-								<td>
-									${fns:getDictLabel(cdbooChannel.themeType, 'theme_type', '')}
-								</td>
-								<td>
-									<theme:themeDetail themeConcreteType="${cdbooChannel.themeConcreteType }" themeType="${cdbooChannel.themeType }"></theme:themeDetail>
-								</td>
-								<td>
-									${cdbooChannel.channelVersion}
-								</td>
-								<td>
-									${cdbooGroupChildChannel.sort}
-								</td>
-								<td>
-									<fmt:formatDate value="${cdbooChannel.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
-								</td>
-							</tr>
-						</c:forEach>
-					</tbody>
-				</table>	
-			</div>
-		</div>
+		<c:if test = "${empty userChannel.id}">
+			<channel:channelListTag userElementId="userId" isInclude="1" channelElementName="channelIds" channelList="${userChannel.channelList }" channelType="${Constants.CHANNEL_TYPE_GROUP }"></channel:channelListTag>
+		</c:if>
+		<c:if test = "${not empty userChannel.id}">
+			<channel:channelListTag isReview="1" userElementId="userId" isInclude="1" channelElementName="channelIds" channelList="${userChannel.channelList }" channelType="${Constants.CHANNEL_TYPE_GROUP }"></channel:channelListTag>
+		</c:if>
 		
 		<div class="form-actions">
 			<c:if test = "${empty userChannel.id}">
@@ -145,18 +61,5 @@
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
 		</div>
 	</form:form>
-	
-	<script type="text/template" id="channelTpl">//<!--
-		<tr>
-			<td>{{row.channelNo}}<input type="hidden" name = 'channelIds' value="{{row.id}}"></td>
-			<td>{{row.channelName}}</td>
-			<td><img src="{{row.photoPath}}" width="${Constants.IMG_WIDTH}" height="${Constants.IMG_HEIGHT}" onclick="disPic('{{row.photoPath}}')"/></td>
-			<td>{{row.themeType}}</td>
-			<td>{{row.themeConcreteType}}</td>
-			<td>{{row.channelVersion}}</td>
-			<td>{{sort}}</td>
-			<td>{{row.createDate}}</td>
-		</tr>//-->
-	</script>
 </body>
 </html>

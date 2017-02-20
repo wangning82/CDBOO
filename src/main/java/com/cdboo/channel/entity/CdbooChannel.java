@@ -23,7 +23,7 @@ import com.thinkgem.jeesite.common.persistence.DataEntity;
 public class CdbooChannel extends DataEntity<CdbooChannel> {
 
 	private static final long serialVersionUID = 1L;
-	private int channelNo; // 频道编号
+	private Integer channelNo; // 频道编号
 	private String channelName; // 频道名称
 	private String photoPath; // 频道图片
 	private String themeType; // 风格类型
@@ -51,7 +51,8 @@ public class CdbooChannel extends DataEntity<CdbooChannel> {
 	private List<String> idArray;
 	private List<String> inIdArray;
 	private String ids;
-	private String userId;//用户id
+	private String userId;//包含用户id的数据
+	private String includeFlag;//是否查询包含userId的频道数据，0为包含，1为不包含
 	private String volume;//音量
 	private Integer sort;//排序数字
 	private String operationType;//业态
@@ -64,11 +65,11 @@ public class CdbooChannel extends DataEntity<CdbooChannel> {
 		super(id);
 	}
 
-	public int getChannelNo() {
+	public Integer getChannelNo() {
 		return channelNo;
 	}
 
-	public void setChannelNo(int channelNo) {
+	public void setChannelNo(Integer channelNo) {
 		this.channelNo = channelNo;
 	}
 
@@ -300,6 +301,7 @@ public class CdbooChannel extends DataEntity<CdbooChannel> {
 	}
 
 	public void setIds(String ids) {
+		this.ids = ids;
 		if (StringUtils.isNotBlank(ids)) {
 			idArray = Lists.newArrayList();
 			String[] idsArray = StringUtils.split(ids, ",");
@@ -398,5 +400,13 @@ public class CdbooChannel extends DataEntity<CdbooChannel> {
 	public void setOperationType(String operationType) {
 		this.operationType = operationType;
 	}
-	
+
+	public String getIncludeFlag() {
+		return includeFlag;
+	}
+
+	public void setIncludeFlag(String includeFlag) {
+		this.includeFlag = includeFlag;
+	}
+
 }

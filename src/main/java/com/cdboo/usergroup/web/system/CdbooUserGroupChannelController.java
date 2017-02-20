@@ -31,6 +31,8 @@ import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.modules.sys.entity.User;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 
+import jersey.repackaged.com.google.common.collect.Lists;
+
 /**
  * @author yubin
  *
@@ -93,18 +95,19 @@ public class CdbooUserGroupChannelController extends BaseController {
 			
 			String channelId = userChannel.getChannel().getId();
 			CdbooChannel cdbooChannel = cdbooChannelService.get(channelId);
-			userChannel.setChannel(cdbooChannel);
+			List<CdbooChannel> channelList = Lists.newArrayList();
+			channelList.add(cdbooChannel);
 			
-			/**************** 查询组合频道下子频道列表 Start ******************/
-			CdbooGroupChild cdbooGroupChild2 = new CdbooGroupChild();
-			cdbooGroupChild2.setGroupChannelId(userChannel.getChannel());
-			List<CdbooGroupChild> groupChildList = groupChildService.findList(cdbooGroupChild2);
-			userChannel.setGroupChildChannelList(groupChildList);
-			/**************** 查询组合频道下子频道列表 End ******************/
-		}
-		else{
-			List<CdbooChannel> groupChannelList = cdbooChannelService.findGroupChannelList();
-			userChannel.setChannelList(groupChannelList);
+			userChannel.setChannelList(channelList);
+			
+//			userChannel.setChannel(cdbooChannel);
+//			
+//			/**************** 查询组合频道下子频道列表 Start ******************/
+//			CdbooGroupChild cdbooGroupChild2 = new CdbooGroupChild();
+//			cdbooGroupChild2.setGroupChannelId(userChannel.getChannel());
+//			List<CdbooGroupChild> groupChildList = groupChildService.findList(cdbooGroupChild2);
+//			userChannel.setGroupChildChannelList(groupChildList);
+//			/**************** 查询组合频道下子频道列表 End ******************/
 		}
 
 		return "cdboo/groupChannel/system/cdbooUserGroupChannelForm";

@@ -173,15 +173,21 @@ public class CdbooChannelController extends BaseController {
 	@RequestMapping(value = { "openChannelWin" })
 	public String openChannelWin(CdbooChannel cdbooChannel, HttpServletRequest request, HttpServletResponse response,
 			Model model) {
-		String userId = cdbooChannel.getUserId();
-		Page<CdbooChannel> page = null;
-		if (StringUtils.isNotBlank(userId)) {
-			page = cdbooChannelService.findPageByUserId(new Page<CdbooChannel>(request, response), cdbooChannel);
-		} else {
-			page = cdbooChannelService.findPage(new Page<CdbooChannel>(request, response), cdbooChannel);
-		}
+		Page<CdbooChannel> page = cdbooChannelService.findPage(new Page<CdbooChannel>(request, response), cdbooChannel);
 		model.addAttribute("page", page);
 		return "cdboo/channel/cdbooChannelOpenWin";
+	}
+	
+	@RequestMapping(value = { "toChildChannelWin" })
+	public String toChildChannelWin(CdbooChannel cdbooChannel, HttpServletRequest request, HttpServletResponse response,
+			Model model) {
+		model.addAttribute("cdbooChannel", cdbooChannel);
+		
+		CdbooGroupChild cdbooGroupChild = new CdbooGroupChild();
+		cdbooGroupChild.setGroupChannelId(cdbooChannel);
+		List<CdbooChannel> childChannelList = cdbooGroupChildService.findChildChannelListByConditions(cdbooGroupChild);
+		cdbooChannel.setChildChannelList(childChannelList);
+		return "cdboo/channel/cdbooChildChannelOpenWin";
 	}
 
 	@RequestMapping(value = { "getGroupChannelInfo" })

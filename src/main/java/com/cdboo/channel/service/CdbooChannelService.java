@@ -78,12 +78,4 @@ public class CdbooChannelService extends CrudService<CdbooChannelDao, CdbooChann
 	public void delete(CdbooChannel cdbooChannel) {
 		super.delete(cdbooChannel);
 	}
-	
-	public Page<CdbooChannel> findPageByUserId(Page<CdbooChannel> page, CdbooChannel cdbooChannel) {
-		cdbooChannel.setPage(page);
-		List<CdbooChannel> list = dao.findPageByUserId(cdbooChannel);
-		page.setList(list);
-		return page;
-	}
-	
 }

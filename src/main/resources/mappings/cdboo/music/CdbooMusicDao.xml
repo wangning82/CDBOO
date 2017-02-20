@@ -46,11 +46,8 @@
 		<include refid="cdbooMusicJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
-			<if test="musicNo != null and musicNo != ''">
-				AND a.music_no LIKE
-				<if test="dbName == 'oracle'">'%'||#{musicNo}||'%'</if>
-				<if test="dbName == 'mssql'">'%'+#{musicNo}+'%'</if>
-				<if test="dbName == 'mysql'">concat('%',#{musicNo},'%')</if>
+			<if test="musicNo != null">
+				AND a.music_no = #{musicNo}
 			</if>
 			<if test="musicOwner != null and musicOwner != ''">
 				AND a.music_owner = #{musicOwner}
@@ -107,11 +104,8 @@
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			AND b.music_id = a.id
 			AND b.user_id = #{userId}
-			<if test="musicNo != null and musicNo != ''">
-				AND a.music_no LIKE
-				<if test="dbName == 'oracle'">'%'||#{musicNo}||'%'</if>
-				<if test="dbName == 'mssql'">'%'+#{musicNo}+'%'</if>
-				<if test="dbName == 'mysql'">concat('%',#{musicNo},'%')</if>
+			<if test="musicNo != null">
+				AND a.music_no = #{musicNo}
 			</if>
 			<if test="musicOwner != null and musicOwner != ''">
 				AND a.music_owner = #{musicOwner}

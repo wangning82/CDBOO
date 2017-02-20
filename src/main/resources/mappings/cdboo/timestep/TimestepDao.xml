@@ -35,8 +35,8 @@
 		<include refid="timestepJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
-			<if test="timestepNo != null and timestepNo != ''">
-				AND a.timestep_no LIKE concat('%',#{timestepNo},'%')
+			<if test="timestepNo != null">
+				AND a.timestep_no = #{timestepNo}
 			</if>
 			<if test="timestepName != null and timestepName != ''">
 				AND a.timestep_name LIKE concat('%',#{timestepName},'%')

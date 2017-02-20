@@ -81,13 +81,18 @@ public class CdbooUserChannelService extends CrudService<CdbooUserChannelDao, Cd
 	 */
 	@Transactional(readOnly = false)
 	public void saveUserGroupChannel(CdbooUserChannel cdbooUserChannel) {
-		CdbooUserChannel queryObj = new CdbooUserChannel();
-		queryObj.setUser(cdbooUserChannel.getUser());
-		queryObj.setChannel(cdbooUserChannel.getChannel());
-		List<CdbooUserChannel> findList = super.findList(queryObj);
-		if (CollectionUtils.isEmpty(findList)) {
-			queryObj.setChannelType(Constants.CHANNEL_TYPE_GROUP);
-			super.save(queryObj);
+		List<String> channelIds = cdbooUserChannel.getChannelIds();
+		if (CollectionUtils.isNotEmpty(channelIds)) {
+			for (String channelId : channelIds) {
+				CdbooUserChannel queryObj = new CdbooUserChannel();
+				queryObj.setUser(cdbooUserChannel.getUser());
+				queryObj.setChannel(new CdbooChannel(channelId));
+				List<CdbooUserChannel> findList = super.findList(queryObj);
+				if (CollectionUtils.isEmpty(findList)) {
+					queryObj.setChannelType(Constants.CHANNEL_TYPE_GROUP);
+					super.save(queryObj);
+				}
+			}
 		}
 	}
 

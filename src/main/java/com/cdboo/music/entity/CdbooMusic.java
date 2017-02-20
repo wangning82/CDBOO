@@ -134,6 +134,7 @@ public class CdbooMusic extends DataEntity<CdbooMusic> {
 	}
 
 	public void setIds(String ids) {
+		this.ids = ids;
 		if (StringUtils.isNotBlank(ids)) {
 			idArray = Lists.newArrayList();
 			String[] idsArray = StringUtils.split(ids, ",");

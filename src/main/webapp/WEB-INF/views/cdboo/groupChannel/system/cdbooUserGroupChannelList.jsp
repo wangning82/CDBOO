@@ -79,7 +79,7 @@
 					<fmt:formatDate value="${userChannel.channel.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<shiro:hasPermission name="channel:groupChannel:user:edit"><td>
-    				<a href="${ctx}/channel/groupChannel/user/form?id=${userChannel.id}">修改</a>
+    				<a href="${ctx}/channel/groupChannel/user/form?id=${userChannel.id}">查看</a>
 					<a href="${ctx}/channel/groupChannel/user/delete?id=${userChannel.id}" onclick="return confirmx('确认要删除该频道信息吗？', this.href)">删除</a>
 				</td></shiro:hasPermission>
 			</tr>

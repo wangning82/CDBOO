@@ -17,6 +17,5 @@ import com.cdboo.channel.entity.CdbooChannel;
  */
 @MyBatisDao
 public interface CdbooChannelDao extends CrudDao<CdbooChannel> {
-	public List<CdbooChannel> findPageByUserId(CdbooChannel cdbooChannel);
 	public List<CdbooChannel> getMaxChannelNo(CdbooChannel cdbooChannel);
 }

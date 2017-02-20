@@ -5,77 +5,92 @@
 <%@ attribute name="sortElementName" type="java.lang.String" required="false" description="排序隐藏域id名称"%>
 <%@ attribute name="userElementId" type="java.lang.String" required="false" description="查询对应用户id所关联的频道,不传查询所有"%>
 <%@ attribute name="channelType" type="java.lang.String" required="false" description="指定频道类型"%>
-<script type="text/javascript">
-	function deleteRow(obj){
-		$(obj).parent().parent().remove();
-	}
-	
-	function openMappingWin(){
-		var ids = '';
-		var channelIdSize = $("input[name = '${channelElementName}']").size();
-		if(channelIdSize > 0){
-			$("input[name = '${channelElementName}']").each(function(index){
-				var id = $(this).val();
-				ids += id;
-				if(index != channelIdSize-1){
-					ids += ",";
+<%@ attribute name="isInclude" type="java.lang.String" required="true" description="是否查询包含用户id的频道数据，0为包含，1为不包含，即查询不等于用户已有频道数据的那些频道"%>
+<%@ attribute name="isReview" type="java.lang.String" required="false" description="是否查询包含用户id的频道数据，0为包含，1为不包含，即查询不等于用户已有频道数据的那些频道"%>
+
+<c:if test="${empty isReview}">
+	<c:set value="0" var="isReview"></c:set>
+</c:if>
+
+<c:if test="${isReview eq '0' }">
+	<script type="text/javascript">
+		function deleteRow(obj){
+			$(obj).parent().parent().remove();
+		}
+		
+		function openMappingWin(){
+			var ids = '';
+			var channelIdSize = $("input[name = '${channelElementName}']").size();
+			if(channelIdSize > 0){
+				$("input[name = '${channelElementName}']").each(function(index){
+					var id = $(this).val();
+					ids += id;
+					if(index != channelIdSize-1){
+						ids += ",";
+					}
+				});
+			}
+			var elementId = '${userElementId}';
+			var userId = '';
+			if(elementId){
+				userId = $('#'+elementId).val();
+			}
+			top.$.jBox.open("iframe:${ctx}/channel/cdbooChannel/openChannelWin?includeFlag=${isInclude}&userId="+userId+"&ids="+ids+"&channelType=${channelType}", "分配频道",$(top.document).width()-240,$(top.document).height()-240,{
+				buttons:{"确定分配":"ok", "关闭":true}, bottomText:"通过查询条件选择频道，选择后窗口不会关闭，可以连续选择。",submit:function(v, h, f){
+					var checkArray = h.find("iframe")[0].contentWindow.getCheckData();
+					if (v=="ok"){
+						try {
+							var tpl = $("#channelTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
+							for (var i = 0; i < checkArray.length; i++) {
+								var entity = checkArray[i];
+								if(checkChannelIsExists(entity.id)){
+									continue;
+								}
+								//alert(entity.id+":"+entity.musicName+":"+entity.actor+":"+entity.special+":"+entity.musicOwner+":"+entity.volume)
+								$('#tb').append(Mustache.render(tpl, {row: entity}));
+							}
+							showTip('追加频道成功，请继续选择频道','success');
+						} catch (e) {
+							showTip('追加频道失败，请重新选择频道','error');
+						}
+						
+				    	return false;
+					}
+				}, loaded:function(h){
+					$(".jbox-content", top.document).css("overflow-y","hidden");
 				}
 			});
 		}
-		var elementId = '${userElementId}';
-		var userId = '';
-		if(elementId){
-			userId = $('#'+elementId).val();
-		}
 		
-		top.$.jBox.open("iframe:${ctx}/channel/cdbooChannel/openChannelWin?userId="+userId+"&ids="+ids+"&channelType=${channelType}", "分配频道",$(top.document).width()-240,$(top.document).height()-240,{
-			buttons:{"确定分配":"ok", "关闭":true}, bottomText:"通过查询条件选择频道，选择后窗口不会关闭，可以连续选择。",submit:function(v, h, f){
-				var checkArray = h.find("iframe")[0].contentWindow.getCheckData();
-				if (v=="ok"){
-					try {
-						var tpl = $("#channelTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
-						for (var i = 0; i < checkArray.length; i++) {
-							var entity = checkArray[i];
-							if(checkChannelIsExists(entity.id)){
-								continue;
-							}
-							//alert(entity.id+":"+entity.musicName+":"+entity.actor+":"+entity.special+":"+entity.musicOwner+":"+entity.volume)
-							$('#tb').append(Mustache.render(tpl, {row: entity}));
-						}
-						showTip('追加频道成功，请继续选择频道','success');
-					} catch (e) {
-						showTip('追加频道失败，请重新选择频道','error');
-					}
-					
-			    	return false;
+		//检查频道id是否存在
+		function checkChannelIsExists(channelId){
+			var flag = false;
+			$("input[name = '${channelElementName}']").each(function(index){
+				var id = $(this).val();
+				//alert("["+id+"]:["+musicId+"]["+(id == musicId)+"]")
+				if(id == channelId){
+					flag = true;
+					return false;
 				}
-			}, loaded:function(h){
-				$(".jbox-content", top.document).css("overflow-y","hidden");
-			}
-		});
-	}
+			});
+			return flag;
+		}
+	</script>
 	
-	//检查频道id是否存在
-	function checkChannelIsExists(channelId){
-		var flag = false;
-		$("input[name = '${channelElementName}']").each(function(index){
-			var id = $(this).val();
-			//alert("["+id+"]:["+musicId+"]["+(id == musicId)+"]")
-			if(id == channelId){
-				flag = true;
-				return false;
-			}
+	<div class="form-actions">
+		<input id="assignButton" class="btn btn-primary" type="button" value="分配频道" onclick="openMappingWin()"/>
+	</div>
+</c:if>
+
+<script type="text/javascript">
+	function toChildChannelPage(channelId){
+		top.$.jBox.open("iframe:${ctx}/channel/cdbooChannel/toChildChannelWin?id="+channelId, "子频道列表",$(top.document).width()-240,$(top.document).height()-240,{
+			buttons:{"关闭":true}
 		});
-		return flag;
 	}
 </script>
-
-<div class="form-actions">
-	<input id="assignButton" class="btn btn-primary" type="button" value="分配频道" onclick="openMappingWin()"/>
-</div>
-
 <div class="control-group">
-	<label class="control-label">子频道列表：</label>
+	<label class="control-label">频道列表：</label>
 	<div class="controls">
 		<table id="contentTable" class="table table-striped table-bordered table-condensed">
 			<thead>
@@ -90,7 +105,12 @@
 						<th style="width: 10%">排序</th>
 					</c:if>	
 					<th style="width: 15%">创建时间</th>
-					<th style="width: 10%">操作</th>
+					
+					<th style="width: 10%">
+						<c:if test="${isReview eq '0' }">
+							操作
+						</c:if>
+					</th>
 				</tr>
 			</thead>					
 			<tbody id="tb">
@@ -130,7 +150,14 @@
 						<td>
 							<fmt:formatDate value="${cdbooChannel.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 						</td>
-						<td><a href="#" onclick="deleteRow(this)">删除</a></td>
+						<td>
+							<c:if test="${isReview eq '0' }">
+								<a href="#" onclick="deleteRow(this)">删除${channelType }</a>
+							</c:if>
+							<c:if test="${channelType eq Constants.CHANNEL_TYPE_GROUP }">
+								<a href="#" onclick="toChildChannelPage('${cdbooChannel.id}')">子频道列表</a>
+							</c:if>
+						</td>
 					</tr>
 				</c:forEach>
 			</tbody>
@@ -138,8 +165,9 @@
 	</div>
 </div>
 
-<c:if test="${not empty sortElementName}">
-	<script type="text/template" id="channelTpl">//<!--
+<c:if test="${isReview eq '0'}">
+	<c:if test="${not empty sortElementName}">
+		<script type="text/template" id="channelTpl">//<!--
 		<tr>
 			<td>{{row.channelNo}}<input type="hidden" name = '${channelElementName }' value='{{row.id}}'></td>
 			<td>{{row.channelName}}</td>
@@ -152,9 +180,9 @@
 			<td><a href="#" onclick="deleteRow(this)">删除</a></td>
 		</tr>//-->
 	</script>	
-</c:if>
-<c:if test="${empty sortElementName}">
-	<script type="text/template" id="channelTpl">//<!--
+	</c:if>
+	<c:if test="${empty sortElementName}">
+		<script type="text/template" id="channelTpl">//<!--
 		<tr>
 			<td>{{row.channelNo}}<input type="hidden" name = '${channelElementName }' value='{{row.id}}'></td>
 			<td>{{row.channelName}}</td>
@@ -165,6 +193,6 @@
 			<td>{{row.createDate}}</td>
 			<td><a href="#" onclick="deleteRow(this)">删除</a></td>
 		</tr>//-->
-	</script>	
+		</script>	
+	</c:if>
 </c:if>
-			
