@@ -56,6 +56,7 @@ public class CdbooChannel extends DataEntity<CdbooChannel> {
 	private String volume;//音量
 	private Integer sort;//排序数字
 	private String operationType;//业态
+	private int musicSize;
 	
 	public CdbooChannel() {
 		super();
@@ -407,6 +408,14 @@ public class CdbooChannel extends DataEntity<CdbooChannel> {
 
 	public void setIncludeFlag(String includeFlag) {
 		this.includeFlag = includeFlag;
+	}
+
+	public int getMusicSize() {
+		return musicSize;
+	}
+
+	public void setMusicSize(int musicSize) {
+		this.musicSize = musicSize;
 	}
 
 }

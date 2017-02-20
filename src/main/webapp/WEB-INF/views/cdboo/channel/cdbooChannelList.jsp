@@ -191,6 +191,7 @@
 				<th>风格类型</th>
 				<th>风格类型明细</th>
 				<th>频道版本</th>
+				<th>歌曲数量</th>
 				<th>创建时间</th>
 				<shiro:hasPermission name="channel:cdbooChannel:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
@@ -215,6 +216,9 @@
 				</td>
 				<td>
 					${cdbooChannel.channelVersion}
+				</td>
+				<td>
+					${cdbooChannel.musicSize}
 				</td>
 				<td>
 					<fmt:formatDate value="${cdbooChannel.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>

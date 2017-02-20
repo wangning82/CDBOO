@@ -19,8 +19,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.cdboo.channel.entity.CdbooChannel;
 import com.cdboo.channel.service.CdbooChannelService;
-import com.cdboo.childchannel.entity.CdbooGroupChild;
-import com.cdboo.childchannel.service.CdbooGroupChildService;
 import com.cdboo.common.Constants;
 import com.cdboo.userchannel.entity.CdbooUserChannel;
 import com.cdboo.userchannel.service.CdbooUserChannelService;
@@ -43,9 +41,6 @@ public class CdbooUserGroupChannelController extends BaseController {
 
 	@Autowired
 	private CdbooChannelService cdbooChannelService;
-	
-	@Autowired
-	private CdbooGroupChildService groupChildService;
 	
 	@Autowired
 	private CdbooUserChannelService cdbooUserChannelService;

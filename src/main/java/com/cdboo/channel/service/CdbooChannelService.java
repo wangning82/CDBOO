@@ -6,11 +6,17 @@ package com.cdboo.channel.service;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cdboo.channel.dao.CdbooChannelDao;
 import com.cdboo.channel.entity.CdbooChannel;
+import com.cdboo.channelmusic.dao.CdbooChannelMusicDao;
+import com.cdboo.channelmusic.entity.CdbooChannelMusic;
+import com.cdboo.childchannel.dao.CdbooGroupChildDao;
+import com.cdboo.childchannel.entity.CdbooGroupChild;
+import com.cdboo.common.Constants;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.common.utils.StringUtils;
@@ -24,6 +30,12 @@ import com.thinkgem.jeesite.common.utils.StringUtils;
 @Transactional(readOnly = true)
 public class CdbooChannelService extends CrudService<CdbooChannelDao, CdbooChannel> {
 
+	@Autowired
+	public CdbooGroupChildDao cdbooGroupChildDao;
+	
+	@Autowired
+	private CdbooChannelMusicDao channelMusicDao;
+	
 	public CdbooChannel get(String id) {
 		return super.get(id);
 	}
@@ -45,7 +57,35 @@ public class CdbooChannelService extends CrudService<CdbooChannelDao, CdbooChann
 	}
 	
 	public Page<CdbooChannel> findPage(Page<CdbooChannel> page, CdbooChannel cdbooChannel) {
-		return super.findPage(page, cdbooChannel);
+		page = super.findPage(page, cdbooChannel);
+		List<CdbooChannel> list = page.getList();
+		if (CollectionUtils.isNotEmpty(list)) {
+			for (CdbooChannel cdbooChannel2 : list) {
+
+				if (StringUtils.equals(Constants.CHANNEL_TYPE_CHILD, cdbooChannel2.getChannelType())) {
+					CdbooChannelMusic cdbooChannelMusic = new CdbooChannelMusic();
+					cdbooChannelMusic.setChannel(cdbooChannel2);
+					List<CdbooChannelMusic> cdbooChannelMusics = channelMusicDao.findList(cdbooChannelMusic);
+					int channelMusicSize = 0;
+					if (CollectionUtils.isNotEmpty(cdbooChannelMusics)) {
+						channelMusicSize = cdbooChannelMusics.size();
+					}
+					cdbooChannel2.setMusicSize(channelMusicSize);
+				}
+
+				if (StringUtils.equals(Constants.CHANNEL_TYPE_GROUP, cdbooChannel2.getChannelType())) {
+					CdbooGroupChild cdbooGroupChild = new CdbooGroupChild();
+					cdbooGroupChild.setGroupChannelId(cdbooChannel2);
+					List<CdbooGroupChild> cdbooGroupChilds = cdbooGroupChildDao.findList(cdbooGroupChild);
+					int childChannelSize = 0;
+					if (CollectionUtils.isNotEmpty(cdbooGroupChilds)) {
+						childChannelSize = cdbooGroupChilds.size();
+					}
+					cdbooChannel2.setChildChannelSize(childChannelSize);
+				}
+			}
+		}
+		return page;
 	}
 	
 	public synchronized int getMaxChannelNo(String channelType){

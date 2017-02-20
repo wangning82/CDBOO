@@ -20,7 +20,6 @@
 				<th>风格类型</th>
 				<th>风格类型明细</th>
 				<th>频道版本</th>
-				<th>频道类型</th>
 				<th>创建时间</th>
 			</tr>
 		</thead>
@@ -44,9 +43,6 @@
 				</td>
 				<td>
 					${cdbooChannel.channelVersion}
-				</td>
-				<td>
-					${fns:getDictLabel(cdbooChannel.channelType, 'channel_type', '')}
 				</td>
 				<td>
 					<fmt:formatDate value="${cdbooChannel.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>

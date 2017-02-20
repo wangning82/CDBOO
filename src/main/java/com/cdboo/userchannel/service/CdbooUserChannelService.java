@@ -10,6 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.cdboo.channel.dao.CdbooChannelDao;
 import com.cdboo.channel.entity.CdbooChannel;
+import com.cdboo.channelmusic.dao.CdbooChannelMusicDao;
+import com.cdboo.channelmusic.entity.CdbooChannelMusic;
+import com.cdboo.childchannel.dao.CdbooGroupChildDao;
+import com.cdboo.childchannel.entity.CdbooGroupChild;
 import com.cdboo.common.Constants;
 import com.cdboo.userchannel.dao.CdbooUserChannelDao;
 import com.cdboo.userchannel.entity.CdbooUserChannel;
@@ -35,6 +39,12 @@ public class CdbooUserChannelService extends CrudService<CdbooUserChannelDao, Cd
 
 	@Autowired
 	private UserDao userDao;
+
+	@Autowired
+	private CdbooChannelMusicDao channelMusicDao;
+	
+	@Autowired
+	private CdbooGroupChildDao cdbooGroupChildDao;
 	
 	public CdbooUserChannel get(String id) {
 		return super.get(id);
@@ -149,6 +159,30 @@ public class CdbooUserChannelService extends CrudService<CdbooUserChannelDao, Cd
 			String channelId = cdbooUserChannel2.getChannel().getId();
 			CdbooChannel cdbooChannel = cdbooChannelDao.get(channelId);
 			cdbooUserChannel2.setChannel(cdbooChannel);
+
+			//如果是子频道查询才查音乐的数量
+			if (StringUtils.equals(Constants.CHANNEL_TYPE_CHILD, cdbooChannel.getChannelType())) {
+				CdbooChannelMusic cdbooChannelMusic = new CdbooChannelMusic();
+				cdbooChannelMusic.setChannel(cdbooChannel);
+				List<CdbooChannelMusic> cdbooChannelMusics = channelMusicDao.findList(cdbooChannelMusic);
+				int channelMusicSize = 0;
+				if (CollectionUtils.isNotEmpty(cdbooChannelMusics)) {
+					channelMusicSize = cdbooChannelMusics.size();
+				}
+				cdbooUserChannel2.setMusicSize(channelMusicSize);
+			}
+
+			//如果是组合频道查询才查子频道的数量
+			if (StringUtils.equals(Constants.CHANNEL_TYPE_GROUP, cdbooChannel.getChannelType())) {
+				CdbooGroupChild cdbooGroupChild = new CdbooGroupChild();
+				cdbooGroupChild.setGroupChannelId(cdbooChannel);
+				List<CdbooGroupChild> cdbooGroupChilds = cdbooGroupChildDao.findList(cdbooGroupChild);
+				int childChannelSize = 0;
+				if (CollectionUtils.isNotEmpty(cdbooGroupChilds)) {
+					childChannelSize = cdbooGroupChilds.size();
+				}
+				cdbooUserChannel2.setChildChannelSize(childChannelSize);
+			}
 		}
 		page.setList(list);
 		return page;
